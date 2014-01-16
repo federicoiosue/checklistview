@@ -1,4 +1,4 @@
-package com.example.checklist.exceptions;
+package it.feio.android.checklistview.exceptions;
 
 public class ViewNotSupportedException extends Exception {
 

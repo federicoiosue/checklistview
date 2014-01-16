@@ -1,9 +1,8 @@
-package it.feio.android.checklist;
+package it.feio.android.checklistview;
 
-import com.example.checklist.exceptions.ViewNotSupportedException;
-import com.example.checklist.models.CheckListView;
-import com.example.checklist.models.CheckableLine;
-
+import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.models.CheckListView;
+import it.feio.android.checklistview.models.CheckableLine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;

@@ -1,12 +1,10 @@
-package com.example.checklist.test;
+package it.feio.android.checklistview.test;
 
-import it.feio.android.checklist.ChecklistManager;
-
-import com.example.checklist.R;
-import com.example.checklist.exceptions.ViewNotSupportedException;
-
-import android.os.Bundle;
+import it.feio.android.checklistview.ChecklistManager;
+import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.R;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

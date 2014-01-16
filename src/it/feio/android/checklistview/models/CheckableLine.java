@@ -1,4 +1,4 @@
-package com.example.checklist.models;
+package it.feio.android.checklistview.models;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
