@@ -69,6 +69,7 @@ public class ChecklistManager {
 		}
 
 		mCheckListView.cloneBackground(v.getBackground());
+//		mCheckListView.setLayoutParams(v.getLayoutParams());
 		
 		return mCheckListView;
 	}
