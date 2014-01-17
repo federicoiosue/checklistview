@@ -52,6 +52,10 @@ public class CheckableLine extends LinearLayout implements
 		// Define EditText
 		editText = new EditText(context);
 		editText.setSingleLine(true);
+		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
+		lp.weight = 1;
+		editText.setLayoutParams(lp);
+		// Listeners
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
@@ -67,6 +71,7 @@ public class CheckableLine extends LinearLayout implements
 			imageView.setImageResource(R.drawable.ic_action_cancel);
 			imageView.setOnClickListener(this);
 			imageView.setVisibility(View.INVISIBLE);
+			imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			addView(imageView);
 		}
 	}
