@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -93,20 +94,24 @@ public class ChecklistManager {
 		CheckListView mCheckListView = new CheckListView(mActivity);
 
 		String text = v.getText().toString();
-		String[] lines = text.split(CARRIAGE_RETURN);
 
 		CheckableLine mCheckableLine;
-		for (String line : lines) {
-			mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
-			mCheckableLine.setText(line);
-			mCheckListView.addView(mCheckableLine);
+		if (text.length() > 0) {
+			String[] lines = text.split(CARRIAGE_RETURN);
+	
+			for (String line : lines) {
+				if (line.length() == 0) continue;
+				mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
+				mCheckableLine.setText(line);
+				mCheckListView.addView(mCheckableLine);
+			}
 		}
 		
 		// Add new fillable line if newEntryText has some text value
 		if (newEntryText.length() > 0) {
 			mCheckableLine = new CheckableLine(mActivity, false);
-//			AlphaManager.setAlpha(mCheckableLine, 0.6F);
 			mCheckableLine.setHint(newEntryText);
+			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 			mCheckListView.addView(mCheckableLine);
 		}
 

@@ -28,11 +28,12 @@ public class CheckListView extends LinearLayout {
 			setBackground(d);
 		}
 		for (int i = 0; i < getChildCount(); i++) {
-			if (Build.VERSION.SDK_INT < 16) {
-				((CheckableLine)getChildAt(i)).getEditText().setBackgroundDrawable(d);
-			} else {
-				((CheckableLine)getChildAt(i)).getEditText().setBackground(d);
-			}			
+//			if (Build.VERSION.SDK_INT < 16) {
+//				((CheckableLine)getChildAt(i)).getEditText().setBackgroundDrawable(d);
+//			} else {
+//				((CheckableLine)getChildAt(i)).getEditText().setBackground(d);
+//			}	
+			((CheckableLine)getChildAt(i)).cloneBackground(d);
 		}
 	}
 	
