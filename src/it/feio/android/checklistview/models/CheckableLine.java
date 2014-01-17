@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +43,7 @@ public class CheckableLine extends LinearLayout implements
 		this.showDeleteIcon = showDeleteIcon;
 		
 		setOrientation(HORIZONTAL);
+		setGravity(Gravity.CENTER_VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
 		// Define CheckBox
@@ -76,6 +78,12 @@ public class CheckableLine extends LinearLayout implements
 	}
 
 	public void setCheckBox(CheckBox checkBox) {
+		for (int i = 0; i <	getChildCount(); i++){
+			if (getChildAt(i).equals(this.checkBox)) {
+				removeViewAt(i);
+				addView(checkBox, i);
+			}
+		}
 		this.checkBox = checkBox;
 	}
 
@@ -112,10 +120,16 @@ public class CheckableLine extends LinearLayout implements
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
+		// When a line gains focus deletion icon (if present) will be shown
 		if (hasFocus) {
 			if (imageView != null)
 				imageView.setVisibility(View.VISIBLE);
 		} else {
+			// When a line loose focus checkbox will be activated
+			CheckBox c = getCheckBox();
+			c.setEnabled(true);
+			setCheckBox(c);
+			// And deletion icon (if present) will hide
 			if (imageView != null)
 				imageView.setVisibility(View.INVISIBLE);
 		}
@@ -134,10 +148,16 @@ public class CheckableLine extends LinearLayout implements
 		}
 	}
 
+	
+	/**
+	 * Deletion icon click
+	 * @param v
+	 */
 	@Override
 	public void onClick(View v) {	
 		ViewGroup parent = (ViewGroup) getParent();
 		if (parent != null) {
+			focusView(View.FOCUS_DOWN);
 			parent.removeView(this);
 		}
 	}
@@ -162,11 +182,16 @@ public class CheckableLine extends LinearLayout implements
 			ViewGroup parent = (ViewGroup) getParent();
 			int last = parent.getChildCount() - 1;
 			if (parent != null) {
+				// If the actual edited line is the last but one a new empty 
+				// line is created at its bottom
 				if (this.equals(parent.getChildAt(last))) {
 					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
 					mCheckableLine.cloneBackground(getBackground());
 					mCheckableLine.setHint(getHint());
 					mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+					CheckBox c = mCheckableLine.getCheckBox();
+					c.setEnabled(false);
+					mCheckableLine.setCheckBox(c);
 					parent.addView(mCheckableLine);
 				}
 				// Add delete icon and remove hint 
@@ -179,11 +204,7 @@ public class CheckableLine extends LinearLayout implements
 				int last = parent.getChildCount() - 1;
 				if (this.equals(parent.getChildAt(last - 1))) {
 					// An upper line is searched to give it focus
-					EditText focusableEditText = (EditText) focusSearch(View.FOCUS_DOWN);
-					if (focusableEditText != null) {
-						focusableEditText.requestFocus();
-						focusableEditText.setSelection(focusableEditText.getText().length());
-					}
+					focusView(View.FOCUS_DOWN);
 					
 					parent.removeView(this);
 				}
@@ -192,6 +213,14 @@ public class CheckableLine extends LinearLayout implements
 	}
 
 
+
+	private void focusView(int focusDirection) {
+		EditText focusableEditText = (EditText) focusSearch(focusDirection);
+		if (focusableEditText != null) {
+			focusableEditText.requestFocus();
+			focusableEditText.setSelection(focusableEditText.getText().length());
+		}		
+	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
 	public void cloneBackground(Drawable d) {
