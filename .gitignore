@@ -29,3 +29,4 @@ proguard/
 .idea/
 /.settings
 /project.properties
+/proguard-project.txt
