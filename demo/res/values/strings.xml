@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CheckListView Library Demo</string>
+    <string name="action_toggle_checklist">Toggle checklist</string>
+
+</resources>

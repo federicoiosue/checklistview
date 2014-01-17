@@ -97,8 +97,9 @@ public class ChecklistManager {
 
 		CheckListView mCheckListView = new CheckListView(mActivity);
 
+		mCheckListView.setId(v.getId());
+		
 		String text = v.getText().toString();
-
 		CheckableLine mCheckableLine;
 		if (text.length() > 0) {
 			String[] lines = text.split(CARRIAGE_RETURN);
