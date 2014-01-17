@@ -21,7 +21,7 @@ public class ChecklistManager {
 
 	private boolean showDeleteIcon = true;
 	private boolean keepChecked = false;
-	private String newEntryText = "";	
+	private String newEntryHint = "";	
 
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
@@ -64,17 +64,17 @@ public class ChecklistManager {
 		this.keepChecked = keepChecked;
 	}
 
-	public String getNewEntryText() {
-		return newEntryText;
+	public String getNewEntryHint() {
+		return newEntryHint;
 	}
 
 	/**
 	 * Adds a new fillable line at the end of the checklist with hint text.
 	 * Set an empty string to remove.
-	 * @param newEntryText Hint text
+	 * @param newEntryHint Hint text
 	 */
-	public void setNewEntryText(String newEntryText) {
-		this.newEntryText = newEntryText;
+	public void setNewEntryHint(String newEntryHint) {
+		this.newEntryHint = newEntryHint;
 	}
 
 	public View convert(View v) throws ViewNotSupportedException {
@@ -112,9 +112,9 @@ public class ChecklistManager {
 		}
 		
 		// Add new fillable line if newEntryText has some text value
-		if (newEntryText.length() > 0) {
+		if (newEntryHint.length() > 0) {
 			mCheckableLine = new CheckableLine(mActivity, false);
-			mCheckableLine.setHint(newEntryText);
+			mCheckableLine.setHint(newEntryHint);
 			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 			mCheckListView.addView(mCheckableLine);
 			mCheckableLine.cloneStyles(v);
