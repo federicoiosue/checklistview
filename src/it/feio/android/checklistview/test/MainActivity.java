@@ -1,8 +1,8 @@
 package it.feio.android.checklistview.test;
 
 import it.feio.android.checklistview.ChecklistManager;
-import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.R;
+import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		mChecklistManager = ChecklistManager.getInstance(this);
+		mChecklistManager.setNewEntryText("mettiii");
 		
 		switchView = findViewById(R.id.edittext);
 		

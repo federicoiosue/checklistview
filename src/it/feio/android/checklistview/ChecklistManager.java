@@ -3,6 +3,7 @@ package it.feio.android.checklistview;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckableLine;
+import it.feio.android.checklistview.utils.AlphaManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
@@ -17,7 +18,10 @@ public class ChecklistManager {
 	private final String CARRIAGE_RETURN = System.getProperty("line.separator"); 
 	private final String UNCHECKED = "[ ]";
 	private final String CHECKED = "[x]";
+
+	private boolean showDeleteIcon = true;
 	private boolean keepChecked = false;
+	private String newEntryText = "";	
 
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
@@ -33,19 +37,49 @@ public class ChecklistManager {
 		return instance;
 	}
 
+	public boolean getShowDeleteIcon() {
+		return showDeleteIcon;
+	}
+
+	/**
+	 * Set if show or not a delete icon at the end of the line.
+	 * Default true.
+	 * @param showDeleteIcon True to show icon, false otherwise.
+	 */
+	public void setShowDeleteIcon(boolean showDeleteIcon) {
+		this.showDeleteIcon = showDeleteIcon;
+	}
+
 	public boolean getKeepChecked() {
 		return keepChecked;
 	}
 
+	/**
+	 * Set if show checked or unchedes sequence symbols when converting back from 
+	 * checklist to edittext.
+	 * Default false.
+	 * @param keepChecked True to keep checks, false otherwise.
+	 */
 	public void setKeepChecked(boolean keepChecked) {
 		this.keepChecked = keepChecked;
 	}
-	
-	
-	
+
+	public String getNewEntryText() {
+		return newEntryText;
+	}
+
+	/**
+	 * Adds a new fillable line at the end of the checklist with hint text.
+	 * Set an empty string to remove.
+	 * @param newEntryText Hint text
+	 */
+	public void setNewEntryText(String newEntryText) {
+		this.newEntryText = newEntryText;
+	}
+
 	public View convert(View v) throws ViewNotSupportedException {
-		if (TextView.class.isAssignableFrom(v.getClass())) {
-			return convert((TextView)v);
+		if (EditText.class.isAssignableFrom(v.getClass())) {
+			return convert((EditText)v);
 		} else if (LinearLayout.class.isAssignableFrom(v.getClass())) {
 			return convert((CheckListView) v);
 		} else {
@@ -54,7 +88,7 @@ public class ChecklistManager {
 	}
 
 	
-	private View convert(TextView v) {
+	private View convert(EditText v) {
 
 		CheckListView mCheckListView = new CheckListView(mActivity);
 
@@ -63,8 +97,16 @@ public class ChecklistManager {
 
 		CheckableLine mCheckableLine;
 		for (String line : lines) {
-			mCheckableLine = new CheckableLine(mActivity);
+			mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
 			mCheckableLine.setText(line);
+			mCheckListView.addView(mCheckableLine);
+		}
+		
+		// Add new fillable line if newEntryText has some text value
+		if (newEntryText.length() > 0) {
+			mCheckableLine = new CheckableLine(mActivity, false);
+//			AlphaManager.setAlpha(mCheckableLine, 0.6F);
+			mCheckableLine.setHint(newEntryText);
 			mCheckListView.addView(mCheckableLine);
 		}
 
