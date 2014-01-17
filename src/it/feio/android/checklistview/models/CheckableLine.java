@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.models;
 
-import it.feio.android.checklistview.Constants;
+import com.neopixl.pixlui.components.edittext.EditText;
+
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.utils.AlphaManager;
 import android.annotation.SuppressLint;
@@ -20,7 +21,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,8 +28,6 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class CheckableLine extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher {
-
-	private final String TAG = Constants.TAG;
 	
 	private Context mContext;
 	private CheckBox checkBox;
@@ -60,17 +58,17 @@ public class CheckableLine extends LinearLayout implements
 		addView(editText);
 
 		// Define ImageView
-		if (showDeleteIcon) {
-			addDeleteIcon();
-		}
+		addDeleteIcon();
 	}
 
 	private void addDeleteIcon() {
-		imageView = new ImageView(mContext);
-		imageView.setImageResource(R.drawable.ic_action_cancel);
-		imageView.setOnClickListener(this);
-		imageView.setVisibility(View.INVISIBLE);
-		addView(imageView);
+		if (showDeleteIcon) {
+			imageView = new ImageView(mContext);
+			imageView.setImageResource(R.drawable.ic_action_cancel);
+			imageView.setOnClickListener(this);
+			imageView.setVisibility(View.INVISIBLE);
+			addView(imageView);
+		}
 	}
 
 	public CheckBox getCheckBox() {
@@ -186,7 +184,7 @@ public class CheckableLine extends LinearLayout implements
 				// line is created at its bottom
 				if (this.equals(parent.getChildAt(last))) {
 					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
-					mCheckableLine.cloneBackground(getBackground());
+					mCheckableLine.cloneStyles(getEditText());
 					mCheckableLine.setHint(getHint());
 					mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 					CheckBox c = mCheckableLine.getCheckBox();
@@ -223,12 +221,18 @@ public class CheckableLine extends LinearLayout implements
 	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
-	public void cloneBackground(Drawable d) {
+	public void cloneStyles(EditText v) {
+		
+		// Cloning background
+		Drawable b = v.getBackground();
 		if (Build.VERSION.SDK_INT < 16) {
-			getEditText().setBackgroundDrawable(d);
+			getEditText().setBackgroundDrawable(b);
 		} else {
-			getEditText().setBackground(d);
+			getEditText().setBackground(b);
 		}
+		
+		// Cloning typography
+		getEditText().setTypeface(v.getTypeface());
 	}
 
 

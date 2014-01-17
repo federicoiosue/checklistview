@@ -2,12 +2,11 @@ package it.feio.android.checklistview.models;
 
 import java.util.ArrayList;
 
+import com.neopixl.pixlui.components.edittext.EditText;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 public class CheckListView extends LinearLayout {
 
@@ -20,21 +19,30 @@ public class CheckListView extends LinearLayout {
 	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
-	public void cloneBackground(Drawable d) {
-
-		if (Build.VERSION.SDK_INT < 16) {
-			setBackgroundDrawable(d);
-		} else {
-			setBackground(d);
-		}
+	public void cloneStyles(EditText v) {
+		
+//		Drawable d = v.getBackground();
+//		if (Build.VERSION.SDK_INT < 16) {
+//			setBackgroundDrawable(d);
+//		} else {
+//			setBackground(d);
+//		}
 		for (int i = 0; i < getChildCount(); i++) {
-//			if (Build.VERSION.SDK_INT < 16) {
-//				((CheckableLine)getChildAt(i)).getEditText().setBackgroundDrawable(d);
-//			} else {
-//				((CheckableLine)getChildAt(i)).getEditText().setBackground(d);
-//			}	
-			((CheckableLine)getChildAt(i)).cloneBackground(d);
+			((CheckableLine)getChildAt(i)).cloneStyles(v);
 		}
+	}
+	
+	
+	/**
+	 * Retrieve the edittext of a child line to be used to copy the typography
+	 * @return
+	 */
+	public EditText getEditText() {
+		EditText res = null;
+		CheckableLine child = (CheckableLine)getChildAt(0);
+		if (child != null)
+			res = child.getEditText();
+		return res;
 	}
 	
 

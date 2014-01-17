@@ -1,18 +1,17 @@
 package it.feio.android.checklistview;
 
+import com.neopixl.pixlui.components.edittext.EditText;
+
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckableLine;
-import it.feio.android.checklistview.utils.AlphaManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class ChecklistManager {
 	
@@ -89,6 +88,11 @@ public class ChecklistManager {
 	}
 
 	
+	/**
+	 * Conversion from EditText to checklist
+	 * @param v EditText view
+	 * @return converted view to replace
+	 */
 	private View convert(EditText v) {
 
 		CheckListView mCheckListView = new CheckListView(mActivity);
@@ -113,15 +117,22 @@ public class ChecklistManager {
 			mCheckableLine.setHint(newEntryText);
 			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 			mCheckListView.addView(mCheckableLine);
+			mCheckableLine.cloneStyles(v);
 		}
 
-		mCheckListView.cloneBackground(v.getBackground());
+		mCheckListView.cloneStyles(v);
 //		mCheckListView.setLayoutParams(v.getLayoutParams());
 		
 		return mCheckListView;
 	}
-
 	
+	
+	
+	/**
+	 * Conversion from checklist view to EditText
+	 * @param v CheckListView to be re-converted
+	 * @return EditText
+	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	private View convert(CheckListView v) {
@@ -143,10 +154,18 @@ public class ChecklistManager {
 			returnView.setBackground(v.getBackground());
 		}
 		
+		// Restoring the typography
+		returnView.setTypeface(v.getEditText().getTypeface());
+		
 		return returnView;
 	}
 
 	
+	/**
+	 * Replace a 
+	 * @param oldView
+	 * @param newView
+	 */
 	public void replaceViews(View oldView, View newView) {
 		if (oldView == null || newView == null)
 			return;

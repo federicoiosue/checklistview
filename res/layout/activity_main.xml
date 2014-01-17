@@ -1,26 +1,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pixlui="http://schemas.android.com/apk/com.neopixl.pixlui"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <EditText
+    <!-- <EditText -->
+    <!-- android:id="@+id/edittext" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:background="@null" -->
+    <!-- android:text="@string/hello_world" /> -->
+
+    <com.neopixl.pixlui.components.edittext.EditText
         android:id="@+id/edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:text="@string/hello_world" />
+        android:text="@string/template_text"
+        pixlui:typeface="RobotoSlab-Regular.ttf" />
 
     <Button
         android:id="@+id/button"
-        android:layout_gravity="top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:text="Toggle checklist" />
 
 </LinearLayout>
