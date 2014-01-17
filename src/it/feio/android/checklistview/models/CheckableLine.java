@@ -1,6 +1,5 @@
 package it.feio.android.checklistview.models;
 
-import com.neopixl.pixlui.components.edittext.EditText;
 
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.utils.AlphaManager;
@@ -11,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,17 +40,18 @@ public class CheckableLine extends LinearLayout implements
 		this.showDeleteIcon = showDeleteIcon;
 		
 		setOrientation(HORIZONTAL);
-		setGravity(Gravity.CENTER_VERTICAL);
+//		setGravity(Gravity.CENTER_VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
 		// Define CheckBox
 		checkBox = new CheckBox(context);
+		checkBox.setPadding(0, 5, 0, 0);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
 
 		// Define EditText
 		editText = new EditText(context);
-		editText.setSingleLine(true);
+//		editText.setSingleLine(true);
 		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
 		lp.weight = 1;
 		editText.setLayoutParams(lp);
@@ -69,9 +69,10 @@ public class CheckableLine extends LinearLayout implements
 		if (showDeleteIcon) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
-			imageView.setOnClickListener(this);
+			checkBox.setPadding(0, 5, 0, 0);
 			imageView.setVisibility(View.INVISIBLE);
 			imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			imageView.setOnClickListener(this);
 			addView(imageView);
 		}
 	}

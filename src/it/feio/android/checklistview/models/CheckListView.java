@@ -2,10 +2,9 @@ package it.feio.android.checklistview.models;
 
 import java.util.ArrayList;
 
-import com.neopixl.pixlui.components.edittext.EditText;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 public class CheckListView extends LinearLayout {

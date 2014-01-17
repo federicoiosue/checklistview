@@ -1,6 +1,5 @@
 package it.feio.android.checklistview;
 
-import com.neopixl.pixlui.components.edittext.EditText;
 
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.models.CheckListView;
@@ -11,6 +10,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 public class ChecklistManager {
