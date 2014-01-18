@@ -2,6 +2,7 @@ package it.feio.android.checklistview.models;
 
 
 import it.feio.android.checklistview.R;
+import it.feio.android.checklistview.interfaces.ItemCheckedListener;
 import it.feio.android.checklistview.utils.AlphaManager;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public class CheckableLine extends LinearLayout implements
@@ -33,6 +35,7 @@ public class CheckableLine extends LinearLayout implements
 	private EditText editText;
 	private ImageView imageView;
 	private boolean showDeleteIcon;
+	private ItemCheckedListener mItemCheckedListener;
 
 	public CheckableLine(Context context, boolean showDeleteIcon) {
 		super(context);
@@ -63,6 +66,14 @@ public class CheckableLine extends LinearLayout implements
 
 		// Define ImageView
 		addDeleteIcon();
+	}
+
+//	public ItemCheckedListener getmItemCheckedListener() {
+//		return mItemCheckedListener;
+//	}
+
+	public void setItemCheckedListener(ItemCheckedListener mItemCheckedListener) {
+		this.mItemCheckedListener = mItemCheckedListener;
 	}
 
 	private void addDeleteIcon() {
@@ -145,6 +156,9 @@ public class CheckableLine extends LinearLayout implements
 			editText.setPaintFlags(editText.getPaintFlags()
 					| Paint.STRIKE_THRU_TEXT_FLAG);
 			AlphaManager.setAlpha(editText, 0.4F);
+			// Item checked is notified
+			if (mItemCheckedListener != null)
+				mItemCheckedListener.onItemChecked(this);
 		} else {
 			editText.setPaintFlags(editText.getPaintFlags()
 					& (~Paint.STRIKE_THRU_TEXT_FLAG));

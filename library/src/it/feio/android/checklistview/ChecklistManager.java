@@ -4,6 +4,7 @@ package it.feio.android.checklistview;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckableLine;
+import it.feio.android.checklistview.utils.Constants;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
@@ -19,8 +20,9 @@ public class ChecklistManager {
 	private final String UNCHECKED = "[ ]";
 	private final String CHECKED = "[x]";
 
-	private boolean showDeleteIcon = true;
-	private boolean keepChecked = false;
+	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
+	private boolean keepChecked = Constants.KEEP_CHECKED;
+	private boolean moveCheckedOnBottom = Constants.MOVE_CHECKED_ON_BOTTOM;
 	private String newEntryHint = "";	
 
 	private static ChecklistManager instance = null;
@@ -37,10 +39,6 @@ public class ChecklistManager {
 		return instance;
 	}
 
-	public boolean getShowDeleteIcon() {
-		return showDeleteIcon;
-	}
-
 	/**
 	 * Set if show or not a delete icon at the end of the line.
 	 * Default true.
@@ -48,10 +46,6 @@ public class ChecklistManager {
 	 */
 	public void setShowDeleteIcon(boolean showDeleteIcon) {
 		this.showDeleteIcon = showDeleteIcon;
-	}
-
-	public boolean getKeepChecked() {
-		return keepChecked;
 	}
 
 	/**
@@ -62,6 +56,18 @@ public class ChecklistManager {
 	 */
 	public void setKeepChecked(boolean keepChecked) {
 		this.keepChecked = keepChecked;
+	}
+
+	public boolean getMoveCheckedOnBottom() {
+		return moveCheckedOnBottom;
+	}
+
+	/**
+	 * If set to true when an item is checked it is moved on bottom of the list
+	 * @param moveCheckedOnBottom
+	 */
+	public void setMoveCheckedOnBottom(boolean moveCheckedOnBottom) {
+		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
 	public String getNewEntryHint() {
@@ -96,7 +102,9 @@ public class ChecklistManager {
 	private View convert(EditText v) {
 
 		CheckListView mCheckListView = new CheckListView(mActivity);
-
+		mCheckListView.setMoveCheckedOnBottom(moveCheckedOnBottom);
+		mCheckListView.setShowDeleteIcon(showDeleteIcon);
+		mCheckListView.setNewEntryHint(newEntryHint);
 		mCheckListView.setId(v.getId());
 		
 		String text = v.getText().toString();
@@ -106,9 +114,10 @@ public class ChecklistManager {
 	
 			for (String line : lines) {
 				if (line.length() == 0) continue;
-				mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
-				mCheckableLine.setText(line);
-				mCheckListView.addView(mCheckableLine);
+//				mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
+//				mCheckableLine.setText(line);
+//				mCheckListView.addView(mCheckableLine);
+				mCheckListView.addNewLine(line);
 			}
 		}
 		

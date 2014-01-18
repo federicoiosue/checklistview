@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
 			// Setting new entries hint text (if not set no hint
 			// will be used)
 			mChecklistManager.setNewEntryHint(HINT);
+			// Let checked items are moved on bottom
+			mChecklistManager.setMoveCheckedOnBottom(true);
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);
