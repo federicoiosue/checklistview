@@ -6,7 +6,7 @@ public interface Constants {
 	public static final boolean KEEP_CHECKED = false;
 	public static final boolean NEW_ITEM = true;
 
-	public static final int CHECKED_HOLD = 1;
-	public static final int CHECKED_ON_BOTTOM = 2;
-	public static final int CHECKED_ON_TOP_OF_CHECKED = 3;
+	public static final int CHECKED_HOLD = 0;
+	public static final int CHECKED_ON_BOTTOM = 1;
+	public static final int CHECKED_ON_TOP_OF_CHECKED = 2;
 }

@@ -2,21 +2,23 @@ package it.feio.android.checklistview.demo;
 
 import it.feio.android.checklistview.ChecklistManager;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
-import it.feio.android.checklistview.utils.Constants;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
-
-	private final String HINT = "New line...";
 
 	Button b;
 	View switchView;
 	private Activity mActivity;
+	private SharedPreferences prefs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,22 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mActivity = this;
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
 		switchView = findViewById(R.id.edittext);
 
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (switchView!= null && prefs.getBoolean("refresh", false)) {
+			if (EditText.class.isAssignableFrom(switchView.getClass())) {}
+			else {
+				toggleCheckList();
+			}	
+			prefs.edit().putBoolean("refresh", false).commit();		
+		}
 	}
 
 	@Override
@@ -42,7 +58,9 @@ public class MainActivity extends Activity {
 			toggleCheckList();
 			break;
 
-		default:
+		case R.id.settings:
+			Intent settingsIntent = new Intent(this, SettingsActivity.class);
+			startActivity(settingsIntent);
 			break;
 		}
 		return super.onMenuItemSelected(featureId, item);
@@ -61,9 +79,9 @@ public class MainActivity extends Activity {
 					.getInstance(mActivity);
 			// Setting new entries hint text (if not set no hint
 			// will be used)
-			mChecklistManager.setNewEntryHint(HINT);
+			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
 			// Let checked items are moved on bottom
-			mChecklistManager.setMoveCheckedOnBottom(Constants.CHECKED_HOLD);
+			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior", "0")));
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);
