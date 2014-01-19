@@ -2,6 +2,7 @@ package it.feio.android.checklistview.demo;
 
 import it.feio.android.checklistview.ChecklistManager;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.utils.Constants;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -62,7 +63,7 @@ public class MainActivity extends Activity {
 			// will be used)
 			mChecklistManager.setNewEntryHint(HINT);
 			// Let checked items are moved on bottom
-			mChecklistManager.setMoveCheckedOnBottom(true);
+			mChecklistManager.setMoveCheckedOnBottom(Constants.CHECKED_HOLD);
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);

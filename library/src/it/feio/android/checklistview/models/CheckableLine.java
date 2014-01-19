@@ -2,7 +2,7 @@ package it.feio.android.checklistview.models;
 
 
 import it.feio.android.checklistview.R;
-import it.feio.android.checklistview.interfaces.ItemCheckedListener;
+import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -35,7 +35,7 @@ public class CheckableLine extends LinearLayout implements
 	private EditText editText;
 	private ImageView imageView;
 	private boolean showDeleteIcon;
-	private ItemCheckedListener mItemCheckedListener;
+	private CheckListEventListener mCheckListEventListener;
 
 	public CheckableLine(Context context, boolean showDeleteIcon) {
 		super(context);
@@ -72,8 +72,8 @@ public class CheckableLine extends LinearLayout implements
 //		return mItemCheckedListener;
 //	}
 
-	public void setItemCheckedListener(ItemCheckedListener mItemCheckedListener) {
-		this.mItemCheckedListener = mItemCheckedListener;
+	public void setItemCheckedListener(CheckListEventListener listener) {
+		this.mCheckListEventListener = listener;
 	}
 
 	private void addDeleteIcon() {
@@ -157,8 +157,8 @@ public class CheckableLine extends LinearLayout implements
 					| Paint.STRIKE_THRU_TEXT_FLAG);
 			AlphaManager.setAlpha(editText, 0.4F);
 			// Item checked is notified
-			if (mItemCheckedListener != null)
-				mItemCheckedListener.onItemChecked(this);
+			if (mCheckListEventListener != null)
+				mCheckListEventListener.onItemChecked(this);
 		} else {
 			editText.setPaintFlags(editText.getPaintFlags()
 					& (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -201,7 +201,7 @@ public class CheckableLine extends LinearLayout implements
 			int last = parent.getChildCount() - 1;
 			if (parent != null) {
 				// If the actual edited line is the last but one a new empty 
-				// line is created at its bottom
+				// line is cremCheckableLineated at its bottom
 				if (this.equals(parent.getChildAt(last))) {
 					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
 					mCheckableLine.cloneStyles(getEditText());
@@ -210,9 +210,12 @@ public class CheckableLine extends LinearLayout implements
 					CheckBox c = mCheckableLine.getCheckBox();
 					c.setEnabled(false);
 					mCheckableLine.setCheckBox(c);
+					mCheckableLine.setItemCheckedListener(mCheckListEventListener);
 					parent.addView(mCheckableLine);
+//					mCheckListEventListener.onNewLineItemEdited(this);
 				}
 				// Add delete icon and remove hint 
+				showDeleteIcon = true;
 				addDeleteIcon();
 				setHint("");
 			}

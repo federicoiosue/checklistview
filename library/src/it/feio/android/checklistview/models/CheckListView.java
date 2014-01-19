@@ -1,20 +1,22 @@
 package it.feio.android.checklistview.models;
 
-import it.feio.android.checklistview.interfaces.ItemCheckedListener;
+import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.utils.Constants;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
+import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class CheckListView extends LinearLayout implements ItemCheckedListener {
-
-//	ArrayList<CheckableLine> lines = new ArrayList<CheckableLine>();
+public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
+	
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
-	private boolean moveCheckedOnBottom = Constants.MOVE_CHECKED_ON_BOTTOM;
+	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
+	private boolean newItem = Constants.NEW_ITEM;
 	private String newEntryHint = "";
 	
 	private Context mContext;
@@ -30,7 +32,7 @@ public class CheckListView extends LinearLayout implements ItemCheckedListener {
 	 * Declare if a checked item must be moved on bottom of the list or not
 	 * @param moveCheckedOnBottom
 	 */
-	public void setMoveCheckedOnBottom(boolean moveCheckedOnBottom) {
+	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
@@ -75,7 +77,7 @@ public class CheckListView extends LinearLayout implements ItemCheckedListener {
 	@Override
 	public void onItemChecked(CheckableLine checked) {
 		// If moveCheckedOnBottom is true the checked item will be moved on bottom of the list
-		if (moveCheckedOnBottom) {
+		if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
 			Log.v(Constants.TAG, "Moving checked on bottom");
 			CheckableLine line;
 			for (int i = 0; i < getChildCount(); i++) {
@@ -89,35 +91,69 @@ public class CheckListView extends LinearLayout implements ItemCheckedListener {
 						return;
 					}
 					
-					// The checked view is removed from actual position
-					removeView(checked);
-					
 					// Otherwise all items at bottom than the actual will be 
 					// cycled until a good position is find.
 					Log.v(Constants.TAG, "Moving item at position " + i);
 					CheckableLine lineAfter;
-					// Starting from the end all item will be shifted of one position 
-					// down until a non checked is found. The newly checked item will be
-					// positioned next to this.
-					for (int j = lastIndex; j > i ; j--) {
-						lineAfter = ((CheckableLine)getChildAt(j));
-						if (!lineAfter.isChecked()) {
-							addView(checked, j);
-						} 
+
+					// The newly checked item will be positioned at last position.
+					if (moveCheckedOnBottom == Constants.CHECKED_ON_BOTTOM) {
+						removeView(checked);
+						addView(checked, lastIndex);
+						return;
+					}
+						
+					// Or at the top of checked ones
+					if (moveCheckedOnBottom == Constants.CHECKED_ON_TOP_OF_CHECKED) {
+						for (int j = lastIndex; j > i ; j--) {
+							lineAfter = ((CheckableLine)getChildAt(j));
+							if (!lineAfter.isChecked()) {
+								removeView(checked);
+								addView(checked, j);
+								return;
+							} 
+						}
 					}
 				}
 			}
 		}		
 	}
+
+	@Override
+	public void onNewLineItemEdited(CheckableLine checkableLine) {
+		CheckableLine mCheckableLine = new CheckableLine(mContext, false);
+		mCheckableLine.cloneStyles(getEditText());
+		mCheckableLine.setHint(newEntryHint);
+		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		CheckBox c = mCheckableLine.getCheckBox();
+		c.setEnabled(false);
+		mCheckableLine.setCheckBox(c);	
+		mCheckableLine.setItemCheckedListener(this);
+		addView(mCheckableLine);
+	}
 	
 	
 	/**
-	 * Add a new line item to che checklist
+	 * Add a new item to the checklist
 	 * @param text String to be inserted as item text
 	 */
-	public void addNewLine(String text){
+	public void addItem(String text){
 		CheckableLine mCheckableLine = new CheckableLine(mContext, showDeleteIcon);
 		mCheckableLine.setText(text);
+		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		mCheckableLine.setItemCheckedListener(this);
+		addView(mCheckableLine);
+	}
+	
+	
+	/**
+	 * Add a new item to the checklist
+	 * @param text String to be inserted as item text
+	 */
+	public void addNewEmptyItem(){
+		CheckableLine mCheckableLine = new CheckableLine(mContext, false);
+		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		mCheckableLine.setHint(newEntryHint);
 		mCheckableLine.setItemCheckedListener(this);
 		addView(mCheckableLine);
 	}

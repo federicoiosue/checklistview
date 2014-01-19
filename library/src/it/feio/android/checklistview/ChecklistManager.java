@@ -22,7 +22,7 @@ public class ChecklistManager {
 
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
-	private boolean moveCheckedOnBottom = Constants.MOVE_CHECKED_ON_BOTTOM;
+	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 	private String newEntryHint = "";	
 
 	private static ChecklistManager instance = null;
@@ -58,7 +58,7 @@ public class ChecklistManager {
 		this.keepChecked = keepChecked;
 	}
 
-	public boolean getMoveCheckedOnBottom() {
+	public int getMoveCheckedOnBottom() {
 		return moveCheckedOnBottom;
 	}
 
@@ -66,7 +66,7 @@ public class ChecklistManager {
 	 * If set to true when an item is checked it is moved on bottom of the list
 	 * @param moveCheckedOnBottom
 	 */
-	public void setMoveCheckedOnBottom(boolean moveCheckedOnBottom) {
+	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
@@ -117,17 +117,18 @@ public class ChecklistManager {
 //				mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
 //				mCheckableLine.setText(line);
 //				mCheckListView.addView(mCheckableLine);
-				mCheckListView.addNewLine(line);
+				mCheckListView.addItem(line);
 			}
 		}
 		
 		// Add new fillable line if newEntryText has some text value
 		if (newEntryHint.length() > 0) {
-			mCheckableLine = new CheckableLine(mActivity, false);
-			mCheckableLine.setHint(newEntryHint);
-			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-			mCheckListView.addView(mCheckableLine);
-			mCheckableLine.cloneStyles(v);
+//			mCheckableLine = new CheckableLine(mActivity, false);
+//			mCheckableLine.setHint(newEntryHint);
+//			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+//			mCheckListView.addView(mCheckableLine);
+//			mCheckableLine.cloneStyles(v);
+			mCheckListView.addNewEmptyItem();
 		}
 
 		mCheckListView.cloneStyles(v);
