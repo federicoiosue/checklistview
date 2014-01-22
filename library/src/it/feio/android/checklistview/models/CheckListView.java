@@ -131,48 +131,41 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onEditorActionPerformed(CheckableLine checkableLine, int actionId, KeyEvent event) {
-		
-		if (actionId != 5)
+
+		if (actionId != EditorInfo.IME_ACTION_NEXT)
 			return;
-		
+
 		EditTextMultiLineNoEnter v = checkableLine.getEditText();
-		
+
+		// Start and end selection point are retrieved
 		int start = v.getSelectionStart();
 		int end = v.getSelectionEnd();
-		
+
+		// A check on the view position is done
 		int index = indexOfChild(checkableLine);
 		int lastIndex = newItem ? getChildCount() - 2 : getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
-		
+
+		// The actual and the new one view contents are generated depending
+		// on cursor position
 		String text = v.getText().toString();
 		boolean textSelected = end != start;
-		String oldViewText = textSelected ? text.substring(0, start) + text.substring(end, text.length()) : text.substring(0, start);
+		String oldViewText = textSelected ? text.substring(0, start) + text.substring(end, text.length()) : text
+				.substring(0, start);
 		String newViewText = textSelected ? text.substring(start, end) : text.substring(end, text.length());
-		
+
+		// Actual view content is replaced
 		v.setText(oldViewText);
-		
-		// Action has been performed from inside the text
-//		if (start < text.length() - 1) {			
-//			if (isLastItem) {
-//				// FOCUS DOWN!!
-//			} else {
-//				addItem(text.substring(start, text.length() - 1), index + 1);
-//			}
-//			
-//		// Or is performed from the end of the text line	
-//		} else {
-//			if (!isLastItem) {
-//				addItem("", index + 1);
-//			} 
-//		}
-		
+
+		// A new checkable item is eventually created (optionally with text content)
 		if (newViewText.length() > 0 || !isLastItem) {
 			addItem(newViewText, index + 1);
-		} 
-		
+		}
+
+		// The new view is focused
 		getChildAt(index + 1).requestFocus();
-//		focusView(v, View.FOCUS_DOWN);		
 	}
+	
 	
 	
 	/**

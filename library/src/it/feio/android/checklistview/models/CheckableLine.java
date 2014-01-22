@@ -76,7 +76,7 @@ public class CheckableLine extends LinearLayout implements
 	}
 
 	private void addDeleteIcon() {
-		if (showDeleteIcon) {
+		if (showDeleteIcon && imageView == null) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
 			checkBox.setPadding(0, 5, 0, 0);
