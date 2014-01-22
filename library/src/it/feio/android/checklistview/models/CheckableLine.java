@@ -185,8 +185,8 @@ public class CheckableLine extends LinearLayout implements
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		// TODO Auto-generated method stub
-		return false;
+		mCheckListEventListener.onEditorActionPerformed(this, actionId, event);		
+		return true;
 	}
 
 	@Override
@@ -248,16 +248,18 @@ public class CheckableLine extends LinearLayout implements
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
 	public void cloneStyles(EditText v) {
 		
-		// Cloning background
-		Drawable b = v.getBackground();
-		if (Build.VERSION.SDK_INT < 16) {
-			getEditText().setBackgroundDrawable(b);
-		} else {
-			getEditText().setBackground(b);
+		if (v != null) {
+			// Cloning background
+			Drawable b = v.getBackground();
+			if (Build.VERSION.SDK_INT < 16) {
+				getEditText().setBackgroundDrawable(b);
+			} else {
+				getEditText().setBackground(b);
+			}
+			
+			// Cloning typography
+			getEditText().setTypeface(v.getTypeface());
 		}
-		
-		// Cloning typography
-		getEditText().setTypeface(v.getTypeface());
 	}
 
 

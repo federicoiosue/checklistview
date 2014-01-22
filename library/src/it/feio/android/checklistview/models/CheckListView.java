@@ -6,10 +6,13 @@ import it.feio.android.checklistview.utils.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
 	
@@ -119,9 +122,56 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		}		
 	}
 
+	
 	@Override
 	public void onNewLineItemEdited(CheckableLine checkableLine) {
 		addNewEmptyItem();
+	}
+	
+
+	@Override
+	public void onEditorActionPerformed(CheckableLine checkableLine, int actionId, KeyEvent event) {
+		
+		if (actionId != 5)
+			return;
+		
+		EditTextMultiLineNoEnter v = checkableLine.getEditText();
+		
+		int start = v.getSelectionStart();
+		int end = v.getSelectionEnd();
+		
+		int index = indexOfChild(checkableLine);
+		int lastIndex = newItem ? getChildCount() - 2 : getChildCount() - 1;
+		boolean isLastItem = index == lastIndex;
+		
+		String text = v.getText().toString();
+		boolean textSelected = end != start;
+		String oldViewText = textSelected ? text.substring(0, start) + text.substring(end, text.length()) : text.substring(0, start);
+		String newViewText = textSelected ? text.substring(start, end) : text.substring(end, text.length());
+		
+		v.setText(oldViewText);
+		
+		// Action has been performed from inside the text
+//		if (start < text.length() - 1) {			
+//			if (isLastItem) {
+//				// FOCUS DOWN!!
+//			} else {
+//				addItem(text.substring(start, text.length() - 1), index + 1);
+//			}
+//			
+//		// Or is performed from the end of the text line	
+//		} else {
+//			if (!isLastItem) {
+//				addItem("", index + 1);
+//			} 
+//		}
+		
+		if (newViewText.length() > 0 || !isLastItem) {
+			addItem(newViewText, index + 1);
+		} 
+		
+		getChildAt(index + 1).requestFocus();
+//		focusView(v, View.FOCUS_DOWN);		
 	}
 	
 	
@@ -140,6 +190,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 */
 	public void addItem(String text, Integer index){
 		CheckableLine mCheckableLine = new CheckableLine(mContext, showDeleteIcon);
+		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setText(text);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		mCheckableLine.setItemCheckedListener(this);
@@ -170,6 +221,16 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		addView(mCheckableLine);
 	}
 	
-	
+
+
+
+
+	private void focusView(View v, int focusDirection) {
+		EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) v.focusSearch(focusDirection);
+		if (focusableEditText != null) {
+			focusableEditText.requestFocus();
+			focusableEditText.setSelection(focusableEditText.getText().length());
+		}		
+	}
 
 }
