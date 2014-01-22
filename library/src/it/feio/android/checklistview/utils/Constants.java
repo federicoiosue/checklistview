@@ -9,7 +9,7 @@ public interface Constants {
 	/**
 	 * Show or not an empty item on bottom of the list
 	 */
-	public static final boolean NEW_ITEM = true;	
+	public static final boolean SHOW_HINT_ITEM = false;	
 	/**
 	 * Keep cheched items when converting back to simple text.
 	 * Otherwise they will be removed.

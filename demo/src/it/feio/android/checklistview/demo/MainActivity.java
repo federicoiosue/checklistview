@@ -77,14 +77,31 @@ public class MainActivity extends Activity {
 			// Getting instance
 			ChecklistManager mChecklistManager = ChecklistManager
 					.getInstance(mActivity);
+			
+			/* 
+			 * These method are useful when converting from EditText to ChecklistView
+			 * (but can be set anytime, they'll be used at appropriate moment)
+			 */
+			
 			// Setting new entries hint text (if not set no hint
 			// will be used)
 			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
-			// I want to make checks symbols visible when converting 
-			// back to simple text from checklist
-			mChecklistManager.setShowChecks(true);
 			// Let checked items are moved on bottom
 			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior", "0")));
+
+			
+			/* 
+			 * These method are useful when converting from ChecklistView to EditText 
+			 * (but can be set anytime, they'll be used at appropriate moment)
+			 */
+
+			// Decide if keep or remove checked items when converting 
+			// back to simple text from checklist
+			mChecklistManager.setKeepChecked(prefs.getBoolean("settings_keep_checked", true));
+			// I want to make checks symbols visible when converting 
+			// back to simple text from checklist
+			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", false));
+			
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);

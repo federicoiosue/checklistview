@@ -16,15 +16,40 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+
+    <CheckBoxPreference
+        android:key="settings_show_hint_item"
+        android:title="@string/settings_show_hint_item" 
+        android:summary="@string/settings_show_hint_item_summary"
+        android:defaultValue="true">
+    </CheckBoxPreference>
+    
     <EditTextPreference
         android:key="settings_hint"
-        android:title="@string/settings_hint" />
+        android:title="@string/settings_hint"
+        android:summary="@string/settings_hint_summary" />
 
     <ListPreference
         android:entries="@array/checked_items_behavior"
         android:entryValues="@array/checked_items_behavior_values"
         android:key="settings_checked_items_behavior"
-        android:title="@string/settings_checked_items_behavior" >
+        android:title="@string/settings_checked_items_behavior"
+        android:summary="@string/settings_checked_items_behavior_summary"
+        android:defaultValue="0" >
     </ListPreference>
+
+    <CheckBoxPreference
+        android:key="settings_keep_checked"
+        android:title="@string/settings_keep_checked" 
+        android:summary="@string/settings_keep_checked_summary"
+        android:defaultValue="true">
+    </CheckBoxPreference>
+
+    <CheckBoxPreference
+        android:key="settings_show_checks"
+        android:title="@string/settings_show_checks" 
+        android:summary="@string/settings_show_checks_summary"
+        android:defaultValue="false">
+    </CheckBoxPreference>
 
 </PreferenceScreen>

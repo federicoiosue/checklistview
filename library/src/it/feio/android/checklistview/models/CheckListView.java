@@ -18,9 +18,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
 	private boolean showChecks = Constants.SHOW_CHECKS;
-	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
-	private boolean newItem = Constants.NEW_ITEM;
+	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
 	private String newEntryHint = "";
+	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 	
 	private Context mContext;
 
@@ -47,12 +47,21 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void setShowDeleteIcon(boolean showDeleteIcon) {
 		this.showDeleteIcon = showDeleteIcon;
 	}
+	
+	/**
+	 * Set if an empty line on bottom of the checklist must be shown or not
+	 * @param showHintItem
+	 */
+	public void setShowHintItem(boolean showHintItem) {
+		this.showHintItem= showHintItem;
+	}
 
 	/**
-	 * If its not an empty string it will be used as hint for the last empty line
+	 * Text to be used as hint for the last empty line (hint item)
 	 * @param hint
 	 */
 	public void setNewEntryHint(String hint) {
+		setShowHintItem(true);
 		this.newEntryHint = hint;
 	}
 
@@ -88,7 +97,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				if (checked.equals(line)) {
 					
 					// If it's on last position yet nothing will be done
-					int lastIndex = newEntryHint != "" ? getChildCount() -2 : getChildCount() -1;
+					int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
 					if (i == lastIndex) {
 						Log.v(Constants.TAG, "Not moving item it's the last one");		
 						return;
@@ -143,7 +152,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		// A check on the view position is done
 		int index = indexOfChild(checkableLine);
-		int lastIndex = newItem ? getChildCount() - 2 : getChildCount() - 1;
+		int lastIndex = showHintItem ? getChildCount() - 2 : getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
 
 		// The actual and the new one view contents are generated depending

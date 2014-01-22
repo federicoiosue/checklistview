@@ -21,8 +21,9 @@ public class ChecklistManager {
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
 	private boolean showChecks = Constants.SHOW_CHECKS;
-	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
+	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
 	private String newEntryHint = "";	
+	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
@@ -79,7 +80,19 @@ public class ChecklistManager {
 	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
+	
+	/**
+	 * Set if an empty line on bottom of the checklist must be shown or not
+	 * @param showHintItem
+	 */
+	public void setShowHintItem(boolean showHintItem) {
+		this.showHintItem= showHintItem;
+	}
 
+	/**
+	 * Text to be used as hint for the last empty line (hint item)
+	 * @param hint
+	 */
 	public String getNewEntryHint() {
 		return newEntryHint;
 	}
@@ -90,6 +103,7 @@ public class ChecklistManager {
 	 * @param newEntryHint Hint text
 	 */
 	public void setNewEntryHint(String newEntryHint) {
+		setShowHintItem(true);
 		this.newEntryHint = newEntryHint;
 	}
 
@@ -149,7 +163,7 @@ public class ChecklistManager {
 		}
 		
 		// Add new fillable line if newEntryText has some text value
-		if (newEntryHint.length() > 0) {
+		if (showHintItem) {
 			mCheckListView.addNewEmptyItem();
 		}
 
@@ -172,7 +186,8 @@ public class ChecklistManager {
 
 		StringBuilder sb = new StringBuilder();
 		boolean isChecked;
-		for (int i = 0; i < v.getChildCount(); i++) {
+		int childs = v.getChildCount() - (showHintItem ? 2 : 1); 
+		for (int i = 0; i < childs; i++) {
 			CheckableLine mCheckableLine = (CheckableLine) v.getChildAt(i);
 			
 			// If item is checked it will be removed if requested
