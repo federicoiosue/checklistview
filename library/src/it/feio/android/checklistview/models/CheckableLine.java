@@ -140,9 +140,12 @@ public class CheckableLine extends LinearLayout implements
 				imageView.setVisibility(View.VISIBLE);
 		} else {
 			// When a line loose focus checkbox will be activated
-			CheckBox c = getCheckBox();
-			c.setEnabled(true);
-			setCheckBox(c);
+			// but only if some text has been inserted
+			if (getEditText().getText().length() > 0) {
+				CheckBox c = getCheckBox();
+				c.setEnabled(true);
+				setCheckBox(c);
+			}
 			// And deletion icon (if present) will hide
 			if (imageView != null)
 				imageView.setVisibility(View.INVISIBLE);
@@ -202,16 +205,16 @@ public class CheckableLine extends LinearLayout implements
 				// If the actual edited line is the last but one a new empty 
 				// line is cremCheckableLineated at its bottom
 				if (this.equals(parent.getChildAt(last))) {
-					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
-					mCheckableLine.cloneStyles(getEditText());
-					mCheckableLine.setHint(getHint());
-					mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-					CheckBox c = mCheckableLine.getCheckBox();
-					c.setEnabled(false);
-					mCheckableLine.setCheckBox(c);
-					mCheckableLine.setItemCheckedListener(mCheckListEventListener);
-					parent.addView(mCheckableLine);
-//					mCheckListEventListener.onNewLineItemEdited(this);
+//					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
+//					mCheckableLine.cloneStyles(getEditText());
+//					mCheckableLine.setHint(getHint());
+//					mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+//					CheckBox c = mCheckableLine.getCheckBox();
+//					c.setEnabled(false);
+//					mCheckableLine.setCheckBox(c);
+//					mCheckableLine.setItemCheckedListener(mCheckListEventListener);
+//					parent.addView(mCheckableLine);
+					mCheckListEventListener.onNewLineItemEdited(this);
 				}
 				// Add delete icon and remove hint 
 				showDeleteIcon = true;

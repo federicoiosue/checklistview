@@ -121,43 +121,55 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onNewLineItemEdited(CheckableLine checkableLine) {
-		CheckableLine mCheckableLine = new CheckableLine(mContext, false);
-		mCheckableLine.cloneStyles(getEditText());
-		mCheckableLine.setHint(newEntryHint);
-		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-		CheckBox c = mCheckableLine.getCheckBox();
-		c.setEnabled(false);
-		mCheckableLine.setCheckBox(c);	
-		mCheckableLine.setItemCheckedListener(this);
-		addView(mCheckableLine);
+		addNewEmptyItem();
 	}
 	
 	
 	/**
-	 * Add a new item to the checklist
+	 * Add a new item into the checklist
 	 * @param text String to be inserted as item text
 	 */
 	public void addItem(String text){
+		addItem(text, null);
+	}
+	
+	
+	/**
+	 * Add a new item into the checklist at specific index
+	 * @param text String to be inserted as item text
+	 */
+	public void addItem(String text, Integer index){
 		CheckableLine mCheckableLine = new CheckableLine(mContext, showDeleteIcon);
 		mCheckableLine.setText(text);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		mCheckableLine.setItemCheckedListener(this);
-		addView(mCheckableLine);
+		if (index != null) {
+			addView(mCheckableLine, index);
+		} else {
+			addView(mCheckableLine);
+		} 
 	}
 	
 	
 	/**
-	 * Add a new item to the checklist
+	 * Add a new item to the checklist 
 	 * @param text String to be inserted as item text
 	 */
 	public void addNewEmptyItem(){
 		CheckableLine mCheckableLine = new CheckableLine(mContext, false);
-		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setHint(newEntryHint);
+		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		// Set the checkbox initially disabled
+		CheckBox c = mCheckableLine.getCheckBox();
+		c.setEnabled(false);
+		mCheckableLine.setCheckBox(c);
+		// Attach listener
 		mCheckableLine.setItemCheckedListener(this);
+		// Add view
 		addView(mCheckableLine);
 	}
-
+	
 	
 
 }
