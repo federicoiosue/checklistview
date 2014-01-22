@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public class CheckableLine extends LinearLayout implements
@@ -32,7 +31,7 @@ public class CheckableLine extends LinearLayout implements
 	
 	private Context mContext;
 	private CheckBox checkBox;
-	private EditText editText;
+	private EditTextMultiLineNoEnter editText;
 	private ImageView imageView;
 	private boolean showDeleteIcon;
 	private CheckListEventListener mCheckListEventListener;
@@ -53,8 +52,8 @@ public class CheckableLine extends LinearLayout implements
 		addView(checkBox);
 
 		// Define EditText
-		editText = new EditText(context);
-//		editText.setSingleLine(true);
+		editText = new EditTextMultiLineNoEnter(context);
+		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
 		lp.weight = 1;
 		editText.setLayoutParams(lp);
@@ -102,11 +101,11 @@ public class CheckableLine extends LinearLayout implements
 		this.checkBox = checkBox;
 	}
 
-	public EditText getEditText() {
+	public EditTextMultiLineNoEnter getEditText() {
 		return editText;
 	}
 
-	public void setEditText(EditText editText) {
+	public void setEditText(EditTextMultiLineNoEnter editText) {
 		this.editText = editText;
 	}
 
@@ -236,7 +235,7 @@ public class CheckableLine extends LinearLayout implements
 
 
 	private void focusView(int focusDirection) {
-		EditText focusableEditText = (EditText) focusSearch(focusDirection);
+		EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) focusSearch(focusDirection);
 		if (focusableEditText != null) {
 			focusableEditText.requestFocus();
 			focusableEditText.setSelection(focusableEditText.getText().length());

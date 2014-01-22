@@ -158,6 +158,7 @@ public class ChecklistManager {
 		}
 		
 		returnView.setText(sb.toString());
+		returnView.setId(v.getId());
 		
 		if (Build.VERSION.SDK_INT < 16) {
 			returnView.setBackgroundDrawable(v.getBackground());
