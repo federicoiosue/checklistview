@@ -10,18 +10,17 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 public class ChecklistManager {
 	
 	private final String CARRIAGE_RETURN = System.getProperty("line.separator"); 
-	private final String UNCHECKED = "[ ]";
-	private final String CHECKED = "[x]";
 
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
+	private boolean showChecks = Constants.SHOW_CHECKS;
 	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 	private String newEntryHint = "";	
 
@@ -49,14 +48,25 @@ public class ChecklistManager {
 	}
 
 	/**
-	 * Set if show checked or unchedes sequence symbols when converting back from 
-	 * checklist to edittext.
+	 * Set if keep or remove checked items when converting back from 
+	 * checklist to simple text.
 	 * Default false.
 	 * @param keepChecked True to keep checks, false otherwise.
 	 */
 	public void setKeepChecked(boolean keepChecked) {
 		this.keepChecked = keepChecked;
 	}
+
+	/**
+	 * Set if show checked or unchecked sequence symbols when converting back from 
+	 * checklist to simple text.
+	 * Default false.
+	 * @param keepChecked True to keep checks, false otherwise.
+	 */
+	public void setShowChecks(boolean showChecks) {
+		this.showChecks = showChecks;
+	}
+	
 
 	public int getMoveCheckedOnBottom() {
 		return moveCheckedOnBottom;
@@ -109,30 +119,41 @@ public class ChecklistManager {
 		
 		String text = v.getText().toString();
 		CheckableLine mCheckableLine;
+		CheckBox mCheckBox;
 		if (text.length() > 0) {
 			String[] lines = text.split(CARRIAGE_RETURN);
 	
+			// All text lines will be cycled to build checklist items
+			String lineText;
+			boolean lineChecked = false;
+			
 			for (String line : lines) {
-				if (line.length() == 0) continue;
-//				mCheckableLine = new CheckableLine(mActivity, showDeleteIcon);
-//				mCheckableLine.setText(line);
-//				mCheckListView.addView(mCheckableLine);
-				mCheckListView.addItem(line);
+				
+				if (line.length() == 0) 
+					continue;
+				
+				// Line text content will be now stripped from checks symbols if they're
+				// present (ex. [x] Task done -> lineText="Task done", lineChecked=true)
+				lineChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
+				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
+				
+				mCheckListView.addItem(lineText);
+				
+				if (lineChecked) {
+					mCheckableLine = (CheckableLine) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
+					mCheckBox = mCheckableLine.getCheckBox();
+					mCheckBox.setChecked(true);
+					mCheckableLine.setCheckBox(mCheckBox);
+				}
 			}
 		}
 		
 		// Add new fillable line if newEntryText has some text value
 		if (newEntryHint.length() > 0) {
-//			mCheckableLine = new CheckableLine(mActivity, false);
-//			mCheckableLine.setHint(newEntryHint);
-//			mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-//			mCheckListView.addView(mCheckableLine);
-//			mCheckableLine.cloneStyles(v);
 			mCheckListView.addNewEmptyItem();
 		}
 
 		mCheckListView.cloneStyles(v);
-//		mCheckListView.setLayoutParams(v.getLayoutParams());
 		
 		return mCheckListView;
 	}
@@ -150,11 +171,17 @@ public class ChecklistManager {
 		EditText returnView = new EditText(mActivity);
 
 		StringBuilder sb = new StringBuilder();
+		boolean isChecked;
 		for (int i = 0; i < v.getChildCount(); i++) {
 			CheckableLine mCheckableLine = (CheckableLine) v.getChildAt(i);
-			sb	.append(i > 0 ? CARRIAGE_RETURN : "")
-				.append(keepChecked ? (mCheckableLine.isChecked() ? CHECKED : UNCHECKED) : "")
-				.append(mCheckableLine.getText());
+			
+			// If item is checked it will be removed if requested
+			isChecked = mCheckableLine.isChecked();
+			if ( !isChecked || (isChecked && keepChecked) ) { 
+				sb	.append(i > 0 ? CARRIAGE_RETURN : "")
+					.append(showChecks ? (isChecked ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM) : "")
+					.append(mCheckableLine.getText());
+			}
 		}
 		
 		returnView.setText(sb.toString());

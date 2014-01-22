@@ -80,6 +80,9 @@ public class MainActivity extends Activity {
 			// Setting new entries hint text (if not set no hint
 			// will be used)
 			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
+			// I want to make checks symbols visible when converting 
+			// back to simple text from checklist
+			mChecklistManager.setShowChecks(true);
 			// Let checked items are moved on bottom
 			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior", "0")));
 			// Converting actual EditText into a View that can

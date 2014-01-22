@@ -12,12 +12,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
 	
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
 	private boolean keepChecked = Constants.KEEP_CHECKED;
+	private boolean showChecks = Constants.SHOW_CHECKS;
 	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 	private boolean newItem = Constants.NEW_ITEM;
 	private String newEntryHint = "";

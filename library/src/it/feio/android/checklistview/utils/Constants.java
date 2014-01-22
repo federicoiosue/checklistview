@@ -2,11 +2,39 @@ package it.feio.android.checklistview.utils;
 
 public interface Constants {
 	public static final String TAG = "CheckListView";
+	/**
+	 * Show or not delete icon on items
+	 */
 	public static final boolean SHOW_DELETE_ICON = true;
-	public static final boolean KEEP_CHECKED = false;
-	public static final boolean NEW_ITEM = true;
+	/**
+	 * Show or not an empty item on bottom of the list
+	 */
+	public static final boolean NEW_ITEM = true;	
+	/**
+	 * Keep cheched items when converting back to simple text.
+	 * Otherwise they will be removed.
+	 */
+	public static final boolean KEEP_CHECKED = true;
+	/**
+	 * Shows or not checks when converting back to simple text
+	 */
+	public static final boolean SHOW_CHECKS = false;
 
+	
+	/**
+	 * Checked items behavior: hold on place.
+	 */
 	public static final int CHECKED_HOLD = 0;
+	/**
+	 * Checked items behavior: move on bottom of list.
+	 */
 	public static final int CHECKED_ON_BOTTOM = 1;
+	/**
+	 * Checked items behavior: move on bottom of unchecked but on top of checked.
+	 */
 	public static final int CHECKED_ON_TOP_OF_CHECKED = 2;
+	
+
+	public static final String UNCHECKED_SYM = "[ ] ";
+	public static final String CHECKED_SYM = "[x] ";
 }
