@@ -186,7 +186,7 @@ public class ChecklistManager {
 
 		StringBuilder sb = new StringBuilder();
 		boolean isChecked;
-		int childs = v.getChildCount() - (showHintItem ? 2 : 1); 
+		int childs = v.getChildCount() - (showHintItem ? 1 : 0); 
 		for (int i = 0; i < childs; i++) {
 			CheckableLine mCheckableLine = (CheckableLine) v.getChildAt(i);
 			
