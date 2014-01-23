@@ -2,6 +2,11 @@ package it.feio.android.checklistview.utils;
 
 public interface Constants {
 	public static final String TAG = "CheckListView";
+
+	/**
+	 * Default line separator to parse simple text into checklist items
+	 */
+	public static final String LINES_SEPARATOR = System.getProperty("line.separator");
 	/**
 	 * Show or not delete icon on items
 	 */
@@ -9,10 +14,10 @@ public interface Constants {
 	/**
 	 * Show or not an empty item on bottom of the list
 	 */
-	public static final boolean SHOW_HINT_ITEM = false;	
+	public static final boolean SHOW_HINT_ITEM = false;
 	/**
-	 * Keep cheched items when converting back to simple text.
-	 * Otherwise they will be removed.
+	 * Keep cheched items when converting back to simple text. Otherwise they
+	 * will be removed.
 	 */
 	public static final boolean KEEP_CHECKED = true;
 	/**
@@ -20,7 +25,6 @@ public interface Constants {
 	 */
 	public static final boolean SHOW_CHECKS = false;
 
-	
 	/**
 	 * Checked items behavior: hold on place.
 	 */
@@ -30,10 +34,10 @@ public interface Constants {
 	 */
 	public static final int CHECKED_ON_BOTTOM = 1;
 	/**
-	 * Checked items behavior: move on bottom of unchecked but on top of checked.
+	 * Checked items behavior: move on bottom of unchecked but on top of
+	 * checked.
 	 */
 	public static final int CHECKED_ON_TOP_OF_CHECKED = 2;
-	
 
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";

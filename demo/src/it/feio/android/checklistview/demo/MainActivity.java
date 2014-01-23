@@ -2,6 +2,7 @@ package it.feio.android.checklistview.demo;
 
 import it.feio.android.checklistview.ChecklistManager;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.utils.Constants;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,20 +28,20 @@ public class MainActivity extends Activity {
 
 		mActivity = this;
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		
+
 		switchView = findViewById(R.id.edittext);
 
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (switchView!= null && prefs.getBoolean("refresh", false)) {
-			if (EditText.class.isAssignableFrom(switchView.getClass())) {}
-			else {
+		if (switchView != null && prefs.getBoolean("refresh", false)) {
+			if (EditText.class.isAssignableFrom(switchView.getClass())) {
+			} else {
 				toggleCheckList();
-			}	
-			prefs.edit().putBoolean("refresh", false).commit();		
+			}
+			prefs.edit().putBoolean("refresh", false).commit();
 		}
 	}
 
@@ -75,33 +76,37 @@ public class MainActivity extends Activity {
 		 */
 		try {
 			// Getting instance
-			ChecklistManager mChecklistManager = ChecklistManager
-					.getInstance(mActivity);
-			
-			/* 
-			 * These method are useful when converting from EditText to ChecklistView
-			 * (but can be set anytime, they'll be used at appropriate moment)
+			ChecklistManager mChecklistManager = ChecklistManager.getInstance(mActivity);
+
+			/*
+			 * These method are useful when converting from EditText to
+			 * ChecklistView (but can be set anytime, they'll be used at
+			 * appropriate moment)
 			 */
-			
+
 			// Setting new entries hint text (if not set no hint
 			// will be used)
 			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
 			// Let checked items are moved on bottom
-			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior", "0")));
+			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior",
+					String.valueOf(Constants.CHECKED_HOLD))));
 
-			
-			/* 
-			 * These method are useful when converting from ChecklistView to EditText 
-			 * (but can be set anytime, they'll be used at appropriate moment)
+			/*
+			 * These method are useful when converting from ChecklistView to
+			 * EditText (but can be set anytime, they'll be used at appropriate
+			 * moment)
 			 */
 
-			// Decide if keep or remove checked items when converting 
+			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
-			mChecklistManager.setKeepChecked(prefs.getBoolean("settings_keep_checked", true));
-			// I want to make checks symbols visible when converting 
+			mChecklistManager.setLinesSeparator(prefs.getString("settings_lines_separator", Constants.LINES_SEPARATOR));
+			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
-			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", false));
-			
+			mChecklistManager.setKeepChecked(prefs.getBoolean("settings_keep_checked", Constants.KEEP_CHECKED));
+			// I want to make checks symbols visible when converting
+			// back to simple text from checklist
+			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", Constants.SHOW_CHECKS));
+
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);
