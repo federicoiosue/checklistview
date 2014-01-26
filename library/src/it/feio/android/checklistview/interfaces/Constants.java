@@ -1,4 +1,4 @@
-package it.feio.android.checklistview.utils;
+package it.feio.android.checklistview.interfaces;
 
 public interface Constants {
 	public static final String TAG = "CheckListView";
@@ -41,4 +41,7 @@ public interface Constants {
 
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";
+
+	public static final int DELETE_ITEM_DELAY = 350;
+	
 }

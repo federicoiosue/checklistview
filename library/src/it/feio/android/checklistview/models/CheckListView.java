@@ -1,8 +1,7 @@
 package it.feio.android.checklistview.models;
 
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
-import it.feio.android.checklistview.utils.Constants;
-
+import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;

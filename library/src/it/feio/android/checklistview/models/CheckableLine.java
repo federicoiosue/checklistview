@@ -3,6 +3,7 @@ package it.feio.android.checklistview.models;
 
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
+import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.utils.AlphaManager;
 import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.SuppressLint;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -44,7 +46,6 @@ public class CheckableLine extends LinearLayout implements
 		this.showDeleteIcon = showDeleteIcon;
 		
 		setOrientation(HORIZONTAL);
-//		setGravity(Gravity.CENTER_VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
 		// Define CheckBox
@@ -77,13 +78,13 @@ public class CheckableLine extends LinearLayout implements
 		this.mCheckListEventListener = listener;
 	}
 
-	private void addDeleteIcon() {
+	@SuppressLint("NewApi") private void addDeleteIcon() {
 		if (showDeleteIcon && imageView == null) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
+			imageView.setBackgroundResource(R.drawable.clickable_view);
 			LayoutParams lp = new LayoutParams(DensityUtil.convertDpToPixel(25, mContext), DensityUtil.convertDpToPixel(25, mContext));
-//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			lp.setMargins(0, DensityUtil.convertDpToPixel(7, mContext), 0, 0);
+			lp.setMargins(0, DensityUtil.convertDpToPixel(6, mContext), 0, 0);
 			imageView.setLayoutParams(lp);
 			// Alpha is set just for newer API because using AlphaManager helper class I should use 
 			// an animation making this way impossible to set visibility to INVISIBLE
@@ -182,11 +183,19 @@ public class CheckableLine extends LinearLayout implements
 	 * @param v
 	 */
 	@Override
-	public void onClick(View v) {	
-		ViewGroup parent = (ViewGroup) getParent();
+	public void onClick(View v) {
+		final ViewGroup parent = (ViewGroup) getParent();
+		final View mCheckabeLine = this;
 		if (parent != null) {
-			focusView(View.FOCUS_DOWN);
-			parent.removeView(this);
+			// Deletion is delayed of a second
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					focusView(View.FOCUS_DOWN);
+					parent.removeView(mCheckabeLine);
+				}
+			}, Constants.DELETE_ITEM_DELAY);
+
 		}
 	}
 	

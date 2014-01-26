@@ -1,11 +1,12 @@
 package it.feio.android.checklistview;
 
-import java.util.regex.Pattern;
-
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckableLine;
-import it.feio.android.checklistview.utils.Constants;
+
+import java.util.regex.Pattern;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;

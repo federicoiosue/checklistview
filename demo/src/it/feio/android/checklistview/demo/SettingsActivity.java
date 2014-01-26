@@ -1,13 +1,10 @@
 package it.feio.android.checklistview.demo;
 
-import it.feio.android.checklistview.utils.Constants;
-
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
