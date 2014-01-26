@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -80,13 +81,15 @@ public class CheckableLine extends LinearLayout implements
 		if (showDeleteIcon && imageView == null) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
-			checkBox.setPadding(0, 5, 0, 0);
-			imageView.setVisibility(View.INVISIBLE);
-//			LayoutParams lp = new LayoutParams(DensityUtil.convertPixelsToDp(50), DensityUtil.convertPixelsToDp(50));
-			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//			lp.setMargins(0, DensityUtil.convertPixelsToDp(15), 0, 0);
+			LayoutParams lp = new LayoutParams(DensityUtil.convertDpToPixel(25, mContext), DensityUtil.convertDpToPixel(25, mContext));
+//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			lp.setMargins(0, DensityUtil.convertDpToPixel(7, mContext), 0, 0);
 			imageView.setLayoutParams(lp);
-			AlphaManager.setAlpha(imageView, 0.7f);
+			// Alpha is set just for newer API because using AlphaManager helper class I should use 
+			// an animation making this way impossible to set visibility to INVISIBLE
+			if (Build.VERSION.SDK_INT >= 11)
+				imageView.setAlpha( 0.7f);
+			imageView.setVisibility(View.INVISIBLE);
 			imageView.setOnClickListener(this);
 			addView(imageView);
 		}
