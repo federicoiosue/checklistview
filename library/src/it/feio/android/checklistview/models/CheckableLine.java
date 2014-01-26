@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -69,23 +68,26 @@ public class CheckableLine extends LinearLayout implements
 		// Define ImageView
 		addDeleteIcon();
 	}
-
-//	public ItemCheckedListener getmItemCheckedListener() {
-//		return mItemCheckedListener;
-//	}
+	
 
 	public void setItemCheckedListener(CheckListEventListener listener) {
 		this.mCheckListEventListener = listener;
 	}
+	
 
 	@SuppressLint("NewApi") private void addDeleteIcon() {
 		if (showDeleteIcon && imageView == null) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
 			imageView.setBackgroundResource(R.drawable.clickable_view);
-			LayoutParams lp = new LayoutParams(DensityUtil.convertDpToPixel(25, mContext), DensityUtil.convertDpToPixel(25, mContext));
-			lp.setMargins(0, DensityUtil.convertDpToPixel(6, mContext), 0, 0);
+			int size = DensityUtil.convertDpToPixel(30, mContext);
+			LayoutParams lp = new LayoutParams(size, size);
+			lp.setMargins(0, DensityUtil.convertDpToPixel(5, mContext), 0, 0);
 			imageView.setLayoutParams(lp);
+			
+			int padding = DensityUtil.convertDpToPixel(2, mContext);
+			imageView.setPadding(padding, padding, padding, padding);
+			
 			// Alpha is set just for newer API because using AlphaManager helper class I should use 
 			// an animation making this way impossible to set visibility to INVISIBLE
 			if (Build.VERSION.SDK_INT >= 11)
@@ -140,6 +142,7 @@ public class CheckableLine extends LinearLayout implements
 	public void setHint(String text) {
 		getEditText().setHint(text);
 	}
+	
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
@@ -160,6 +163,7 @@ public class CheckableLine extends LinearLayout implements
 				imageView.setVisibility(View.INVISIBLE);
 		}
 	}
+	
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -205,13 +209,16 @@ public class CheckableLine extends LinearLayout implements
 		mCheckListEventListener.onEditorActionPerformed(this, actionId, event);		
 		return true;
 	}
+	
 
 	@Override
 	public void afterTextChanged(Editable s) {}
 
+	
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+	
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// Checks if is the first text written here
@@ -222,15 +229,6 @@ public class CheckableLine extends LinearLayout implements
 				// If the actual edited line is the last but one a new empty 
 				// line is cremCheckableLineated at its bottom
 				if (this.equals(parent.getChildAt(last))) {
-//					CheckableLine mCheckableLine = new CheckableLine(mContext, false);
-//					mCheckableLine.cloneStyles(getEditText());
-//					mCheckableLine.setHint(getHint());
-//					mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-//					CheckBox c = mCheckableLine.getCheckBox();
-//					c.setEnabled(false);
-//					mCheckableLine.setCheckBox(c);
-//					mCheckableLine.setItemCheckedListener(mCheckListEventListener);
-//					parent.addView(mCheckableLine);
 					mCheckListEventListener.onNewLineItemEdited(this);
 				}
 				// Add delete icon and remove hint 
@@ -244,8 +242,7 @@ public class CheckableLine extends LinearLayout implements
 				int last = parent.getChildCount() - 1;
 				if (this.equals(parent.getChildAt(last - 1))) {
 					// An upper line is searched to give it focus
-					focusView(View.FOCUS_DOWN);
-					
+					focusView(View.FOCUS_DOWN);					
 					parent.removeView(this);
 				}
 			}
