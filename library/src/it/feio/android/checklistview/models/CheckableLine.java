@@ -4,6 +4,7 @@ package it.feio.android.checklistview.models;
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
+import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
@@ -81,7 +82,11 @@ public class CheckableLine extends LinearLayout implements
 			imageView.setImageResource(R.drawable.ic_action_cancel);
 			checkBox.setPadding(0, 5, 0, 0);
 			imageView.setVisibility(View.INVISIBLE);
-			imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+//			LayoutParams lp = new LayoutParams(DensityUtil.convertPixelsToDp(50), DensityUtil.convertPixelsToDp(50));
+			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//			lp.setMargins(0, DensityUtil.convertPixelsToDp(15), 0, 0);
+			imageView.setLayoutParams(lp);
+			AlphaManager.setAlpha(imageView, 0.7f);
 			imageView.setOnClickListener(this);
 			addView(imageView);
 		}
