@@ -224,17 +224,19 @@ public class CheckableLine extends LinearLayout implements
 		// Checks if is the first text written here
 		if (before == 0 && s.length() == 1) {			
 			ViewGroup parent = (ViewGroup) getParent();
-			int last = parent.getChildCount() - 1;
 			if (parent != null) {
-				// If the actual edited line is the last but one a new empty 
-				// line is cremCheckableLineated at its bottom
-				if (this.equals(parent.getChildAt(last))) {
-					mCheckListEventListener.onNewLineItemEdited(this);
+				int last = parent.getChildCount() - 1;
+				if (parent != null) {
+					// If the actual edited line is the last but one a new empty 
+					// line is cremCheckableLineated at its bottom
+					if (this.equals(parent.getChildAt(last))) {
+						mCheckListEventListener.onNewLineItemEdited(this);
+					}
+					// Add delete icon and remove hint 
+					showDeleteIcon = true;
+					addDeleteIcon();
+					setHint("");
 				}
-				// Add delete icon and remove hint 
-				showDeleteIcon = true;
-				addDeleteIcon();
-				setHint("");
 			}
 		} else if (s.length() == 0) {
 			ViewGroup parent = (ViewGroup) getParent();
