@@ -272,5 +272,11 @@ public class ChecklistManager {
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
+	
+	
+	
+	public void addTextChangedListener(TextWatcher mTextWatcher) {
+		this.mTextWatcher = mTextWatcher;
+	}
 
 }
