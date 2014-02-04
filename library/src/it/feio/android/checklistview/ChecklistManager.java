@@ -1,6 +1,7 @@
 package it.feio.android.checklistview;
 
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
+import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckableLine;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -28,6 +30,8 @@ public class ChecklistManager {
 
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
+	private TextWatcher mTextWatcher;
+	private CheckListChangedListener mCheckListChangedListener;
 
 	private ChecklistManager(Activity mActivity) {
 		this.mActivity = mActivity;
@@ -151,6 +155,11 @@ public class ChecklistManager {
 		mCheckListView.setShowDeleteIcon(showDeleteIcon);
 		mCheckListView.setNewEntryHint(newEntryHint);
 		mCheckListView.setId(v.getId());
+		
+		// Listener for general event is propagated on bottom
+		if (mCheckListChangedListener != null) {
+			mCheckListView.setCheckListChangedListener(mCheckListChangedListener);
+		}
 
 		String text = v.getText().toString();
 		CheckableLine mCheckableLine;
@@ -233,6 +242,11 @@ public class ChecklistManager {
 
 		// Restoring the typography
 		returnView.setTypeface(v.getEditText().getTypeface());
+		
+		// Associating textChangedListener
+		if (this.mTextWatcher != null) {
+			returnView.addTextChangedListener(this.mTextWatcher);
+		}
 
 		return returnView;
 	}
@@ -251,6 +265,12 @@ public class ChecklistManager {
 		int index = parent.indexOfChild(oldView);
 		parent.removeView(oldView);
 		parent.addView(newView, index);
+	}
+	
+	
+	
+	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
+		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
 
 }

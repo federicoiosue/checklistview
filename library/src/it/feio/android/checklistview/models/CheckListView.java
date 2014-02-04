@@ -1,9 +1,12 @@
 package it.feio.android.checklistview.models;
 
+import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 	
 	private Context mContext;
+	private CheckListChangedListener mCheckListChangedListener;
 
 	public CheckListView(Context context) {
 		super(context);
@@ -86,48 +90,54 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	}
 
 	@Override
-	public void onItemChecked(CheckableLine checked) {
-		// If moveCheckedOnBottom is true the checked item will be moved on bottom of the list
-		if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
-			Log.v(Constants.TAG, "Moving checked on bottom");
-			CheckableLine line;
-			for (int i = 0; i < getChildCount(); i++) {
-				line = ((CheckableLine)getChildAt(i));
-				if (checked.equals(line)) {
-					
-					// If it's on last position yet nothing will be done
-					int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
-					if (i == lastIndex) {
-						Log.v(Constants.TAG, "Not moving item it's the last one");		
-						return;
-					}
-					
-					// Otherwise all items at bottom than the actual will be 
-					// cycled until a good position is find.
-					Log.v(Constants.TAG, "Moving item at position " + i);
-					CheckableLine lineAfter;
-
-					// The newly checked item will be positioned at last position.
-					if (moveCheckedOnBottom == Constants.CHECKED_ON_BOTTOM) {
-						removeView(checked);
-						addView(checked, lastIndex);
-						return;
-					}
+	public void onItemChecked(CheckableLine checked, boolean isChecked) {
+		if (isChecked) {
+			// If moveCheckedOnBottom is true the checked item will be moved on bottom of the list
+			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+				Log.v(Constants.TAG, "Moving checked on bottom");
+				CheckableLine line;
+				for (int i = 0; i < getChildCount(); i++) {
+					line = ((CheckableLine)getChildAt(i));
+					if (checked.equals(line)) {
 						
-					// Or at the top of checked ones
-					if (moveCheckedOnBottom == Constants.CHECKED_ON_TOP_OF_CHECKED) {
-						for (int j = lastIndex; j > i ; j--) {
-							lineAfter = ((CheckableLine)getChildAt(j));
-							if (!lineAfter.isChecked()) {
-								removeView(checked);
-								addView(checked, j);
-								return;
-							} 
+						// If it's on last position yet nothing will be done
+						int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
+						if (i == lastIndex) {
+							Log.v(Constants.TAG, "Not moving item it's the last one");		
+							return;
+						}
+						
+						// Otherwise all items at bottom than the actual will be 
+						// cycled until a good position is find.
+						Log.v(Constants.TAG, "Moving item at position " + i);
+						CheckableLine lineAfter;
+	
+						// The newly checked item will be positioned at last position.
+						if (moveCheckedOnBottom == Constants.CHECKED_ON_BOTTOM) {
+							removeView(checked);
+							addView(checked, lastIndex);
+							return;
+						}
+							
+						// Or at the top of checked ones
+						if (moveCheckedOnBottom == Constants.CHECKED_ON_TOP_OF_CHECKED) {
+							for (int j = lastIndex; j > i ; j--) {
+								lineAfter = ((CheckableLine)getChildAt(j));
+								if (!lineAfter.isChecked()) {
+									removeView(checked);
+									addView(checked, j);
+									return;
+								} 
+							}
 						}
 					}
 				}
-			}
-		}		
+			}		
+		}
+		// Notify something is changed 
+		if (mCheckListChangedListener != null) {
+			mCheckListChangedListener.onCheckListChanged();
+		}
 	}
 
 	
@@ -194,7 +204,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setText(text);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-		mCheckableLine.setItemCheckedListener(this);
+		mCheckableLine.setItemCheckedListener(this);		
+		// Set text changed listener if is asked to do this
+		if (mCheckListChangedListener != null) {
+			mCheckableLine.setCheckListChangedListener(this.mCheckListChangedListener);
+		}
 		if (index != null) {
 			addView(mCheckableLine, index);
 		} else {
@@ -217,7 +231,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		c.setEnabled(false);
 		mCheckableLine.setCheckBox(c);
 		// Attach listener
-		mCheckableLine.setItemCheckedListener(this);
+		mCheckableLine.setItemCheckedListener(this);		
+		// Set text changed listener if is asked to do this
+		if (mCheckListChangedListener != null) {
+			mCheckableLine.setCheckListChangedListener(this.mCheckListChangedListener);
+		}
 		// Add view
 		addView(mCheckableLine);
 	}
@@ -232,6 +250,32 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			focusableEditText.requestFocus();
 			focusableEditText.setSelection(focusableEditText.getText().length());
 		}		
+	}
+	
+	
+	
+	
+	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
+		this.mCheckListChangedListener = mCheckListChangedListener;
+	}
+
+//	@Override
+//	public void afterTextChanged(Editable s) {}
+//	@Override
+//	public void beforeTextChanged(CharSequence s, int start, int count,
+//			int after) {}
+//	@Override
+//	public void onTextChanged(CharSequence s, int start, int before, int count) {		
+//		// Eventually notify something is changed 
+//		if (mCheckListChangedListener != null) {
+//			mCheckListChangedListener.onCheckListChanged();
+//		}		
+//	}
+
+	@Override
+	public void onLineDeleted(CheckableLine checkableLine) {
+		// Eventually notify something is changed 
+		mCheckListChangedListener.onCheckListChanged();
 	}
 
 }

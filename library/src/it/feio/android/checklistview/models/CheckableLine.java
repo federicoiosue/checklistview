@@ -2,6 +2,7 @@ package it.feio.android.checklistview.models;
 
 
 import it.feio.android.checklistview.R;
+import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.utils.AlphaManager;
@@ -38,6 +39,7 @@ public class CheckableLine extends LinearLayout implements
 	private ImageView imageView;
 	private boolean showDeleteIcon;
 	private CheckListEventListener mCheckListEventListener;
+	private CheckListChangedListener mCheckListChangedListener;
 
 	public CheckableLine(Context context, boolean showDeleteIcon) {
 		super(context);
@@ -79,7 +81,7 @@ public class CheckableLine extends LinearLayout implements
 		if (showDeleteIcon && imageView == null) {
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
-			imageView.setBackgroundResource(R.drawable.clickable_view);
+			imageView.setBackgroundResource(R.drawable.icon_selector);
 			int size = DensityUtil.convertDpToPixel(30, mContext);
 			LayoutParams lp = new LayoutParams(size, size);
 			lp.setMargins(0, DensityUtil.convertDpToPixel(5, mContext), 0, 0);
@@ -171,14 +173,14 @@ public class CheckableLine extends LinearLayout implements
 			editText.setPaintFlags(editText.getPaintFlags()
 					| Paint.STRIKE_THRU_TEXT_FLAG);
 			AlphaManager.setAlpha(editText, 0.4F);
-			// Item checked is notified
-			if (mCheckListEventListener != null)
-				mCheckListEventListener.onItemChecked(this);
 		} else {
 			editText.setPaintFlags(editText.getPaintFlags()
 					& (~Paint.STRIKE_THRU_TEXT_FLAG));
 			AlphaManager.setAlpha(editText, 1F);
 		}
+		// Item checked is notified
+		if (mCheckListEventListener != null)
+			mCheckListEventListener.onItemChecked(this, isChecked);
 	}
 
 	
@@ -197,6 +199,7 @@ public class CheckableLine extends LinearLayout implements
 				public void run() {
 					focusView(View.FOCUS_DOWN);
 					parent.removeView(mCheckabeLine);
+					mCheckListEventListener.onLineDeleted((CheckableLine) mCheckabeLine);
 				}
 			}, Constants.DELETE_ITEM_DELAY);
 
@@ -249,6 +252,11 @@ public class CheckableLine extends LinearLayout implements
 				}
 			}
 		}		
+		
+		// Notify somethign is changed
+		if (this.mCheckListChangedListener != null) {
+			mCheckListChangedListener.onCheckListChanged();
+		}
 	}
 
 
@@ -276,6 +284,11 @@ public class CheckableLine extends LinearLayout implements
 			// Cloning typography
 			getEditText().setTypeface(v.getTypeface());
 		}
+	}
+
+
+	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
+		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
 
 
