@@ -4,7 +4,7 @@ import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListView;
-import it.feio.android.checklistview.models.CheckableLine;
+import it.feio.android.checklistview.models.CheckListViewItem;
 
 import java.util.regex.Pattern;
 
@@ -162,7 +162,7 @@ public class ChecklistManager {
 		}
 
 		String text = v.getText().toString();
-		CheckableLine mCheckableLine;
+		CheckListViewItem mCheckableLine;
 		CheckBox mCheckBox;
 		if (text.length() > 0) {
 			String[] lines = text.split(Pattern.quote(linesSeparator));
@@ -186,7 +186,7 @@ public class ChecklistManager {
 				mCheckListView.addItem(lineText);
 
 				if (lineChecked) {
-					mCheckableLine = (CheckableLine) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
+					mCheckableLine = (CheckListViewItem) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
 					mCheckBox = mCheckableLine.getCheckBox();
 					mCheckBox.setChecked(true);
 					mCheckableLine.setCheckBox(mCheckBox);
@@ -220,7 +220,7 @@ public class ChecklistManager {
 		boolean isChecked;
 		int childs = v.getChildCount() - (showHintItem ? 1 : 0);
 		for (int i = 0; i < childs; i++) {
-			CheckableLine mCheckableLine = (CheckableLine) v.getChildAt(i);
+			CheckListViewItem mCheckableLine = (CheckListViewItem) v.getChildAt(i);
 
 			// If item is checked it will be removed if requested
 			isChecked = mCheckableLine.isChecked();

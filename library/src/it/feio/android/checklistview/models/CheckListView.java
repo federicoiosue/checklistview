@@ -71,7 +71,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
 	public void cloneStyles(EditText v) {		
 		for (int i = 0; i < getChildCount(); i++) {
-			((CheckableLine)getChildAt(i)).cloneStyles(v);
+			((CheckListViewItem)getChildAt(i)).cloneStyles(v);
 		}
 	}
 		
@@ -83,21 +83,21 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 */
 	public EditText getEditText() {
 		EditText res = null;
-		CheckableLine child = (CheckableLine)getChildAt(0);
+		CheckListViewItem child = (CheckListViewItem)getChildAt(0);
 		if (child != null)
 			res = child.getEditText();
 		return res;
 	}
 
 	@Override
-	public void onItemChecked(CheckableLine checked, boolean isChecked) {
+	public void onItemChecked(CheckListViewItem checked, boolean isChecked) {
 		if (isChecked) {
 			// If moveCheckedOnBottom is true the checked item will be moved on bottom of the list
 			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
 				Log.v(Constants.TAG, "Moving checked on bottom");
-				CheckableLine line;
+				CheckListViewItem line;
 				for (int i = 0; i < getChildCount(); i++) {
-					line = ((CheckableLine)getChildAt(i));
+					line = ((CheckListViewItem)getChildAt(i));
 					if (checked.equals(line)) {
 						
 						// If it's on last position yet nothing will be done
@@ -110,7 +110,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						// Otherwise all items at bottom than the actual will be 
 						// cycled until a good position is find.
 						Log.v(Constants.TAG, "Moving item at position " + i);
-						CheckableLine lineAfter;
+						CheckListViewItem lineAfter;
 	
 						// The newly checked item will be positioned at last position.
 						if (moveCheckedOnBottom == Constants.CHECKED_ON_BOTTOM) {
@@ -122,7 +122,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						// Or at the top of checked ones
 						if (moveCheckedOnBottom == Constants.CHECKED_ON_TOP_OF_CHECKED) {
 							for (int j = lastIndex; j > i ; j--) {
-								lineAfter = ((CheckableLine)getChildAt(j));
+								lineAfter = ((CheckListViewItem)getChildAt(j));
 								if (!lineAfter.isChecked()) {
 									removeView(checked);
 									addView(checked, j);
@@ -142,13 +142,13 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	
 	@Override
-	public void onNewLineItemEdited(CheckableLine checkableLine) {
+	public void onNewLineItemEdited(CheckListViewItem checkableLine) {
 		addNewEmptyItem();
 	}
 	
 
 	@Override
-	public void onEditorActionPerformed(CheckableLine checkableLine, int actionId, KeyEvent event) {
+	public void onEditorActionPerformed(CheckListViewItem checkableLine, int actionId, KeyEvent event) {
 
 		if (actionId != EditorInfo.IME_ACTION_NEXT)
 			return;
@@ -200,7 +200,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * @param text String to be inserted as item text
 	 */
 	public void addItem(String text, Integer index){
-		CheckableLine mCheckableLine = new CheckableLine(mContext, showDeleteIcon);
+		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, showDeleteIcon);
 		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setText(text);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -222,7 +222,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * @param text String to be inserted as item text
 	 */
 	public void addNewEmptyItem(){
-		CheckableLine mCheckableLine = new CheckableLine(mContext, false);
+		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, false);
 		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setHint(newEntryHint);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -273,7 +273,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 //	}
 
 	@Override
-	public void onLineDeleted(CheckableLine checkableLine) {
+	public void onLineDeleted(CheckListViewItem checkableLine) {
 		// Eventually notify something is changed 
 		mCheckListChangedListener.onCheckListChanged();
 	}

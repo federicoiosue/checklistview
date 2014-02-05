@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class CheckableLine extends LinearLayout implements
+public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher {
 	
 	private Context mContext;
@@ -41,7 +41,7 @@ public class CheckableLine extends LinearLayout implements
 	private CheckListEventListener mCheckListEventListener;
 	private CheckListChangedListener mCheckListChangedListener;
 
-	public CheckableLine(Context context, boolean showDeleteIcon) {
+	public CheckListViewItem(Context context, boolean showDeleteIcon) {
 		super(context);
 		this.mContext = context;
 		this.showDeleteIcon = showDeleteIcon;
@@ -199,7 +199,7 @@ public class CheckableLine extends LinearLayout implements
 				public void run() {
 					focusView(View.FOCUS_DOWN);
 					parent.removeView(mCheckabeLine);
-					mCheckListEventListener.onLineDeleted((CheckableLine) mCheckabeLine);
+					mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckabeLine);
 				}
 			}, Constants.DELETE_ITEM_DELAY);
 
