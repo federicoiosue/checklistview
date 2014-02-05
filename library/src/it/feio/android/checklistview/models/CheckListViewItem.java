@@ -40,6 +40,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private boolean showDeleteIcon;
 	private CheckListEventListener mCheckListEventListener;
 	private CheckListChangedListener mCheckListChangedListener;
+	private int lenghtBeforeTextChanged;
 
 	public CheckListViewItem(Context context, boolean showDeleteIcon) {
 		super(context);
@@ -219,13 +220,15 @@ public class CheckListViewItem extends LinearLayout implements
 
 	
 	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		lenghtBeforeTextChanged = s.length();
+	}
 
 	
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// Checks if is the first text written here
-		if (before == 0 && s.length() == 1) {			
+		if (lenghtBeforeTextChanged == 0) {			
 			ViewGroup parent = (ViewGroup) getParent();
 			if (parent != null) {
 				int last = parent.getChildCount() - 1;
