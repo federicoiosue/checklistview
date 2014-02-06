@@ -8,6 +8,7 @@ import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.utils.AlphaManager;
 import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -30,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class CheckListViewItem extends LinearLayout implements
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher {
 	
 	private Context mContext;
@@ -63,6 +64,10 @@ public class CheckListViewItem extends LinearLayout implements
 		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
 		lp.weight = 1;
 		editText.setLayoutParams(lp);
+		// Alignment to support RTL
+		if (Build.VERSION.SDK_INT >= 18) {
+			editText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
+		}
 		// Listeners
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
