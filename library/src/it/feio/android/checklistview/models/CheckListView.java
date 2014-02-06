@@ -177,7 +177,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		// A new checkable item is eventually created (optionally with text content)
 		if (newViewText.length() > 0 || !isLastItem) {
-			addItem(newViewText, index + 1);
+			addItem(newViewText, false, index + 1);
 		}
 
 		// The new view is focused
@@ -191,7 +191,17 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * @param text String to be inserted as item text
 	 */
 	public void addItem(String text){
-		addItem(text, null);
+		addItem(text, false);
+	}
+	
+	
+	
+	/**
+	 * Add a new item into the checklist
+	 * @param text String to be inserted as item text
+	 */
+	public void addItem(String text, boolean isChecked){
+		addItem(text, isChecked, null);
 	}
 	
 	
@@ -199,8 +209,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * Add a new item into the checklist at specific index
 	 * @param text String to be inserted as item text
 	 */
-	public void addItem(String text, Integer index){
-		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, showDeleteIcon);
+	public void addItem(String text, boolean isChecked, Integer index){
+		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, isChecked, showDeleteIcon);
 		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setText(text);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -222,7 +232,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * @param text String to be inserted as item text
 	 */
 	public void addNewEmptyItem(){
-		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, false);
+		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, false, false);
 		mCheckableLine.cloneStyles(getEditText());
 		mCheckableLine.setHint(newEntryHint);
 		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);

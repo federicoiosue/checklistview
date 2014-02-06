@@ -169,7 +169,7 @@ public class ChecklistManager {
 
 			// All text lines will be cycled to build checklist items
 			String lineText;
-			boolean lineChecked = false;
+			boolean isChecked = false;
 
 			for (String line : lines) {
 
@@ -180,17 +180,17 @@ public class ChecklistManager {
 				// they're
 				// present (ex. [x] Task done -> lineText="Task done",
 				// lineChecked=true)
-				lineChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
+				isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
 				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
 
-				mCheckListView.addItem(lineText);
+				mCheckListView.addItem(lineText, isChecked);
 
-				if (lineChecked) {
-					mCheckableLine = (CheckListViewItem) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
-					mCheckBox = mCheckableLine.getCheckBox();
-					mCheckBox.setChecked(true);
-					mCheckableLine.setCheckBox(mCheckBox);
-				}
+//				if (isChecked) {
+//					mCheckableLine = (CheckListViewItem) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
+//					mCheckBox = mCheckableLine.getCheckBox();
+//					mCheckBox.setChecked(true);
+//					mCheckableLine.setCheckBox(mCheckBox);
+//				}
 			}
 		}
 

@@ -42,7 +42,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lenghtBeforeTextChanged;
 
-	public CheckListViewItem(Context context, boolean showDeleteIcon) {
+	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
 		super(context);
 		this.mContext = context;
 		this.showDeleteIcon = showDeleteIcon;
@@ -53,6 +53,7 @@ public class CheckListViewItem extends LinearLayout implements
 		// Define CheckBox
 		checkBox = new CheckBox(context);
 		checkBox.setPadding(0, 5, 0, 0);
+		checkBox.setChecked(isChecked);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
 
