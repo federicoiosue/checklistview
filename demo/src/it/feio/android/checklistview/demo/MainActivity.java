@@ -22,6 +22,8 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 	View switchView;
 	private Activity mActivity;
 	private SharedPreferences prefs;
+	boolean isChecklist;
+	private ChecklistManager mChecklistManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +32,38 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 
 		mActivity = this;
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		isChecklist = prefs.getBoolean("isChecklist", false);
 
-		switchView = findViewById(R.id.edittext);
-
+		switchView = findViewById(R.id.edittext);		
+		((EditText)switchView).setText(prefs.getString("text", getString(R.string.template_phrase)));
+		
+		if (isChecklist) {
+			isChecklist = false;
+			toggleCheckList();
+		}
 	}
 
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (switchView != null && prefs.getBoolean("refresh", false)) {
-			if (EditText.class.isAssignableFrom(switchView.getClass())) {
+		if (prefs.getBoolean("refresh", false)) {
+			if (isChecklist) {
 			} else {
 				toggleCheckList();
 			}
 			prefs.edit().putBoolean("refresh", false).commit();
 		}
 	}
-
+	
+	
+	@Override
+	protected void onPause() {
+		save();
+		super.onPause();
+	}
+	
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -54,6 +71,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 		return true;
 	}
 
+	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
@@ -78,7 +96,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 		 */
 		try {
 			// Getting instance
-			ChecklistManager mChecklistManager = ChecklistManager.getInstance(mActivity);
+			mChecklistManager = ChecklistManager.getInstance(mActivity);
 
 			/*
 			 * These method are useful when converting from EditText to
@@ -126,12 +144,34 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 			// Updating the instance of the pointed view for
 			// eventual reverse conversion
 			switchView = newView;
+						
+			isChecklist = !isChecklist;
 		
 		} catch (ViewNotSupportedException e) {
 			// This exception is fired if the source view class is
 			// not supported
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	private void save(){
+		String text = "";
+		if (isChecklist) {
+			try {
+				text = ((EditText)mChecklistManager.convert(switchView)).getText().toString();
+			} catch (ViewNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			text = ((EditText)switchView).getText().toString();
+		}
+		prefs.edit()
+			.putString("text", text)
+			.putBoolean("isChecklist", isChecklist)
+			.commit();
 	}
 
 	
