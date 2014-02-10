@@ -5,12 +5,11 @@ import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -163,6 +162,16 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		int index = indexOfChild(checkableLine);
 		int lastIndex = showHintItem ? getChildCount() - 2 : getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
+		boolean isHintItem = index > lastIndex;
+		
+		// If the "next" ime key is pressed being into the hint item of the list the
+		// softkeyboard will be hidden and focus assigned out of the checklist items.
+		if (isHintItem) {
+			InputMethodManager inputManager = (InputMethodManager) mContext
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputManager.hideSoftInputFromWindow(checkableLine.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			return;
+		}
 
 		// The actual and the new one view contents are generated depending
 		// on cursor position
