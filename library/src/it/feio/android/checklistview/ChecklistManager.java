@@ -177,20 +177,12 @@ public class ChecklistManager {
 					continue;
 
 				// Line text content will be now stripped from checks symbols if
-				// they're
-				// present (ex. [x] Task done -> lineText="Task done",
+				// they're present (ex. [x] Task done -> lineText="Task done",
 				// lineChecked=true)
 				isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
 				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
 
 				mCheckListView.addItem(lineText, isChecked);
-
-//				if (isChecked) {
-//					mCheckableLine = (CheckListViewItem) mCheckListView.getChildAt(mCheckListView.getChildCount() - 1);
-//					mCheckBox = mCheckableLine.getCheckBox();
-//					mCheckBox.setChecked(true);
-//					mCheckableLine.setCheckBox(mCheckBox);
-//				}
 			}
 		}
 

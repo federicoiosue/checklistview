@@ -54,7 +54,6 @@ import android.widget.TextView.OnEditorActionListener;
 		// Define CheckBox
 		checkBox = new CheckBox(context);
 		checkBox.setPadding(0, 5, 0, 0);
-		checkBox.setChecked(isChecked);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
 
@@ -76,6 +75,12 @@ import android.widget.TextView.OnEditorActionListener;
 
 		// Define ImageView
 		addDeleteIcon();
+		
+		// If row was previously checked its state have to be restored
+		if (isChecked) {
+			checkBox.setChecked(true);
+			onCheckedChanged(checkBox, true);
+		}
 	}
 	
 

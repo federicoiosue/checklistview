@@ -88,6 +88,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		return res;
 	}
 
+	
 	@Override
 	public void onItemChecked(CheckListViewItem checked, boolean isChecked) {
 		if (isChecked) {
