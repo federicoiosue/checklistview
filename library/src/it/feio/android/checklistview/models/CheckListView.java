@@ -5,6 +5,7 @@ import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -301,7 +302,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void addHintItem(){
 		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
 		mCheckListViewItem.cloneStyles(getEditText());
-		mCheckListViewItem.setHint(newEntryHint);
+		mCheckListViewItem.setHint(Html.fromHtml("<i>"+newEntryHint+"</i>"));
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		// Set the checkbox initially disabled
 		CheckBox c = mCheckListViewItem.getCheckBox();

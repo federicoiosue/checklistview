@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -154,6 +155,10 @@ import android.widget.TextView.OnEditorActionListener;
 	}
 
 	public void setHint(String text) {
+		getEditText().setHint(text);
+	}
+
+	public void setHint(Spanned text) {
 		getEditText().setHint(text);
 	}
 	
