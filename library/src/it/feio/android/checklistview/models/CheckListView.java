@@ -178,18 +178,22 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		EditTextMultiLineNoEnter v = mCheckListViewItem.getEditText();
 
-		// Start and end selection point are retrieved
+		// Text lenght, start and end selection points, and other derived flags are retrieved 
+		int textLenght = mCheckListViewItem.getText().length();
 		int start = v.getSelectionStart();
 		int end = v.getSelectionEnd();
+		boolean isTextSelected = end != start;
+		boolean isTruncating = !isTextSelected && start > 0 && start < textLenght;
 
 		// A check on the view position is done
 		int index = indexOfChild(mCheckListViewItem);
-		int lastIndex = showHintItem ? getChildCount() - 2 : getChildCount() - 1;
+		int lastIndex = getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
+		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
 		
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
-		if (mCheckListViewItem.isHintItem() && mCheckListViewItem.getText().length() == 0) {
+		if ( (mCheckListViewItem.isHintItem() || isLastItem) && textLenght == 0) {
 			InputMethodManager inputManager = (InputMethodManager) mContext
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(mCheckListViewItem.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -198,31 +202,30 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		
 		// If line is empty a newline will not be created but the focus will be moved on bottom.
 		// This must happen also if an empty line is already present under the actual one.
-		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
-		if (mCheckListViewItem.getText().length() == 0 
-			|| (nextItem != null && nextItem.getText().length() == 0 
-				&& start==end
-				&& start==mCheckListViewItem.getText().length() ) 
+		if (textLenght == 0 	// Empty line
+			|| (nextItem != null && nextItem.getText().length() == 0 && !isTextSelected && !isTruncating) // Empty item below 
+			|| (nextItem != null && !isTextSelected && !isTruncating && start == 0)	// On first characther
 			) {
-			focusView(mCheckListViewItem, FOCUS_DOWN);
+//			focusView(mCheckListViewItem, FOCUS_DOWN);
+			nextItem.requestFocus();
+			nextItem.getEditText().setSelection(0);
 			return;
 		}
 
 		// The actual and the new one view contents are generated depending
 		// on cursor position
 		String text = v.getText().toString();
-		boolean textSelected = end != start;
-		String oldViewText = textSelected ? text.substring(0, start) + text.substring(end, text.length()) : text
+		String oldViewText = isTextSelected ? text.substring(0, start) + text.substring(end, text.length()) : text
 				.substring(0, start);
-		String newViewText = textSelected ? text.substring(start, end) : text.substring(end, text.length());
+		String newViewText = isTextSelected ? text.substring(start, end) : text.substring(end, text.length());
 
 		// Actual view content is replaced
 		v.setText(oldViewText);
 
 		// A new checkable item is eventually created (optionally with text content)
-		if (newViewText.length() > 0 || !isLastItem) {
+//		if (newViewText.length() > 0) {
 			addItem(newViewText, mCheckListViewItem.isChecked(), index + 1);
-		}
+//		}
 
 		// The new view is focused
 		getChildAt(index + 1).requestFocus();
