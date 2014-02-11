@@ -194,6 +194,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			inputManager.hideSoftInputFromWindow(checkableLine.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			return;
 		}
+		
+		// If line is empty a newline will not be created but the focus will be moved on bottom
+		if (checkableLine.getText().length() == 0) {
+			focusView(checkableLine, FOCUS_DOWN);
+			return;
+		}
 
 		// The actual and the new one view contents are generated depending
 		// on cursor position
