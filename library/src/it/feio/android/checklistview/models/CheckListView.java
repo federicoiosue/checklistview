@@ -104,7 +104,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 					if (checked.equals(line)) {
 						
 						// If it's on last position yet nothing will be done
-						int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
+//						int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
+						int lastIndex = getChildCount() -1;
 						if (i == lastIndex) {
 							Log.v(Constants.TAG, "Not moving item it's the last one");		
 							return;
@@ -143,7 +144,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				
 				CheckListViewItem line;
 				int position = showHintItem ? getChildCount() -2 : getChildCount() -1;
-				for (int i = 0; i < getChildCount(); i++) {
+				for (int i = 0; i < position; i++) {
 					line = ((CheckListViewItem)getChildAt(i));
 					position = i;
 					if (line.isChecked()) break;
@@ -208,7 +209,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		// A new checkable item is eventually created (optionally with text content)
 		if (newViewText.length() > 0 || !isLastItem) {
-			addItem(newViewText, false, index + 1);
+			addItem(newViewText, checkableLine.isChecked(), index + 1);
 		}
 
 		// The new view is focused
