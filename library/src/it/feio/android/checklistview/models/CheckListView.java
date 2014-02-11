@@ -165,39 +165,41 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	
 	@Override
 	public void onNewLineItemEdited(CheckListViewItem checkableLine) {
-		addNewEmptyItem();
+		addHintItem();
 	}
 	
 
 	@Override
-	public void onEditorActionPerformed(CheckListViewItem checkableLine, int actionId, KeyEvent event) {
+	public void onEditorActionPerformed(CheckListViewItem mCheckListViewItem, int actionId, KeyEvent event) {
 
 		if (actionId != EditorInfo.IME_ACTION_NEXT)
 			return;
 
-		EditTextMultiLineNoEnter v = checkableLine.getEditText();
+		EditTextMultiLineNoEnter v = mCheckListViewItem.getEditText();
 
 		// Start and end selection point are retrieved
 		int start = v.getSelectionStart();
 		int end = v.getSelectionEnd();
 
 		// A check on the view position is done
-		int index = indexOfChild(checkableLine);
+		int index = indexOfChild(mCheckListViewItem);
 		int lastIndex = showHintItem ? getChildCount() - 2 : getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
 		
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
-		if (checkableLine.isHintItem() && checkableLine.getText().length() == 0) {
+		if (mCheckListViewItem.isHintItem() && mCheckListViewItem.getText().length() == 0) {
 			InputMethodManager inputManager = (InputMethodManager) mContext
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.hideSoftInputFromWindow(checkableLine.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			inputManager.hideSoftInputFromWindow(mCheckListViewItem.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			return;
 		}
 		
-		// If line is empty a newline will not be created but the focus will be moved on bottom
-		if (checkableLine.getText().length() == 0) {
-			focusView(checkableLine, FOCUS_DOWN);
+		// If line is empty a newline will not be created but the focus will be moved on bottom.
+		// This must happen also if an empty line is already present under the actual one.
+		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
+		if (mCheckListViewItem.getText().length() == 0 || nextItem.getText().length() == 0) {
+			focusView(mCheckListViewItem, FOCUS_DOWN);
 			return;
 		}
 
@@ -214,7 +216,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		// A new checkable item is eventually created (optionally with text content)
 		if (newViewText.length() > 0 || !isLastItem) {
-			addItem(newViewText, checkableLine.isChecked(), index + 1);
+			addItem(newViewText, mCheckListViewItem.isChecked(), index + 1);
 		}
 
 		// The new view is focused
@@ -247,44 +249,80 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * @param text String to be inserted as item text
 	 */
 	public void addItem(String text, boolean isChecked, Integer index){
-		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, isChecked, showDeleteIcon);
-		mCheckableLine.cloneStyles(getEditText());
-		mCheckableLine.setText(text);
-		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-		mCheckableLine.setItemCheckedListener(this);		
+		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, isChecked, showDeleteIcon);
+		mCheckListViewItem.cloneStyles(getEditText());
+		mCheckListViewItem.setText(text);
+		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		mCheckListViewItem.setItemCheckedListener(this);		
 		// Set text changed listener if is asked to do this
 		if (mCheckListChangedListener != null) {
-			mCheckableLine.setCheckListChangedListener(this.mCheckListChangedListener);
+			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
 		}
 		if (index != null) {
-			addView(mCheckableLine, index);
+			addView(mCheckListViewItem, index);
 		} else {
-			addView(mCheckableLine);
+			addView(mCheckListViewItem);
 		} 
 	}
+	
+	
+//	/**
+//	 * Add a new item to the checklist 
+//	 * @param text String to be inserted as item text
+//	 */
+//	public void addHintItem(int position){
+//		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
+//		mCheckListViewItem.cloneStyles(getEditText());
+//		mCheckListViewItem.setHint(newEntryHint);
+//		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+//		// Set the checkbox initially disabled
+//		CheckBox c = mCheckListViewItem.getCheckBox();
+//		c.setEnabled(false);
+//		mCheckListViewItem.setCheckBox(c);
+//		// Attach listener
+//		mCheckListViewItem.setItemCheckedListener(this);		
+//		// Set text changed listener if is asked to do this
+//		if (mCheckListChangedListener != null) {
+//			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
+//		}
+//		// Add view
+//		addView(mCheckListViewItem, position);
+//	}
 	
 	
 	/**
 	 * Add a new item to the checklist 
 	 * @param text String to be inserted as item text
 	 */
-	public void addNewEmptyItem(){
-		CheckListViewItem mCheckableLine = new CheckListViewItem(mContext, false, false);
-		mCheckableLine.cloneStyles(getEditText());
-		mCheckableLine.setHint(newEntryHint);
-		mCheckableLine.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
+	public void addHintItem(){
+		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
+		mCheckListViewItem.cloneStyles(getEditText());
+		mCheckListViewItem.setHint(newEntryHint);
+		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		// Set the checkbox initially disabled
-		CheckBox c = mCheckableLine.getCheckBox();
+		CheckBox c = mCheckListViewItem.getCheckBox();
 		c.setEnabled(false);
-		mCheckableLine.setCheckBox(c);
+		mCheckListViewItem.setCheckBox(c);
 		// Attach listener
-		mCheckableLine.setItemCheckedListener(this);		
+		mCheckListViewItem.setItemCheckedListener(this);		
 		// Set text changed listener if is asked to do this
 		if (mCheckListChangedListener != null) {
-			mCheckableLine.setCheckListChangedListener(this.mCheckListChangedListener);
+			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
 		}
+		
+		// Defining position (default last, but if checked items behavior is not HOLD if changes)
+		int hintItemPosition = getChildCount();
+		if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+			for (int i = 0; i < getChildCount(); i++) {				
+				if ( ((CheckListViewItem) getChildAt(i)).isChecked() ) {
+					hintItemPosition = i;
+					break;
+				}
+			}
+		}
+		
 		// Add view
-		addView(mCheckableLine);
+		addView(mCheckListViewItem, hintItemPosition);
 	}
 	
 

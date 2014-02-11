@@ -14,7 +14,6 @@ import android.os.Build;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -162,23 +161,23 @@ public class ChecklistManager {
 		}
 
 		String text = v.getText().toString();
-		CheckListViewItem mCheckableLine;
-		CheckBox mCheckBox;
+		
+		// Parse all lines if text is not empty
 		if (text.length() > 0) {
 			String[] lines = text.split(Pattern.quote(linesSeparator));
 
 			// All text lines will be cycled to build checklist items
 			String lineText;
 			boolean isChecked = false;
-
-			for (String line : lines) {
-
+			for (int i = 0; i < lines.length; i++) {
+				
+				String line = lines[i];
+				
 				if (line.length() == 0)
 					continue;
 
-				// Line text content will be now stripped from checks symbols if
-				// they're present (ex. [x] Task done -> lineText="Task done",
-				// lineChecked=true)
+				// Line text content will be now stripped from checks symbols if they're present
+				// (ex. [x] Task done -> lineText="Task done", lineChecked=true)
 				isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
 				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
 
@@ -186,9 +185,10 @@ public class ChecklistManager {
 			}
 		}
 
-		// Add new fillable line if newEntryText has some text value
+		// Add new fillable line if newEntryText has some 
+		// text value or showHintItem is set to true
 		if (showHintItem) {
-			mCheckListView.addNewEmptyItem();
+			mCheckListView.addHintItem();
 		}
 
 		mCheckListView.cloneStyles(v);
@@ -196,6 +196,7 @@ public class ChecklistManager {
 		return mCheckListView;
 	}
 
+	
 	/**
 	 * Conversion from checklist view to EditText
 	 * 
@@ -210,7 +211,6 @@ public class ChecklistManager {
 
 		StringBuilder sb = new StringBuilder();
 		boolean isChecked;
-//		int childs = v.getChildCount() - (showHintItem ? 1 : 0);
 		for (int i = 0; i < v.getChildCount(); i++) {
 			CheckListViewItem mCheckListViewItem = (CheckListViewItem) v.getChildAt(i);
 			
@@ -248,6 +248,7 @@ public class ChecklistManager {
 		return returnView;
 	}
 
+	
 	/**
 	 * Replace a
 	 * 
