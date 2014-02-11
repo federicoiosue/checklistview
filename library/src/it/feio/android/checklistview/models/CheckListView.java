@@ -143,8 +143,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				Log.v(Constants.TAG, "Moving up item");
 				
 				CheckListViewItem line;
-				int position = showHintItem ? getChildCount() -2 : getChildCount() -1;
-				for (int i = 0; i < position; i++) {
+				int position = 0;
+				for (int i = 0; i < getChildCount(); i++) {
 					line = ((CheckListViewItem)getChildAt(i));
 					position = i;
 					if (line.isChecked()) break;
