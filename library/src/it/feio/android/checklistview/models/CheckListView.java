@@ -200,7 +200,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		// This must happen also if an empty line is already present under the actual one.
 		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
 		if (mCheckListViewItem.getText().length() == 0 
-			|| (nextItem.getText().length() == 0 
+			|| (nextItem != null && nextItem.getText().length() == 0 
 				&& start==end
 				&& start==mCheckListViewItem.getText().length() ) 
 			) {
