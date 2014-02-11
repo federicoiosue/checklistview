@@ -198,7 +198,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		// If line is empty a newline will not be created but the focus will be moved on bottom.
 		// This must happen also if an empty line is already present under the actual one.
 		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
-		if (mCheckListViewItem.getText().length() == 0 || nextItem.getText().length() == 0) {
+		if (mCheckListViewItem.getText().length() == 0 
+			|| (nextItem.getText().length() == 0 
+				&& start==end
+				&& start==mCheckListViewItem.getText().length() ) 
+			) {
 			focusView(mCheckListViewItem, FOCUS_DOWN);
 			return;
 		}
