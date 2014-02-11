@@ -210,16 +210,19 @@ public class ChecklistManager {
 
 		StringBuilder sb = new StringBuilder();
 		boolean isChecked;
-		int childs = v.getChildCount() - (showHintItem ? 1 : 0);
-		for (int i = 0; i < childs; i++) {
-			CheckListViewItem mCheckableLine = (CheckListViewItem) v.getChildAt(i);
+//		int childs = v.getChildCount() - (showHintItem ? 1 : 0);
+		for (int i = 0; i < v.getChildCount(); i++) {
+			CheckListViewItem mCheckListViewItem = (CheckListViewItem) v.getChildAt(i);
+			
+			if (mCheckListViewItem.isHintItem())
+				continue;
 
 			// If item is checked it will be removed if requested
-			isChecked = mCheckableLine.isChecked();
+			isChecked = mCheckListViewItem.isChecked();
 			if (!isChecked || (isChecked && keepChecked)) {
 				sb.append(i > 0 ? linesSeparator : "")
 						.append(showChecks ? (isChecked ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM) : "")
-						.append(mCheckableLine.getText());
+						.append(mCheckListViewItem.getText());
 			}
 		}
 

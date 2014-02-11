@@ -304,6 +304,20 @@ import android.widget.TextView.OnEditorActionListener;
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
+	
+	
+	
+	/**
+	 * Checks if is the hint item
+	 * @return
+	 */
+	public boolean isHintItem() {
+		boolean res = false;
+		if (!getCheckBox().isEnabled()) {
+			res = true;
+		}
+		return res;
+	}
 
 
 }
