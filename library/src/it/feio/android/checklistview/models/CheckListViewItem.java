@@ -246,7 +246,8 @@ import android.widget.TextView.OnEditorActionListener;
 				if (parent != null) {
 					// If the actual edited line is the last but one a new empty 
 					// line is cremCheckableLineated at its bottom
-					if (this.equals(parent.getChildAt(last))) {
+//					if (this.equals(parent.getChildAt(last))) {
+					if (isHintItem()) {
 						mCheckListEventListener.onNewLineItemEdited(this);
 					}
 					// Add delete icon and remove hint 

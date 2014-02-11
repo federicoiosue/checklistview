@@ -236,7 +236,9 @@ public class ChecklistManager {
 		}
 
 		// Restoring the typography
-		returnView.setTypeface(v.getEditText().getTypeface());
+		if (v.getEditText() != null) {
+			returnView.setTypeface(v.getEditText().getTypeface());
+		}
 		
 		// Associating textChangedListener
 		if (this.mTextWatcher != null) {

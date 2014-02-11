@@ -147,7 +147,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				for (int i = 0; i < getChildCount(); i++) {
 					line = ((CheckListViewItem)getChildAt(i));
 					position = i;
-					if (line.isChecked()) break;
+					if (line.isChecked() || line.isHintItem()) break;
 				}
 				removeView(checked);
 				addView(checked, position);
@@ -185,11 +185,10 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		int index = indexOfChild(checkableLine);
 		int lastIndex = showHintItem ? getChildCount() - 2 : getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
-		boolean isHintItem = index > lastIndex;
 		
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
-		if (isHintItem) {
+		if (checkableLine.isHintItem() && checkableLine.getText().length() == 0) {
 			InputMethodManager inputManager = (InputMethodManager) mContext
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(checkableLine.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

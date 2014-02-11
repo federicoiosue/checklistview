@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 
 			// Setting new entries hint text (if not set no hint
 			// will be used)
-//			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
+			mChecklistManager.setNewEntryHint(prefs.getString("settings_hint", ""));
 			// Let checked items are moved on bottom
 			
 			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior",
