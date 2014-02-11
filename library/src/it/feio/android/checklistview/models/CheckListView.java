@@ -92,11 +92,14 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	@Override
 	public void onItemChecked(CheckListViewItem checked, boolean isChecked) {
 		if (isChecked) {
-			// If moveCheckedOnBottom is true the checked item will be moved on bottom of the list
+			// If is not selected to HOLD checked items on position then the checked
+			// item will be moved on bottom of the list
 			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
 				Log.v(Constants.TAG, "Moving checked on bottom");
+				
 				CheckListViewItem line;
 				for (int i = 0; i < getChildCount(); i++) {
+					
 					line = ((CheckListViewItem)getChildAt(i));
 					if (checked.equals(line)) {
 						
@@ -132,12 +135,30 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						}
 					}
 				}
-			}		
+			}
+		// Item has been unchecked and have to be (eventually) moved up
+		} else {
+			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+				Log.v(Constants.TAG, "Moving up item");
+				
+				CheckListViewItem line;
+				int position = showHintItem ? getChildCount() -2 : getChildCount() -1;
+				for (int i = 0; i < getChildCount(); i++) {
+					line = ((CheckListViewItem)getChildAt(i));
+					position = i;
+					if (line.isChecked()) break;
+				}
+				removeView(checked);
+				addView(checked, position);
+				
+			}
 		}
+		
 		// Notify something is changed 
 		if (mCheckListChangedListener != null) {
 			mCheckListChangedListener.onCheckListChanged();
 		}
+		
 	}
 
 	
