@@ -3,7 +3,8 @@ CheckListView
 
 Library to convert an EditText into a View capable of acting as checklist
 
-![Example Image][1] ![Example Image][2] ![Example Image][3]
+![Example Image](./01.png) ![Example Image](./02.png) ![Example Image](./03.png)
+
 
 Try out the app on the [Play Store](https://play.google.com/store/apps/details?id=it.feio.android.checklistview.demo).
 
@@ -92,7 +93,3 @@ There are no dependencies for the library, but if you want to compile the demo p
     
     
     
-    
-[1]: https://lh3.ggpht.com/6qZbcT37LZCXodHyIfAR-al6xphYFvgb-T24_ojr1VMGe5Ah5pnTKKYa0iSRkTD_hsk=h400-rw
-[2]: https://lh6.ggpht.com/6W-QExuLKhPo1V4pmD_WsKz196fbB-74Bff-HsVZp8E3JntGQiMCVGYgRfb6A0h2usU=h400-rw
-[3]: https://lh5.ggpht.com/gVv29Z6ELWevA3wx-gkI-Zm5dzLaT6McTL-6nNAn_O09nWF2dKE3gMc0HBKMhaRbd3A=h400-rw   
