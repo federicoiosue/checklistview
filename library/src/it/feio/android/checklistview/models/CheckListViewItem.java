@@ -5,6 +5,7 @@ import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
 import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.SuppressLint;
@@ -14,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.ContactsContract.DeletedContacts;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
@@ -33,7 +35,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
-		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher {
+		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
 	
 	private Context mContext;
 	private CheckBox checkBox;
@@ -72,6 +74,7 @@ import android.widget.TextView.OnEditorActionListener;
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
+		editText.setEditTextEventListener(this);
 		addView(editText);
 
 		// Define ImageView
@@ -323,6 +326,21 @@ import android.widget.TextView.OnEditorActionListener;
 			res = true;
 		}
 		return res;
+	}
+
+
+	@Override
+	public void onDeletePressed() {
+		// When this is catched if text is empty the current item will 
+		// be removed and focus moved to item above.
+		if (!isHintItem() && getText().length() == 0) {
+			if (imageView != null) {
+//				imageView.performClick();
+				focusView(View.FOCUS_UP);
+				((ViewGroup) getParent()).removeView(this);
+				mCheckListEventListener.onLineDeleted(this);
+			}
+		}
 	}
 
 
