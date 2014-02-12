@@ -22,23 +22,15 @@ public class EditTextMultiLineNoEnter extends EditText {
 
 	@Override
 	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-//		InputConnection connection = super.onCreateInputConnection(outAttrs);
-		// Removed redundant imeAction check
-//		int imeActions = outAttrs.imeOptions & EditorInfo.IME_MASK_ACTION;
-//		if ((imeActions & EditorInfo.IME_ACTION_NEXT) != 0) {
-//			// clear the existing action
-//			outAttrs.imeOptions ^= imeActions;
-//			// set the DONE action
-//			outAttrs.imeOptions |= EditorInfo.IME_ACTION_NEXT;
-//		}
+		InputConnection connection = super.onCreateInputConnection(outAttrs);
 		// By default setting android:inputType="textMultiLine" will remove any
 		// imeAction like NEXT, DONE...
 		// So here is where this behaviour is changed
 		if ((outAttrs.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) != 0) {
 			outAttrs.imeOptions &= ~EditorInfo.IME_FLAG_NO_ENTER_ACTION;
 		}
-		return new DelCatcherInputConnection(super.onCreateInputConnection(outAttrs),
-                true);
+//		return connection;
+		return new DelCatcherInputConnection(connection, true);
 	}
 	
 
