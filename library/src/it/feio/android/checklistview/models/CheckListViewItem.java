@@ -319,7 +319,7 @@ import android.widget.TextView.OnEditorActionListener;
 	 */
 	public boolean isHintItem() {
 		boolean res = false;
-		if (!getCheckBox().isEnabled()) {
+		if (!getCheckBox().isEnabled() && getEditText().getHint().length() > 0) {
 			res = true;
 		}
 		return res;
