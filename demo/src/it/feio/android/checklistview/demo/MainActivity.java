@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.demo;
 
 import it.feio.android.checklistview.ChecklistManager;
+import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
@@ -110,7 +111,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 			// Let checked items are moved on bottom
 			
 			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior",
-					String.valueOf(Constants.CHECKED_HOLD))));
+					String.valueOf(Settings.CHECKED_HOLD))));
 			
 			// Is also possible to set a general changes listener
 			mChecklistManager.setCheckListChangedListener(this);
@@ -124,15 +125,15 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 
 			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
-			mChecklistManager.setLinesSeparator(prefs.getString("settings_lines_separator", Constants.LINES_SEPARATOR));
+			mChecklistManager.setLinesSeparator(prefs.getString("settings_lines_separator", Settings.LINES_SEPARATOR));
 			
 			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
-			mChecklistManager.setKeepChecked(prefs.getBoolean("settings_keep_checked", Constants.KEEP_CHECKED));
+			mChecklistManager.setKeepChecked(prefs.getBoolean("settings_keep_checked", Settings.KEEP_CHECKED));
 			
 			// I want to make checks symbols visible when converting
 			// back to simple text from checklist
-			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", Constants.SHOW_CHECKS));
+			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", Settings.SHOW_CHECKS));
 
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
