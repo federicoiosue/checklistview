@@ -15,10 +15,10 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.ContactsContract.DeletedContacts;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +38,7 @@ import android.widget.TextView.OnEditorActionListener;
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
 	
 	private Context mContext;
+	private ImageView dragHandler;
 	private CheckBox checkBox;
 	private EditTextMultiLineNoEnter editText;
 	private ImageView imageView;
@@ -53,15 +54,38 @@ import android.widget.TextView.OnEditorActionListener;
 		
 		setOrientation(HORIZONTAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
-		// Define CheckBox
-		checkBox = new CheckBox(context);
+		
+		initDragHandler();
+		initCheckBox();
+		initEditText();
+		addDeleteIcon();
+		
+		// If row was previously checked its state have to be restored
+		if (isChecked) {
+			checkBox.setChecked(true);
+			onCheckedChanged(checkBox, true);
+		}
+	}
+	
+	
+	
+	private void initDragHandler(){
+		dragHandler = new ImageView(mContext);
+		dragHandler.setImageResource(R.drawable.ic_drag_handle);
+		addView(dragHandler);
+	}
+	
+	
+	private void initCheckBox() {
+		checkBox = new CheckBox(mContext);
 		checkBox.setPadding(0, 5, 0, 0);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
-
-		// Define EditText
-		editText = new EditTextMultiLineNoEnter(context);
+	}
+	
+	
+	private void initEditText() {
+		editText = new EditTextMultiLineNoEnter(mContext);
 		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
 		lp.weight = 1;
@@ -76,16 +100,8 @@ import android.widget.TextView.OnEditorActionListener;
 		editText.addTextChangedListener(this);
 		editText.setEditTextEventListener(this);
 		addView(editText);
-
-		// Define ImageView
-		addDeleteIcon();
-		
-		// If row was previously checked its state have to be restored
-		if (isChecked) {
-			checkBox.setChecked(true);
-			onCheckedChanged(checkBox, true);
-		}
 	}
+	
 	
 
 	public void setItemCheckedListener(CheckListEventListener listener) {
@@ -114,6 +130,11 @@ import android.widget.TextView.OnEditorActionListener;
 			imageView.setOnClickListener(this);
 			addView(imageView);
 		}
+	}
+
+
+	public ImageView getDragHandler() {
+		return this.dragHandler;
 	}
 
 	public CheckBox getCheckBox() {
@@ -342,6 +363,17 @@ import android.widget.TextView.OnEditorActionListener;
 			}
 		}
 	}
-
-
+	
+	
+	@Override
+	public void setOnDragListener(final OnDragListener l) {
+		super.setOnDragListener(l);
+		this.getEditText().setOnDragListener(new OnDragListener() {			
+			@Override
+			public boolean onDrag(View v, DragEvent event) {
+				l.onDrag(v, event);
+				return false;
+			}
+		});
+	}
 }
