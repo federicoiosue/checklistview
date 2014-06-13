@@ -368,11 +368,13 @@ import android.widget.TextView.OnEditorActionListener;
 	@Override
 	public void setOnDragListener(final OnDragListener l) {
 		super.setOnDragListener(l);
-		this.getEditText().setOnDragListener(new OnDragListener() {			
+		this.getEditText().setOnDragListener(new OnDragListener() {
 			@Override
 			public boolean onDrag(View v, DragEvent event) {
-				l.onDrag(v, event);
-				return false;
+				if (event.getAction() == DragEvent.ACTION_DROP) {
+					return l.onDrag(v, event);
+				}
+				return true;
 			}
 		});
 	}

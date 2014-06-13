@@ -12,10 +12,9 @@ import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -41,6 +40,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		this.mContext = context;
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		if (Build.VERSION.SDK_INT >= 11) {
+			this.setOnDragListener(this);
+		}
 	}
 
 
@@ -423,15 +425,10 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			case DragEvent.ACTION_DRAG_STARTED:
 				Log.d(Constants.TAG, "Drag event started");
 				dragged.setVisibility(View.INVISIBLE);
-				// if (layoutview.getId() == R.id.pinkLayout
-				// || layoutview.getId() == R.id.yellowLayout) {
-				return true;
-				// } else {
-				// return false;
-				// }
+				break;
 			case DragEvent.ACTION_DRAG_ENTERED:
 				Log.d(Constants.TAG, "Drag event entered into " + target.toString());
-				if (target.getClass().isInstance(CheckListViewItem.class)) {
+				if (target.getClass().isAssignableFrom(CheckListViewItem.class)) {
 					dragged.setVisibility(View.INVISIBLE);
 					ViewGroup container = (ViewGroup) dragged.getParent();
 					int index = container.indexOfChild(target);
@@ -441,9 +438,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:
 				Log.d(Constants.TAG, "Drag event exited from " + target.toString());
-//				if (target.getId() == R.id.pinkLayout) {
-//					dragged.setVisibility(View.VISIBLE);
-//				}
+				if (target.equals(dragged.getParent())) {
+					showViewWithDelay(dragged);
+				}
 				break;
 			case DragEvent.ACTION_DRAG_LOCATION:
 //				x = event.getX();
@@ -452,25 +449,24 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				break;
 			case DragEvent.ACTION_DROP:
 				Log.d(Constants.TAG, "Dropped into " + target.toString());
-				// ViewGroup owner = (ViewGroup) dragged.getParent();
-				// owner.removeView(dragged);
-				// LinearLayout container = (LinearLayout) target;
-				// container.addView(dragged);
-				// dragged.setVisibility(View.VISIBLE);
+				showViewWithDelay(dragged);
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
-				Log.d(Constants.TAG, "Drag ended");
-				dragged.post(new Runnable() {
-					@Override
-					public void run() {
-						dragged.setVisibility(View.VISIBLE);
-					}
-				});
+				Log.d(Constants.TAG, "Drag ended");				
 				break;
 			default:
 				break;
 		}
 		return true;
+	}
+	
+	private void showViewWithDelay(final View v) {
+		v.post(new Runnable() {
+			@Override
+			public void run() {
+				v.setVisibility(View.VISIBLE);
+			}
+		});
 	}
 
 }
