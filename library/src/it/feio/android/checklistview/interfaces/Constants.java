@@ -41,6 +41,8 @@ public interface Constants {
 
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";
+    public static final String UNCHECKED_ENTITY = "&EmptySmallSquare; ";
+    public static final String CHECKED_ENTITY = "&#x2713; ";
 
 	public static final int DELETE_ITEM_DELAY = 350;
 	

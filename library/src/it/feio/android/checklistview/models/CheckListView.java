@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import com.neopixl.pixlui.links.TextLinkClickListener;
 
 @SuppressLint("NewApi")
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener, OnTouchListener, OnDragListener {
@@ -33,6 +34,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	private Context mContext;
 	private CheckListChangedListener mCheckListChangedListener;
+	private TextLinkClickListener mTextLinkClickListener;
 
 
 	public CheckListView(Context context) {
@@ -94,6 +96,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		for (int i = 0; i < getChildCount(); i++) {
 			((CheckListViewItem) getChildAt(i)).cloneStyles(v);
 		}
+	}
+
+
+	public CheckListViewItem getChildAt(int i) {
+		return (CheckListViewItem) super.getChildAt(i);
 	}
 
 
@@ -288,6 +295,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mCheckListViewItem.setText(text);
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		mCheckListViewItem.setItemCheckedListener(this);
+		// Links recognition
+		if (mTextLinkClickListener != null) {
+			mCheckListViewItem.getEditText().gatherLinksForText();
+			mCheckListViewItem.getEditText().setOnTextLinkClickListener(mTextLinkClickListener);
+		}
 		// Set text changed listener if is asked to do this
 		if (mCheckListChangedListener != null) {
 			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
@@ -403,6 +415,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void onLineDeleted(CheckListViewItem checkableLine) {
 		// Eventually notify something is changed
 		mCheckListChangedListener.onCheckListChanged();
+	}
+
+
+	public void setOnTextLinkClickListener(TextLinkClickListener textlinkclicklistener) {
+		mTextLinkClickListener = textlinkclicklistener;
 	}
 
 
