@@ -378,4 +378,9 @@ import android.widget.TextView.OnEditorActionListener;
 			}
 		});
 	}
+	
+	
+	public CheckListView getParentView() {
+		return (CheckListView)getParent();
+	}
 }
