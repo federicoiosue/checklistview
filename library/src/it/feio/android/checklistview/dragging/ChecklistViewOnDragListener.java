@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.dragging;
 
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckListViewItem;
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -25,7 +26,7 @@ public class ChecklistViewOnDragListener implements OnDragListener {
 				break;
 			case DragEvent.ACTION_DRAG_ENTERED:
 				Log.d(Constants.TAG, "Drag event entered into " + target.toString());
-				if (target.getClass().isAssignableFrom(CheckListViewItem.class)) {
+				if (targetCanAcceptDrop(dragged, target)) {
 					dragged.setVisibility(View.INVISIBLE);
 					ViewGroup container = (ViewGroup) dragged.getParent();
 					int index = container.indexOfChild(target);
@@ -57,6 +58,21 @@ public class ChecklistViewOnDragListener implements OnDragListener {
 		return true;
 	}
 	
+	
+	private boolean targetCanAcceptDrop(View dragged, View target) {
+		boolean canAcceptDrop = false;
+		if (dragged.getClass().isAssignableFrom(CheckListViewItem.class)
+				&& target.getClass().isAssignableFrom(CheckListViewItem.class)) {
+			CheckListViewItem draggedItem = (CheckListViewItem) dragged;
+			CheckListViewItem targetItem = (CheckListViewItem) target;
+			if (!(draggedItem.isChecked()^targetItem.isChecked())) {
+				canAcceptDrop = true;
+			}
+		}
+		return canAcceptDrop;
+	}
+	
+
 	private void showViewWithDelay(final View v) {
 		v.post(new Runnable() {
 			@Override
