@@ -4,6 +4,7 @@ import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
@@ -32,14 +33,14 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private String newEntryHint = "";
 	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 
-	private Context mContext;
+	private Activity mActivity;
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
 
 
-	public CheckListView(Context context) {
-		super(context);
-		this.mContext = context;
+	public CheckListView(Activity activity) {
+		super(activity);
+		this.mActivity = activity;
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		if (Build.VERSION.SDK_INT >= 11) {
@@ -220,7 +221,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
 		if ((mCheckListViewItem.isHintItem() || isLastItem) && textLenght == 0) {
-			InputMethodManager inputManager = (InputMethodManager) mContext
+			InputMethodManager inputManager = (InputMethodManager) mActivity
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(mCheckListViewItem.getWindowToken(),
 					InputMethodManager.HIDE_NOT_ALWAYS);
@@ -290,7 +291,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 *            String to be inserted as item text
 	 */
 	public void addItem(String text, boolean isChecked, Integer index) {
-		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, isChecked, showDeleteIcon);
+		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mActivity, isChecked, showDeleteIcon);
 		mCheckListViewItem.cloneStyles(getEditText());
 		mCheckListViewItem.setText(text);
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -320,6 +321,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private void enableDragAndDrop(CheckListViewItem mCheckListViewItem) {
 		mCheckListViewItem.getDragHandler().setOnTouchListener(this);
 		mCheckListViewItem.setOnDragListener(this);
+//		mActivity.getWindow().getDecorView()
+//			//.findViewById(android.R.id.content)
+//			.setOnDragListener(this);
 	}
 
 
@@ -353,7 +357,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 *            String to be inserted as item text
 	 */
 	public void addHintItem() {
-		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
+		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mActivity, false, false);
 		mCheckListViewItem.cloneStyles(getEditText());
 		mCheckListViewItem.setHint(Html.fromHtml("<i>" + newEntryHint + "</i>"));
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -377,6 +381,16 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 					break;
 				}
 			}
+		}
+		
+		// To avoid dropping here the  dragged checklist items
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			mCheckListViewItem.setOnDragListener(new OnDragListener() {			
+				@Override
+				public boolean onDrag(View v, DragEvent event) {
+					return true;
+				}
+			});
 		}
 
 		// Add view
