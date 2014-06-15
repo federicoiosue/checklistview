@@ -2,6 +2,7 @@ package it.feio.android.checklistview.models;
 
 
 import it.feio.android.checklistview.R;
+import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
@@ -186,6 +187,17 @@ import android.widget.TextView.OnEditorActionListener;
 		getEditText().setHint(text);
 	}
 	
+	
+	public boolean isFirstItem(){
+		return (this.equals(getParentView().getChildAt(0)));
+	}
+	
+	
+	public boolean isLastItem(){
+		int lastIndex = getParentView().getChildCount() - 1;
+		return (this.equals(getParentView().getChildAt(lastIndex)));
+	}
+	
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
@@ -343,7 +355,8 @@ import android.widget.TextView.OnEditorActionListener;
 	 */
 	public boolean isHintItem() {
 		boolean res = false;
-		if (!getCheckBox().isEnabled() && getEditText().getHint().length() > 0) {
+//		if (!getCheckBox().isEnabled() && getEditText().getHint().length() > 0) {
+		if (!getCheckBox().isEnabled() && getEditText().getText().length() == 0) {
 			res = true;
 		}
 		return res;
@@ -371,12 +384,29 @@ import android.widget.TextView.OnEditorActionListener;
 		this.getEditText().setOnDragListener(new OnDragListener() {
 			@Override
 			public boolean onDrag(View v, DragEvent event) {
-				if (event.getAction() == DragEvent.ACTION_DROP) {
-					return l.onDrag(v, event);
-				}
-				return true;
+				switch (event.getAction()) {					
+					case DragEvent.ACTION_DRAG_STARTED:
+						return true;
+					case DragEvent.ACTION_DRAG_LOCATION:
+//						return l.onDrag(v, event);
+						return false;
+					case DragEvent.ACTION_DROP:
+						return l.onDrag(v, event);
+					default:
+						return true;
+				}	
+//				if (event.getAction() == DragEvent.ACTION_DRAG_LOCATION) {
+//					return false;
+//				}
+//				else if (event.getAction() == DragEvent.ACTION_DROP) {
+//					return l.onDrag(v, event);
+//				}
+//				else {
+//					return true;
+//				}
 			}
 		});
+//		this.getEditText().setOnDragListener(new ChecklistViewItemOnDragListener());
 	}
 	
 	
