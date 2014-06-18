@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.models;
 
 
+import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
@@ -70,9 +71,11 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	
 	private void initDragHandler(){
-		dragHandler = new ImageView(mContext);
-		dragHandler.setImageResource(R.drawable.ic_drag_handle);
-		addView(dragHandler);
+		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
+			dragHandler = new ImageView(mContext);
+			dragHandler.setImageResource(R.drawable.ic_drag_handle);
+			addView(dragHandler);
+		}
 	}
 	
 	

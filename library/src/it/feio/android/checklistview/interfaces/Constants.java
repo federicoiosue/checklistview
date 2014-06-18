@@ -27,7 +27,7 @@ public interface Constants {
 	/**
 	 * Default value for dragging feature
 	 */
-	public static final boolean DRAG_ENABLED = false;
+	public static final boolean DRAG_ENABLED = true;
 	
 
 	public static final String UNCHECKED_SYM = "[ ] ";
