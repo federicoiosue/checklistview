@@ -13,8 +13,7 @@ public class Settings {
 	 */
 	public static final int CHECKED_ON_BOTTOM = 1;
 	/**
-	 * Checked items behavior: move on bottom of unchecked but on top of
-	 * checked.
+	 * Checked items behavior: move on bottom of unchecked but on top of checked.
 	 */
 	public static final int CHECKED_ON_TOP_OF_CHECKED = 2;
 
@@ -25,6 +24,7 @@ public class Settings {
 	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
 	private String newEntryHint = "";
 	private int moveCheckedOnBottom = CHECKED_HOLD;
+	private boolean dragEnabled = Constants.DRAG_ENABLED;
 
 
 	public String getLinesSeparator() {
@@ -94,6 +94,16 @@ public class Settings {
 
 	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
+	}
+
+
+	public boolean getDragEnabled() {
+		return dragEnabled;
+	}
+
+
+	public void setDragEnabled(boolean dragEnabled) {
+		this.dragEnabled = dragEnabled;
 	}
 
 }

@@ -24,6 +24,11 @@ public interface Constants {
 	 * Shows or not checks when converting back to simple text
 	 */
 	public static final boolean SHOW_CHECKS = false;
+	/**
+	 * Default value for dragging feature
+	 */
+	public static final boolean DRAG_ENABLED = false;
+	
 
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";

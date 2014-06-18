@@ -18,14 +18,6 @@ import com.neopixl.pixlui.links.TextLinkClickListener;
 
 public class ChecklistManager {
 
-	// private String linesSeparator = Constants.LINES_SEPARATOR;
-	// private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
-	// private boolean keepChecked = Constants.KEEP_CHECKED;
-	// private boolean showChecks = Constants.SHOW_CHECKS;
-	// private boolean showHintItem = Constants.SHOW_HINT_ITEM;
-	// private String newEntryHint = "";
-	// private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
-
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
 	private TextWatcher mTextWatcher;
@@ -139,6 +131,16 @@ public class ChecklistManager {
 	public void setNewEntryHint(String newEntryHint) {
 		setShowHintItem(true);
 		App.getSettings().setNewEntryHint(newEntryHint);
+	}
+	
+	
+	public void setDragEnabled(boolean dragEnabled) {
+		App.getSettings().setDragEnabled(dragEnabled);
+	}
+	
+	
+	public boolean getDragEnabled() {
+		return App.getSettings().getDragEnabled();
 	}
 
 

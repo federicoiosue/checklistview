@@ -1,5 +1,6 @@
 package it.feio.android.checklistview.models;
 
+import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
 import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
@@ -329,7 +330,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		}
 
 		// Drag & drop
-		if (Build.VERSION.SDK_INT >= 11) {
+		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
 			enableDragAndDrop(mCheckListViewItem);
 		}
 	}
