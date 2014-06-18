@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.demo;
 
 import it.feio.android.checklistview.ChecklistManager;
+import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
@@ -110,7 +111,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 			// Let checked items are moved on bottom
 			
 			mChecklistManager.setMoveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior",
-					String.valueOf(Constants.CHECKED_HOLD))));
+					String.valueOf(Settings.CHECKED_HOLD))));
 			
 			// Is also possible to set a general changes listener
 			mChecklistManager.setCheckListChangedListener(this);

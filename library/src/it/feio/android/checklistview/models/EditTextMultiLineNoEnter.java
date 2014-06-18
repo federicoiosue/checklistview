@@ -1,12 +1,12 @@
 package it.feio.android.checklistview.models;
 
-import com.neopixl.pixlui.components.edittext.EditText;
 import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
+import com.neopixl.pixlui.components.edittext.EditText;
 
 /**
  * Class used to avoid carriage return in multi-line EditText.

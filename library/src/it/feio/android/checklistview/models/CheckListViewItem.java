@@ -2,7 +2,6 @@ package it.feio.android.checklistview.models;
 
 
 import it.feio.android.checklistview.R;
-import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;

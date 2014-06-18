@@ -25,20 +25,6 @@ public interface Constants {
 	 */
 	public static final boolean SHOW_CHECKS = false;
 
-	/**
-	 * Checked items behavior: hold on place.
-	 */
-	public static final int CHECKED_HOLD = 0;
-	/**
-	 * Checked items behavior: move on bottom of list.
-	 */
-	public static final int CHECKED_ON_BOTTOM = 1;
-	/**
-	 * Checked items behavior: move on bottom of unchecked but on top of
-	 * checked.
-	 */
-	public static final int CHECKED_ON_TOP_OF_CHECKED = 2;
-
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";
     public static final String UNCHECKED_ENTITY = "&EmptySmallSquare; ";

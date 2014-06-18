@@ -1,6 +1,7 @@
 package it.feio.android.checklistview.models;
 
-import it.feio.android.checklistview.dragging.ChecklistViewOnDragListener;
+import it.feio.android.checklistview.Settings;
+import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
 import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
@@ -29,11 +30,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private boolean showChecks = Constants.SHOW_CHECKS;
 	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
 	private String newEntryHint = "";
-	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
+	private int moveCheckedOnBottom = Settings.CHECKED_HOLD;
 
 	private Activity mActivity;
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
+	private ChecklistViewItemOnDragListener mChecklistViewItemOnDragListener;
 
 
 	public CheckListView(Activity activity) {
@@ -42,7 +44,24 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		if (Build.VERSION.SDK_INT >= 11) {
-			this.setOnDragListener(new ChecklistViewOnDragListener());
+			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
+			this.setOnDragListener(mChecklistViewItemOnDragListener);
+
+			// this.setOnDragListener(new OnDragListener() {
+			// @Override
+			// public boolean onDrag(View v, DragEvent event) {
+			// switch (event.getAction()) {
+			// case DragEvent.ACTION_DRAG_LOCATION:
+			// Log.v(Constants.TAG, "dehaneee " + event.getX() + ", " + event.getY());
+			// // performScroll(dragged, target);
+			// return true;
+			//
+			// default:
+			// return true;
+			// }
+			// }
+			// });
+
 		}
 	}
 
@@ -121,7 +140,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		if (isChecked) {
 			// If is not selected to HOLD checked items on position then the checked
 			// item will be moved on bottom of the list
-			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+			if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
 				Log.v(Constants.TAG, "Moving checked on bottom");
 
 				CheckListViewItem line;
@@ -144,14 +163,14 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						CheckListViewItem lineAfter;
 
 						// The newly checked item will be positioned at last position.
-						if (moveCheckedOnBottom == Constants.CHECKED_ON_BOTTOM) {
+						if (moveCheckedOnBottom == Settings.CHECKED_ON_BOTTOM) {
 							removeView(checked);
 							addView(checked, lastIndex);
 							return;
 						}
 
 						// Or at the top of checked ones
-						if (moveCheckedOnBottom == Constants.CHECKED_ON_TOP_OF_CHECKED) {
+						if (moveCheckedOnBottom == Settings.CHECKED_ON_TOP_OF_CHECKED) {
 							for (int j = lastIndex; j > i; j--) {
 								lineAfter = ((CheckListViewItem) getChildAt(j));
 								if (!lineAfter.isChecked()) {
@@ -166,7 +185,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			}
 			// Item has been unchecked and have to be (eventually) moved up
 		} else {
-			if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+			if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
 				Log.v(Constants.TAG, "Moving up item");
 
 				CheckListViewItem line;
@@ -318,10 +337,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	private void enableDragAndDrop(CheckListViewItem mCheckListViewItem) {
 		mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
-		mCheckListViewItem.setOnDragListener(new ChecklistViewOnDragListener());
-//		mActivity.getWindow().getDecorView()
-//			//.findViewById(android.R.id.content)
-//			.setOnDragListener(this);
+//		mCheckListViewItem.setOnDragListener(new ChecklistViewItemOnDragListener());
+		mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
+		
+		// mActivity.getWindow().getDecorView()
+		// //.findViewById(android.R.id.content)
+		// .setOnDragListener(this);
 	}
 
 
@@ -372,7 +393,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		// Defining position (default last, but if checked items behavior is not HOLD if changes)
 		int hintItemPosition = getChildCount();
-		if (moveCheckedOnBottom != Constants.CHECKED_HOLD) {
+		if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
 			for (int i = 0; i < getChildCount(); i++) {
 				if (((CheckListViewItem) getChildAt(i)).isChecked()) {
 					hintItemPosition = i;
@@ -380,12 +401,15 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				}
 			}
 		}
-		
-		// To avoid dropping here the  dragged checklist items
+
+		// To avoid dropping here the dragged checklist items
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			mCheckListViewItem.setOnDragListener(new OnDragListener() {			
+			mCheckListViewItem.setOnDragListener(new OnDragListener() {
 				@Override
 				public boolean onDrag(View v, DragEvent event) {
+					if (event.getAction() == DragEvent.ACTION_DROP) {
+						mChecklistViewItemOnDragListener.onDrag(v, event);
+					}
 					return true;
 				}
 			});
@@ -434,68 +458,79 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mTextLinkClickListener = textlinkclicklistener;
 	}
 
+	// public boolean onTouch(View view, MotionEvent motionEvent) {
+	// if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+	// View v = (View) view.getParent();
+	// DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+	// v.startDrag(null, shadowBuilder, v, 0);
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
 
-//	public boolean onTouch(View view, MotionEvent motionEvent) {
-//		if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//			View v = (View) view.getParent();
-//			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-//			v.startDrag(null, shadowBuilder, v, 0);
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
-
-
-//	public boolean onDrag(View target, DragEvent event) {
-//		int action = event.getAction();
-//		final View dragged = (View) event.getLocalState();
-//		switch (action) {
-//			case DragEvent.ACTION_DRAG_STARTED:
-//				Log.d(Constants.TAG, "Drag event started");
-//				dragged.setVisibility(View.INVISIBLE);
-//				break;
-//			case DragEvent.ACTION_DRAG_ENTERED:
-//				Log.d(Constants.TAG, "Drag event entered into " + target.toString());
-//				if (target.getClass().isAssignableFrom(CheckListViewItem.class)) {
-//					dragged.setVisibility(View.INVISIBLE);
-//					ViewGroup container = (ViewGroup) dragged.getParent();
-//					int index = container.indexOfChild(target);
-//					container.removeView(dragged);
-//					container.addView(dragged, index);
-//				}
-//				break;
-//			case DragEvent.ACTION_DRAG_EXITED:
-//				Log.d(Constants.TAG, "Drag event exited from " + target.toString());
-//				if (target.equals(dragged.getParent())) {
-//					showViewWithDelay(dragged);
-//				}
-//				break;
-//			case DragEvent.ACTION_DRAG_LOCATION:
-////				x = event.getX();
-////				y = event.getY();
-////				Log.v(Constants.TAG, "Drag event position " + x + ", " + y);
-//				break;
-//			case DragEvent.ACTION_DROP:
-//				Log.d(Constants.TAG, "Dropped into " + target.toString());
-//				showViewWithDelay(dragged);
-//				break;
-//			case DragEvent.ACTION_DRAG_ENDED:
-//				Log.d(Constants.TAG, "Drag ended");				
-//				break;
-//			default:
-//				break;
-//		}
-//		return true;
-//	}
-//	
-//	private void showViewWithDelay(final View v) {
-//		v.post(new Runnable() {
-//			@Override
-//			public void run() {
-//				v.setVisibility(View.VISIBLE);
-//			}
-//		});
-//	}
+	// public boolean onDrag(View target, DragEvent event) {
+	// int action = event.getAction();
+	// final View dragged = (View) event.getLocalState();
+	// switch (action) {
+	// case DragEvent.ACTION_DRAG_STARTED:
+	// Log.d(Constants.TAG, "Drag event started");
+	// dragged.setVisibility(View.INVISIBLE);
+	// break;
+	// case DragEvent.ACTION_DRAG_ENTERED:
+	// Log.d(Constants.TAG, "Drag event entered into " + target.toString());
+	// if (target.getClass().isAssignableFrom(CheckListViewItem.class)) {
+	// dragged.setVisibility(View.INVISIBLE);
+	// ViewGroup container = (ViewGroup) dragged.getParent();
+	// int index = container.indexOfChild(target);
+	// container.removeView(dragged);
+	// container.addView(dragged, index);
+	// }
+	// break;
+	// case DragEvent.ACTION_DRAG_EXITED:
+	// Log.d(Constants.TAG, "Drag event exited from " + target.toString());
+	// if (target.equals(dragged.getParent())) {
+	// showViewWithDelay(dragged);
+	// }
+	// break;
+	// case DragEvent.ACTION_DRAG_LOCATION:
+	// // x = event.getX();
+	// // y = event.getY();
+	// // Log.v(Constants.TAG, "Drag event position " + x + ", " + y);
+	// break;
+	// case DragEvent.ACTION_DROP:
+	// Log.d(Constants.TAG, "Dropped into " + target.toString());
+	// showViewWithDelay(dragged);
+	// break;
+	// case DragEvent.ACTION_DRAG_ENDED:
+	// Log.d(Constants.TAG, "Drag ended");
+	// break;
+	// default:
+	// break;
+	// }
+	// return true;
+	// }
+	//
+	// private void showViewWithDelay(final View v) {
+	// v.post(new Runnable() {
+	// @Override
+	// public void run() {
+	// v.setVisibility(View.VISIBLE);
+	// }
+	// });
+	// }
+	
+	
+	@Override
+	public boolean dispatchDragEvent(DragEvent ev) {
+		boolean r = super.dispatchDragEvent(ev);
+		if (r && (ev.getAction() == DragEvent.ACTION_DRAG_STARTED || ev.getAction() == DragEvent.ACTION_DRAG_ENDED)) {
+			// If we got a start or end and the return value is true, our
+			// onDragEvent wasn't called by ViewGroup.dispatchDragEvent
+			// So we do it here.
+			onDragEvent(ev);
+		}
+		return r;
+	}
 
 }

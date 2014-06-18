@@ -1,7 +1,7 @@
 package it.feio.android.checklistview.interfaces;
 
-import android.view.KeyEvent;
 import it.feio.android.checklistview.models.CheckListViewItem;
+import android.view.KeyEvent;
 
 public interface CheckListEventListener {
 	/**
