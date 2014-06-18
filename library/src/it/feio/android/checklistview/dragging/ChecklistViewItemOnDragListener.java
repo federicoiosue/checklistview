@@ -3,6 +3,7 @@ package it.feio.android.checklistview.dragging;
 import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckListViewItem;
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -16,9 +17,14 @@ import android.widget.ScrollView;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
-	private final int SCROLLING_MARGIN = 200;
+	private final int SCROLLING_DELAY = 10;
+	private final int SCROLLING_STEP = 5;
+	private final int DIRECTION_UP = 0;
+	private final int DIRECTION_DOWN = 1;
 
+	private int dragDirection;
 	private float y;
+	private Thread scrollerThread;
 
 
 	public boolean onDrag(View target, DragEvent event) {
@@ -36,6 +42,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 			case DragEvent.ACTION_DRAG_ENTERED:
 				Log.d(Constants.TAG, "Drag event entered into " + target.toString());
 				if (targetCanAcceptDrop(dragged, target)) {
+					toggleScroll(target);
 					Log.d(Constants.TAG, "Entrance accepted");
 					dragged.setVisibility(View.INVISIBLE);
 					ViewGroup container = (ViewGroup) dragged.getParent();
@@ -47,9 +54,11 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 			case DragEvent.ACTION_DRAG_EXITED:
 				Log.d(Constants.TAG, "Drag event exited from " + target.toString());
+				Log.d(Constants.TAG, "Drag direction: " + dragDirection);
 				if (target.equals(dragged.getParent())) {
 					showViewWithDelay(dragged);
 				}
+				toggleScroll(target);
 				break;
 
 			case DragEvent.ACTION_DRAG_LOCATION:
@@ -69,22 +78,26 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 //					}
 					
 					
-					ScrollView mainScrollView = (ScrollView) getScrollableAncestor(dragged);
+//					ScrollView mainScrollView = (ScrollView) getScrollableAncestor(dragged);
+//
+//		            int topOfDropZone = target.getTop();
+//		            int bottomOfDropZone = target.getBottom();
+//
+//		            int scrollY = mainScrollView.getScrollY();
+//		            int scrollViewHeight = mainScrollView.getMeasuredHeight();
+//
+//		            Log.d(Constants.TAG,"location: Scroll Y: "+ scrollY + " Scroll Y+Height: "+(scrollY + scrollViewHeight));
+//		            Log.d(Constants.TAG," top: "+ topOfDropZone +" bottom: "+bottomOfDropZone);
+//
+//		            if (bottomOfDropZone > (scrollY + scrollViewHeight - SCROLLING_MARGIN))
+//		                mainScrollView.smoothScrollBy(0, 30);
+//
+//		            if (topOfDropZone < (scrollY + SCROLLING_MARGIN))
+//		                mainScrollView.smoothScrollBy(0, -30);
+					
 
-		            int topOfDropZone = target.getTop();
-		            int bottomOfDropZone = target.getBottom();
-
-		            int scrollY = mainScrollView.getScrollY();
-		            int scrollViewHeight = mainScrollView.getMeasuredHeight();
-
-		            Log.d(Constants.TAG,"location: Scroll Y: "+ scrollY + " Scroll Y+Height: "+(scrollY + scrollViewHeight));
-		            Log.d(Constants.TAG," top: "+ topOfDropZone +" bottom: "+bottomOfDropZone);
-
-		            if (bottomOfDropZone > (scrollY + scrollViewHeight - SCROLLING_MARGIN))
-		                mainScrollView.smoothScrollBy(0, 30);
-
-		            if (topOfDropZone < (scrollY + SCROLLING_MARGIN))
-		                mainScrollView.smoothScrollBy(0, -30);
+					dragDirection = event.getY() < y ? DIRECTION_UP : DIRECTION_DOWN;
+					y = event.getY();
 					
 					
 					return true;
@@ -103,6 +116,40 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 				break;
 		}
 		return true;
+	}
+
+
+	private void toggleScroll(View target) {
+		if (scrollerThread == null && target.getClass().isAssignableFrom(CheckListView.class)) {
+			scrollerThread = new Thread(new Scroller(target));
+			scrollerThread.start();
+		} else {
+			if (scrollerThread != null) {
+				scrollerThread.interrupt();
+			}
+		}
+	}
+	
+	
+	class Scroller implements Runnable {
+		View target;
+		public Scroller(View target) {
+			this.target = target;
+		}
+
+		@Override
+		public void run() {
+			while (!scrollerThread.interrupted()) {
+				ScrollView mainScrollView = (ScrollView) getScrollableAncestor(target);
+				int scroll = dragDirection == DIRECTION_UP ? -SCROLLING_STEP : SCROLLING_STEP;
+				mainScrollView.smoothScrollBy(0, scroll);
+				try {
+					Thread.sleep(SCROLLING_DELAY);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 
