@@ -18,13 +18,13 @@ import com.neopixl.pixlui.links.TextLinkClickListener;
 
 public class ChecklistManager {
 
-	private String linesSeparator = Constants.LINES_SEPARATOR;
-	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
-	private boolean keepChecked = Constants.KEEP_CHECKED;
-	private boolean showChecks = Constants.SHOW_CHECKS;
-	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
-	private String newEntryHint = "";
-	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
+//	private String linesSeparator = Constants.LINES_SEPARATOR;
+//	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
+//	private boolean keepChecked = Constants.KEEP_CHECKED;
+//	private boolean showChecks = Constants.SHOW_CHECKS;
+//	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
+//	private String newEntryHint = "";
+//	private int moveCheckedOnBottom = Constants.CHECKED_HOLD;
 
 	private static ChecklistManager instance = null;
 	private Activity mActivity;
@@ -56,7 +56,7 @@ public class ChecklistManager {
 	 *            String separator
 	 */
 	public void setLinesSeparator(String linesSeparator) {
-		this.linesSeparator = linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator;
+		App.getSettings().linesSeparator = linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator;
 	}
 
 
@@ -67,7 +67,7 @@ public class ChecklistManager {
 	 *            True to show icon, false otherwise.
 	 */
 	public void setShowDeleteIcon(boolean showDeleteIcon) {
-		this.showDeleteIcon = showDeleteIcon;
+		App.getSettings().showDeleteIcon = showDeleteIcon;
 	}
 
 
@@ -78,7 +78,7 @@ public class ChecklistManager {
 	 *            True to keep checks, false otherwise.
 	 */
 	public void setKeepChecked(boolean keepChecked) {
-		this.keepChecked = keepChecked;
+		App.getSettings().keepChecked = keepChecked;
 	}
 
 
@@ -90,12 +90,12 @@ public class ChecklistManager {
 	 *            True to keep checks, false otherwise.
 	 */
 	public void setShowChecks(boolean showChecks) {
-		this.showChecks = showChecks;
+		App.getSettings().showChecks = showChecks;
 	}
 
 
 	public int getMoveCheckedOnBottom() {
-		return moveCheckedOnBottom;
+		return App.getSettings().moveCheckedOnBottom;
 	}
 
 
@@ -105,7 +105,7 @@ public class ChecklistManager {
 	 * @param moveCheckedOnBottom
 	 */
 	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
-		this.moveCheckedOnBottom = moveCheckedOnBottom;
+		App.getSettings().moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
 
@@ -115,7 +115,7 @@ public class ChecklistManager {
 	 * @param showHintItem
 	 */
 	public void setShowHintItem(boolean showHintItem) {
-		this.showHintItem = showHintItem;
+		App.getSettings().showHintItem = showHintItem;
 	}
 
 
@@ -125,7 +125,7 @@ public class ChecklistManager {
 	 * @param hint
 	 */
 	public String getNewEntryHint() {
-		return newEntryHint;
+		return App.getSettings().newEntryHint;
 	}
 
 
@@ -137,7 +137,7 @@ public class ChecklistManager {
 	 */
 	public void setNewEntryHint(String newEntryHint) {
 		setShowHintItem(true);
-		this.newEntryHint = newEntryHint;
+		App.getSettings().newEntryHint = newEntryHint;
 	}
 
 
@@ -162,9 +162,9 @@ public class ChecklistManager {
 	private View convert(EditText v) {
 
 		mCheckListView = new CheckListView(mActivity);
-		mCheckListView.setMoveCheckedOnBottom(moveCheckedOnBottom);
-		mCheckListView.setShowDeleteIcon(showDeleteIcon);
-		mCheckListView.setNewEntryHint(newEntryHint);
+		mCheckListView.setMoveCheckedOnBottom(App.getSettings().moveCheckedOnBottom);
+		mCheckListView.setShowDeleteIcon(App.getSettings().showDeleteIcon);
+		mCheckListView.setNewEntryHint(App.getSettings().newEntryHint);
 		mCheckListView.setId(v.getId());
 
 		// Listener for general event is propagated on bottom
@@ -181,7 +181,7 @@ public class ChecklistManager {
 
 		// Parse all lines if text is not empty
 		if (text.length() > 0) {
-			String[] lines = text.split(Pattern.quote(linesSeparator));
+			String[] lines = text.split(Pattern.quote(App.getSettings().linesSeparator));
 
 			// All text lines will be cycled to build checklist items
 			String lineText;
@@ -203,7 +203,7 @@ public class ChecklistManager {
 
 		// Add new fillable line if newEntryText has some
 		// text value or showHintItem is set to true
-		if (showHintItem) {
+		if (App.getSettings().showHintItem) {
 			mCheckListView.addHintItem();
 		}
 
@@ -234,9 +234,9 @@ public class ChecklistManager {
 
 			// If item is checked it will be removed if requested
 			isChecked = mCheckListViewItem.isChecked();
-			if (!isChecked || (isChecked && keepChecked)) {
-				sb.append(i > 0 ? linesSeparator : "")
-						.append(showChecks ? (isChecked ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM) : "")
+			if (!isChecked || (isChecked && App.getSettings().keepChecked)) {
+				sb.append(i > 0 ? App.getSettings().linesSeparator : "")
+						.append(App.getSettings().showChecks ? (isChecked ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM) : "")
 						.append(mCheckListViewItem.getText());
 			}
 		}
@@ -301,8 +301,8 @@ public class ChecklistManager {
 		do {
 			CheckListViewItem checklistviewitem;
 			if (i >= mCheckListView.getChildCount()) {
-				if (stringbuilder.length() > linesSeparator.length()) {
-					return stringbuilder.substring(linesSeparator.length());
+				if (stringbuilder.length() > App.getSettings().linesSeparator.length()) {
+					return stringbuilder.substring(App.getSettings().linesSeparator.length());
 				} else {
 					return "";
 				}
@@ -310,10 +310,10 @@ public class ChecklistManager {
 			checklistviewitem = mCheckListView.getChildAt(i);
 			if (!checklistviewitem.isHintItem()) {
 				boolean flag = checklistviewitem.isChecked();
-				if (!flag || flag && keepChecked) {
-					StringBuilder stringbuilder1 = stringbuilder.append(linesSeparator);
+				if (!flag || flag && App.getSettings().keepChecked) {
+					StringBuilder stringbuilder1 = stringbuilder.append(App.getSettings().linesSeparator);
 					String s;
-					if (showChecks) {
+					if (App.getSettings().showChecks) {
 						if (flag) {
 							s = "[x] ";
 						} else {
