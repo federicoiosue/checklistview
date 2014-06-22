@@ -328,21 +328,24 @@ import android.widget.TextView.OnEditorActionListener;
 	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
-	public void cloneStyles(EditText v) {
-		
-		if (v != null) {
-			// Cloning background
-			Drawable b = v.getBackground();
-			if (Build.VERSION.SDK_INT < 16) {
-				getEditText().setBackgroundDrawable(b);
-			} else {
-				getEditText().setBackground(b);
-			}
-			
-			// Cloning typography
-			getEditText().setTypeface(v.getTypeface());
-		}
-	}
+	public void cloneStyles(EditText edittext)
+    {
+        if (edittext != null)
+        {
+            Drawable drawable = edittext.getBackground();
+            if (android.os.Build.VERSION.SDK_INT < 16)
+            {
+                getEditText().setBackgroundDrawable(drawable);
+            } else
+            {
+                getEditText().setBackground(drawable);
+            }
+            getEditText().setTypeface(edittext.getTypeface());
+            getEditText().setTextSize(0, edittext.getTextSize());
+            getEditText().setTextColor(edittext.getTextColors());
+            getEditText().setLinkTextColor(edittext.getLinkTextColors());
+        }
+    }
 
 
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {

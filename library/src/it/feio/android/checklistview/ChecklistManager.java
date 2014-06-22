@@ -258,6 +258,9 @@ public class ChecklistManager {
 		// Restoring the typography
 		if (v.getEditText() != null) {
 			returnView.setTypeface(v.getEditText().getTypeface());
+			returnView.setTextSize(0, v.getEditText().getTextSize());
+			returnView.setTextColor(v.getEditText().getTextColors());
+			returnView.setLinkTextColor(v.getEditText().getLinkTextColors());
 		}
 
 		// Associating textChangedListener
