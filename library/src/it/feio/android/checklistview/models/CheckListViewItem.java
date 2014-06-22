@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,6 +75,10 @@ import android.widget.TextView.OnEditorActionListener;
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
 			dragHandler = new ImageView(mContext);
 			dragHandler.setImageResource(R.drawable.ic_drag_handle);
+			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			lp.gravity = Gravity.TOP;
+			lp.setMargins(0, DensityUtil.convertDpToPixel(6, mContext), 0, 0);
+			dragHandler.setLayoutParams(lp);
 			addView(dragHandler);
 		}
 	}
