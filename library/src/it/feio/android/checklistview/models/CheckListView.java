@@ -42,6 +42,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public CheckListView(Activity activity) {
 		super(activity);
 		this.mActivity = activity;
+		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		if (Build.VERSION.SDK_INT >= 11) {

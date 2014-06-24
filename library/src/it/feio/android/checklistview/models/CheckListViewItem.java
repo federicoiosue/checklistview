@@ -67,6 +67,8 @@ import android.widget.TextView.OnEditorActionListener;
 			checkBox.setChecked(true);
 			onCheckedChanged(checkBox, true);
 		}
+		
+		setTag(Constants.TAG_ITEM);
 	}
 	
 	
@@ -79,6 +81,7 @@ import android.widget.TextView.OnEditorActionListener;
 			lp.gravity = Gravity.TOP;
 			lp.setMargins(0, DensityUtil.convertDpToPixel(6, mContext), 0, 0);
 			dragHandler.setLayoutParams(lp);
+			dragHandler.setTag(Constants.TAG_DRAG_HANDLER);
 			addView(dragHandler);
 		}
 	}
@@ -107,6 +110,7 @@ import android.widget.TextView.OnEditorActionListener;
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
 		editText.setEditTextEventListener(this);
+		dragHandler.setTag(Constants.TAG_EDITTEXT);
 		addView(editText);
 	}
 	

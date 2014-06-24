@@ -37,4 +37,14 @@ public interface Constants {
 
 	public static final int DELETE_ITEM_DELAY = 350;
 	
+
+	// Views tags
+	static final String TAG_LIST = "lt";
+	static final String TAG_ITEM = "it";
+	static final String TAG_DRAG_HANDLER = "dh";
+	static final String TAG_EDITTEXT = "et";
+//	static final String TAG_CHECKBOX = "it";
+//	static final String ITEM_TAG = "it";
+	
+	
 }
