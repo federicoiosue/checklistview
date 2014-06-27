@@ -25,6 +25,8 @@ public class Settings {
 	private String newEntryHint = "";
 	private int moveCheckedOnBottom = CHECKED_HOLD;
 	private boolean dragEnabled = Constants.DRAG_ENABLED;
+	private boolean dragVibrationEnabled = Constants.DRAG_VIBRATION_ENABLED;
+	private int dragVibrationDuration = Constants.DRAG_VIBRATION_DURATION;
 
 
 	public String getLinesSeparator() {
@@ -104,6 +106,26 @@ public class Settings {
 
 	public void setDragEnabled(boolean dragEnabled) {
 		this.dragEnabled = dragEnabled;
+	}
+
+
+	public boolean getDragVibrationEnabled() {
+		return dragVibrationEnabled;
+	}
+
+
+	public void setDragVibrationEnabled(boolean dragVibrationEnabled) {
+		this.dragVibrationEnabled = dragVibrationEnabled;
+	}
+
+
+	public int getDragVibrationDuration() {
+		return dragVibrationDuration;
+	}
+
+
+	public void setDragVibrationDuration(int dragVibrationDuration) {
+		this.dragVibrationDuration = dragVibrationDuration;
 	}
 
 }

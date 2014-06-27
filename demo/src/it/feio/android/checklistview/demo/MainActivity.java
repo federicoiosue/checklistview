@@ -135,6 +135,10 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 			// back to simple text from checklist
 			mChecklistManager.setShowChecks(prefs.getBoolean("settings_show_checks", Constants.SHOW_CHECKS));
 
+			// Enable or disable drag & drop
+//			mChecklistManager.setDragEnabled(false);
+			mChecklistManager.setDragVibrationEnabled(true);
+			
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);

@@ -48,8 +48,7 @@ public class ChecklistManager {
 	 *            String separator
 	 */
 	public void setLinesSeparator(String linesSeparator) {
-		App.getSettings().setLinesSeparator(
-				linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator);
+		App.getSettings().setLinesSeparator(linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator);
 	}
 
 
@@ -132,15 +131,35 @@ public class ChecklistManager {
 		setShowHintItem(true);
 		App.getSettings().setNewEntryHint(newEntryHint);
 	}
-	
-	
+
+
 	public void setDragEnabled(boolean dragEnabled) {
 		App.getSettings().setDragEnabled(dragEnabled);
 	}
-	
-	
+
+
 	public boolean getDragEnabled() {
 		return App.getSettings().getDragEnabled();
+	}
+
+
+	public void setDragVibrationEnabled(boolean dragVibrationEnabled) {
+		App.getSettings().setDragVibrationEnabled(dragVibrationEnabled);
+	}
+
+
+	public boolean getDragVibrationEnabled() {
+		return App.getSettings().getDragVibrationEnabled();
+	}
+
+
+	public void setDragVibrationDuration(int dragVibrationDuration) {
+		App.getSettings().setDragVibrationDuration(dragVibrationDuration);
+	}
+
+
+	public int getDragVibrationDuration() {
+		return App.getSettings().getDragVibrationDuration();
 	}
 
 
@@ -198,8 +217,7 @@ public class ChecklistManager {
 				// Line text content will be now stripped from checks symbols if they're present
 				// (ex. [x] Task done -> lineText="Task done", lineChecked=true)
 				isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
-				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM,
-						"");
+				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
 
 				mCheckListView.addItem(lineText, isChecked);
 			}
@@ -241,8 +259,7 @@ public class ChecklistManager {
 			if (!isChecked || (isChecked && App.getSettings().getKeepChecked())) {
 				sb.append(i > 0 ? App.getSettings().getLinesSeparator() : "")
 						.append(App.getSettings().getShowChecks() ? (isChecked ? Constants.CHECKED_SYM
-								: Constants.UNCHECKED_SYM)
-								: "").append(mCheckListViewItem.getText());
+								: Constants.UNCHECKED_SYM) : "").append(mCheckListViewItem.getText());
 			}
 		}
 
@@ -319,8 +336,7 @@ public class ChecklistManager {
 			if (!checklistviewitem.isHintItem()) {
 				boolean flag = checklistviewitem.isChecked();
 				if (!flag || flag && App.getSettings().getKeepChecked()) {
-					StringBuilder stringbuilder1 = stringbuilder
-							.append(App.getSettings().getLinesSeparator());
+					StringBuilder stringbuilder1 = stringbuilder.append(App.getSettings().getLinesSeparator());
 					String s;
 					if (App.getSettings().getShowChecks()) {
 						if (flag) {

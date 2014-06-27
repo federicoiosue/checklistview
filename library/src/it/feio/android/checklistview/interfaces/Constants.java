@@ -45,6 +45,9 @@ public interface Constants {
 	static final String TAG_EDITTEXT = "et";
 //	static final String TAG_CHECKBOX = "it";
 //	static final String ITEM_TAG = "it";
+
+	public static final boolean DRAG_VIBRATION_ENABLED = false;
+	public static final int DRAG_VIBRATION_DURATION = 25;
 	
 	
 }
