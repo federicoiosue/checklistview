@@ -110,7 +110,7 @@ import android.widget.TextView.OnEditorActionListener;
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
 		editText.setEditTextEventListener(this);
-		dragHandler.setTag(Constants.TAG_EDITTEXT);
+		editText.setTag(Constants.TAG_EDITTEXT);
 		addView(editText);
 	}
 	
@@ -292,31 +292,20 @@ import android.widget.TextView.OnEditorActionListener;
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// Checks if is the first text written here
 		if (lenghtBeforeTextChanged == 0) {			
-			ViewGroup parent = (ViewGroup) getParent();
-			if (parent != null) {
-				int last = parent.getChildCount() - 1;
-				if (parent != null) {
-					// If the actual edited line is the last but one a new empty 
-					// line is cremCheckableLineated at its bottom
-//					if (this.equals(parent.getChildAt(last))) {
-					if (isHintItem()) {
-						mCheckListEventListener.onNewLineItemEdited(this);
-					}
-					// Add delete icon and remove hint 
-					showDeleteIcon = true;
-					addDeleteIcon();
-					setHint("");
-				}
+			// If the actual edited line is the last but one a new empty 
+			// line is cremCheckableLineated at its bottom
+			if (isHintItem()) {
+				mCheckListEventListener.onNewLineItemEdited(this);
 			}
+			// Add delete icon and remove hint 
+			showDeleteIcon = true;
+			addDeleteIcon();
+			setHint("");
 		} else if (s.length() == 0) {
-			ViewGroup parent = (ViewGroup) getParent();
-			if (parent != null) {
-				int last = parent.getChildCount() - 1;
-				if (this.equals(parent.getChildAt(last - 1))) {
-					// An upper line is searched to give it focus
-					focusView(View.FOCUS_DOWN);					
-					parent.removeView(this);
-				}
+			if (isLastItem()) {
+				// An upper line is searched to give it focus
+				focusView(View.FOCUS_DOWN);					
+				getParentView().removeView(this);
 			}
 		}		
 		
@@ -369,8 +358,7 @@ import android.widget.TextView.OnEditorActionListener;
 	 */
 	public boolean isHintItem() {
 		boolean res = false;
-//		if (!getCheckBox().isEnabled() && getEditText().getHint().length() > 0) {
-		if (!getCheckBox().isEnabled() && getEditText().getText().length() == 0) {
+		if (!getCheckBox().isEnabled()) {
 			res = true;
 		}
 		return res;
