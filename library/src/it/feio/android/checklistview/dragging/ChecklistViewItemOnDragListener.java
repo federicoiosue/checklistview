@@ -4,8 +4,8 @@ import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListViewItem;
+import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.TargetApi;
-import android.graphics.Rect;
 import android.os.Build;
 import android.util.Log;
 import android.view.DragEvent;
@@ -18,7 +18,7 @@ import android.widget.ScrollView;
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 	private final int SCROLLING_DELAY = 10;
-	private final int SCROLLING_STEP = 3;
+	private final int SCROLLING_STEP = 4;
 	private final int DIRECTION_UP = 0;
 	private final int DIRECTION_DOWN = 1;
 
@@ -71,17 +71,17 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 					y = event.getY();
 					Log.v(Constants.TAG, "Drag event vertical position: " + y);
 					
-					Rect scrollBounds = new Rect();
-					scrollView.getLocalVisibleRect(scrollBounds);
-					Rect scrollBounds1 = new Rect();
-					scrollView.getHitRect(scrollBounds1);
-					Rect scrollBounds2 = new Rect();
-					scrollView.getDrawingRect(scrollBounds2);
-					
-					if (y - scrollView.getScrollY() < 200) {
+//					Rect scrollBounds = new Rect();
+//					scrollView.getLocalVisibleRect(scrollBounds);
+//					Rect scrollBounds1 = new Rect();
+//					scrollView.getHitRect(scrollBounds1);
+//					Rect scrollBounds2 = new Rect();
+//					scrollView.getDrawingRect(scrollBounds2);
+					int scroll = getScroll(scrollView, target);
+					if (y - scroll < 200) {
 						dragDirection = DIRECTION_UP;
 						startScrolling(target);
-					} else if (scrollView.getHeight() - (y - scrollView.getScrollY()) < 200) {
+					} else if (scrollView.getHeight() - (y - scroll) < 200) {
 						dragDirection = DIRECTION_DOWN;
 						startScrolling(target);
 					}
@@ -104,6 +104,24 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 				break;
 		}
 		return true;
+	}
+
+
+	private int getScroll(ScrollView scrollView, View target) {
+		int scroll = 0;
+		scroll += scrollView.getScrollY();
+		int sum = 0;
+		View child = target;
+		ViewGroup parent;
+		do {
+			parent = (ViewGroup) child.getParent();
+			int index = parent.indexOfChild(child);
+			for (int i = 0; i < index; i++) {
+				sum += parent.getChildAt(i).getHeight();
+			}
+			child = parent;
+		} while (!parent.equals(scrollView));
+		return scroll - sum;
 	}
 
 
@@ -136,7 +154,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		public void run() {
 			int scrollStep = dragDirection == DIRECTION_UP ? -SCROLLING_STEP : SCROLLING_STEP;
 			while (scroll) {
-				scrollView.smoothScrollBy(0, scrollStep);
+				scrollView.smoothScrollBy(0, DensityUtil.convertDpToPixel(scrollStep, scrollView.getContext()));
 				try {
 					Thread.sleep(SCROLLING_DELAY);
 				} catch (InterruptedException e) {

@@ -23,7 +23,7 @@ public class ChecklistViewDragShadowBuilder extends DragShadowBuilder {
 		int height = getView().getHeight();
 //		shadow.setBounds(0, 0, width, height);
 		size.set(width, height);
-		touch.set(10, 10);
+		touch.set(10, 20);
 	}
 
 
