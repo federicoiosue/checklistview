@@ -213,6 +213,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onNewLineItemEdited(CheckListViewItem checkableLine) {
+		enableDragAndDrop(checkableLine);
 		addHintItem();
 	}
 
@@ -331,20 +332,20 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		}
 
 		// Drag & drop
-		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
-			enableDragAndDrop(mCheckListViewItem);
-		}
+		enableDragAndDrop(mCheckListViewItem);
 	}
 
 
 	private void enableDragAndDrop(CheckListViewItem mCheckListViewItem) {
-		mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
-//		mCheckListViewItem.setOnDragListener(new ChecklistViewItemOnDragListener());
-		mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
-		
-		// mActivity.getWindow().getDecorView()
-		// //.findViewById(android.R.id.content)
-		// .setOnDragListener(this);
+		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
+			mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
+			// mCheckListViewItem.setOnDragListener(new ChecklistViewItemOnDragListener());
+			mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
+
+			// mActivity.getWindow().getDecorView()
+			// //.findViewById(android.R.id.content)
+			// .setOnDragListener(this);
+		}
 	}
 
 

@@ -18,7 +18,7 @@ import android.widget.ScrollView;
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 	private final int SCROLLING_DELAY = 10;
-	private final int SCROLLING_STEP = 5;
+	private final int SCROLLING_STEP = 3;
 	private final int DIRECTION_UP = 0;
 	private final int DIRECTION_DOWN = 1;
 
@@ -81,9 +81,9 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 					if (y - scrollView.getScrollY() < 200) {
 						dragDirection = DIRECTION_UP;
 						startScrolling(target);
-//					} else if (y - getScrollableAncestor(dragged).getScrollY() - target.getHeight() < 200) {
-//						dragDirection = DIRECTION_DOWN;
-//						toggleScroll(target);
+					} else if (scrollView.getHeight() - (y - scrollView.getScrollY()) < 200) {
+						dragDirection = DIRECTION_DOWN;
+						startScrolling(target);
 					}
 					break;
 				} else {
@@ -108,16 +108,20 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 
 	private void startScrolling(View target) {
-		scrollerThread = new Thread(new Scroller(target));
-		scroll = true;
-		scrollerThread.start();
+		if (!scroll) {
+			scrollerThread = new Thread(new Scroller(target));
+			scroll = true;
+			scrollerThread.start();
+		}
 	}
 
 
 	private void stopScrolling() {
-		scroll = false;
-		if (scrollerThread != null && scrollerThread.isAlive()) {
-			scrollerThread.interrupt();
+		if (scroll) {
+			scroll = false;
+			if (scrollerThread != null && scrollerThread.isAlive()) {
+				scrollerThread.interrupt();
+			}
 		}
 	}
 	
