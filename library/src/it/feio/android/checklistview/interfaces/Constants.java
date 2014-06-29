@@ -28,7 +28,6 @@ public interface Constants {
 	 * Default value for dragging feature
 	 */
 	public static final boolean DRAG_ENABLED = true;
-	
 
 	public static final String UNCHECKED_SYM = "[ ] ";
 	public static final String CHECKED_SYM = "[x] ";
@@ -37,17 +36,18 @@ public interface Constants {
 
 	public static final int DELETE_ITEM_DELAY = 350;
 	
-
 	// Views tags
 	static final String TAG_LIST = "lt";
 	static final String TAG_ITEM = "it";
 	static final String TAG_DRAG_HANDLER = "dh";
 	static final String TAG_EDITTEXT = "et";
-//	static final String TAG_CHECKBOX = "it";
-//	static final String ITEM_TAG = "it";
 
+	// Drag and drop parameters
 	public static final boolean DRAG_VIBRATION_ENABLED = false;
 	public static final int DRAG_VIBRATION_DURATION = 25;
+	public static final int SCROLLING_DELAY = 10;
+	public static final int SCROLLING_STEP = 5;
+	public static final int SCROLLING_THREESHOLD = 100;
 	
 	
 }

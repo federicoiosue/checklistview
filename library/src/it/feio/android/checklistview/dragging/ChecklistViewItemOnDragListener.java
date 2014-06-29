@@ -17,8 +17,6 @@ import android.widget.ScrollView;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
-	private final int SCROLLING_DELAY = 10;
-	private final int SCROLLING_STEP = 4;
 	private final int DIRECTION_UP = 0;
 	private final int DIRECTION_DOWN = 1;
 
@@ -70,20 +68,22 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 				if (checkTag(target, Constants.TAG_LIST)) {
 					y = event.getY();
 					Log.v(Constants.TAG, "Drag event vertical position: " + y);
-					
-//					Rect scrollBounds = new Rect();
-//					scrollView.getLocalVisibleRect(scrollBounds);
-//					Rect scrollBounds1 = new Rect();
-//					scrollView.getHitRect(scrollBounds1);
-//					Rect scrollBounds2 = new Rect();
-//					scrollView.getDrawingRect(scrollBounds2);
+
+					// Rect scrollBounds = new Rect();
+					// scrollView.getLocalVisibleRect(scrollBounds);
+					// Rect scrollBounds1 = new Rect();
+					// scrollView.getHitRect(scrollBounds1);
+					// Rect scrollBounds2 = new Rect();
+					// scrollView.getDrawingRect(scrollBounds2);
 					int scroll = getScroll(scrollView, target);
-					if (y - scroll < 200) {
+					if (y - scroll < Constants.SCROLLING_THREESHOLD) {
 						dragDirection = DIRECTION_UP;
 						startScrolling(target);
-					} else if (scrollView.getHeight() - (y - scroll) < 200) {
+					} else if (scrollView.getHeight() - (y - scroll) < Constants.SCROLLING_THREESHOLD) {
 						dragDirection = DIRECTION_DOWN;
 						startScrolling(target);
+					} else {
+						stopScrolling();
 					}
 					break;
 				} else {
@@ -142,21 +142,23 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 			}
 		}
 	}
-	
-	
+
 	class Scroller implements Runnable {
 		View target;
+
+
 		public Scroller(View target) {
 			this.target = target;
 		}
 
+
 		@Override
 		public void run() {
-			int scrollStep = dragDirection == DIRECTION_UP ? -SCROLLING_STEP : SCROLLING_STEP;
+			int scrollStep = dragDirection == DIRECTION_UP ? -Constants.SCROLLING_STEP : Constants.SCROLLING_STEP;
 			while (scroll) {
-				scrollView.smoothScrollBy(0, DensityUtil.convertDpToPixel(scrollStep, scrollView.getContext()));
+				scrollView.smoothScrollBy(0, DensityUtil.dpToPx(scrollStep, scrollView.getContext()));
 				try {
-					Thread.sleep(SCROLLING_DELAY);
+					Thread.sleep(Constants.SCROLLING_DELAY);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -184,7 +186,8 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		if (checkTag(target, Constants.TAG_ITEM)) {
 			CheckListViewItem draggedItem = (CheckListViewItem) dragged;
 			CheckListViewItem targetItem = (CheckListViewItem) target;
-			if (App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD || !(draggedItem.isChecked() ^ targetItem.isChecked())) {
+			if (App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD
+					|| !(draggedItem.isChecked() ^ targetItem.isChecked())) {
 				canAcceptDrop = true;
 			}
 		}
@@ -200,8 +203,8 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 			}
 		});
 	}
-	
-	
+
+
 	private boolean checkTag(View view, Object tag) {
 		if (view.getTag() != null && view.getTag().equals(tag)) {
 			return true;

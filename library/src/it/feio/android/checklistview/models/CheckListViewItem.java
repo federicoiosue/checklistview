@@ -76,11 +76,12 @@ import android.widget.TextView.OnEditorActionListener;
 	private void initDragHandler(){
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
 			dragHandler = new ImageView(mContext);
-			dragHandler.setImageResource(R.drawable.ic_drag_handle);
 			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			lp.gravity = Gravity.TOP;
-			lp.setMargins(0, DensityUtil.convertDpToPixel(6, mContext), 0, 0);
+			lp.setMargins(0, DensityUtil.dpToPx(6, mContext), 0, 0);
 			dragHandler.setLayoutParams(lp);
+			dragHandler.setImageResource(R.drawable.ic_drag_handle);
+			dragHandler.setPadding(2, 2, 2, 2);
 			dragHandler.setTag(Constants.TAG_DRAG_HANDLER);
 			addView(dragHandler);
 		}
@@ -89,7 +90,10 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	private void initCheckBox() {
 		checkBox = new CheckBox(mContext);
-		checkBox.setPadding(0, 5, 0, 0);
+		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lp.gravity = Gravity.TOP;
+		checkBox.setLayoutParams(lp);
+		checkBox.setPadding(2, 5, 2, 2);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
 	}
@@ -97,10 +101,11 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	private void initEditText() {
 		editText = new EditTextMultiLineNoEnter(mContext);
-		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
 		lp.weight = 1;
+		lp.gravity = Gravity.TOP;
 		editText.setLayoutParams(lp);
+		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		// Alignment to support RTL
 		if (Build.VERSION.SDK_INT >= 18) {
 			editText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
@@ -126,12 +131,12 @@ import android.widget.TextView.OnEditorActionListener;
 			imageView = new ImageView(mContext);
 			imageView.setImageResource(R.drawable.ic_action_cancel);
 			imageView.setBackgroundResource(R.drawable.icon_selector);
-			int size = DensityUtil.convertDpToPixel(30, mContext);
+			int size = DensityUtil.dpToPx(30, mContext);
 			LayoutParams lp = new LayoutParams(size, size);
-			lp.setMargins(0, DensityUtil.convertDpToPixel(5, mContext), 0, 0);
+			lp.setMargins(0, DensityUtil.dpToPx(5, mContext), 0, 0);
 			imageView.setLayoutParams(lp);
 			
-			int padding = DensityUtil.convertDpToPixel(2, mContext);
+			int padding = DensityUtil.dpToPx(2, mContext);
 			imageView.setPadding(padding, padding, padding, padding);
 			
 			// Alpha is set just for newer API because using AlphaManager helper class I should use 
