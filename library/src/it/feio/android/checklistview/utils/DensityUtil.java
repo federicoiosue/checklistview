@@ -23,9 +23,9 @@ public class DensityUtil {
 //		float px = dp * (metrics.densityDpi / 160f);
 //		return (int)px;
 //	}
-	public static int dpToPx(int dp, Context context) {
+	public static int dpToPx(float dp, Context context) {
 	    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    int px = Math.round(dp * (displayMetrics.densityDpi / 160f));       
 	    return px;
 	}
 
@@ -45,9 +45,9 @@ public class DensityUtil {
 //		float dp = px / (metrics.densityDpi / 160f);
 //		return (int)dp;
 //	}
-	public static int pxToDp(int px, Context context) {
+	public static int pxToDp(float px, Context context) {
 	    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-	    int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	    int dp = Math.round(px / (displayMetrics.densityDpi / 160f));
 	    return dp;
 	}
 }
