@@ -323,11 +323,14 @@ import android.widget.TextView.OnEditorActionListener;
 
 
 	private void focusView(int focusDirection) {
-		EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) focusSearch(focusDirection);
-		if (focusableEditText != null) {
-			focusableEditText.requestFocus();
-			focusableEditText.setSelection(focusableEditText.getText().length());
-		}		
+		View v = focusSearch(focusDirection);
+		if (v.getClass().isAssignableFrom(EditTextMultiLineNoEnter.class)) {
+			EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) focusSearch(focusDirection);
+			if (focusableEditText != null) {
+				focusableEditText.requestFocus();
+				focusableEditText.setSelection(focusableEditText.getText().length());
+			}	
+		}	
 	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
