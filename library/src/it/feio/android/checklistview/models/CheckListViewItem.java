@@ -324,7 +324,7 @@ import android.widget.TextView.OnEditorActionListener;
 
 	private void focusView(int focusDirection) {
 		View v = focusSearch(focusDirection);
-		if (v.getClass().isAssignableFrom(EditTextMultiLineNoEnter.class)) {
+		if (v != null && v.getClass().isAssignableFrom(EditTextMultiLineNoEnter.class)) {
 			EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) focusSearch(focusDirection);
 			if (focusableEditText != null) {
 				focusableEditText.requestFocus();
