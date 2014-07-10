@@ -8,6 +8,7 @@ import it.feio.android.checklistview.models.CheckListViewItem;
 import java.util.regex.Pattern;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.text.TextWatcher;
 import android.view.View;
@@ -19,22 +20,21 @@ import com.neopixl.pixlui.links.TextLinkClickListener;
 public class ChecklistManager {
 
 	private static ChecklistManager instance = null;
-	private Activity mActivity;
+	private Context mContext;
 	private TextWatcher mTextWatcher;
 	private CheckListChangedListener mCheckListChangedListener;
 	private CheckListView mCheckListView;
 	private TextLinkClickListener mTextLinkClickListener;
 
 
-	private ChecklistManager(Activity mActivity) {
-		this.mActivity = mActivity;
-		mActivity.getLayoutInflater();
+	private ChecklistManager(Context mContext) {
+		this.mContext = mContext;
 	}
 
 
-	public static synchronized ChecklistManager getInstance(Activity mActivity) {
+	public static synchronized ChecklistManager getInstance(Context mContext) {
 		if (instance == null) {
-			instance = new ChecklistManager(mActivity);
+			instance = new ChecklistManager(mContext);
 		}
 		return instance;
 	}
@@ -183,7 +183,7 @@ public class ChecklistManager {
 	 */
 	private View convert(EditText v) {
 
-		mCheckListView = new CheckListView(mActivity);
+		mCheckListView = new CheckListView(mContext);
 		mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
 		mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
 		mCheckListView.setNewEntryHint(App.getSettings().getNewEntryHint());
@@ -245,7 +245,7 @@ public class ChecklistManager {
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	private View convert(CheckListView v) {
-		EditText returnView = new EditText(mActivity);
+		EditText returnView = new EditText(mContext);
 
 		StringBuilder sb = new StringBuilder();
 		boolean isChecked;

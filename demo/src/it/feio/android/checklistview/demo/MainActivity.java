@@ -22,7 +22,6 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 
 	Button b;
 	View switchView;
-	private Activity mActivity;
 	private SharedPreferences prefs;
 	boolean isChecklist;
 	private ChecklistManager mChecklistManager;
@@ -31,8 +30,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		mActivity = this;
+		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		isChecklist = prefs.getBoolean("isChecklist", false);
 
@@ -98,7 +96,7 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 		 */
 		try {
 			// Getting instance
-			mChecklistManager = ChecklistManager.getInstance(mActivity);
+			mChecklistManager = ChecklistManager.getInstance(getApplicationContext());
 
 			/*
 			 * These method are useful when converting from EditText to
