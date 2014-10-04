@@ -1,16 +1,17 @@
 package it.feio.android.checklistview.models;
 
-import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
+
 import com.neopixl.pixlui.components.edittext.EditText;
+
+import it.feio.android.checklistview.interfaces.EditTextEventListener;
 
 /**
  * Class used to avoid carriage return in multi-line EditText.
- *
  */
 public class EditTextMultiLineNoEnter extends EditText {
 	
@@ -29,14 +30,12 @@ public class EditTextMultiLineNoEnter extends EditText {
 		if ((outAttrs.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) != 0) {
 			outAttrs.imeOptions &= ~EditorInfo.IME_FLAG_NO_ENTER_ACTION;
 		}
-//		return connection;
 		return new DelCatcherInputConnection(connection, true);
 	}
 	
 
 	/**
 	 * Sets event linstener to catch delete key pressions
-	 * @param mEditTextEventListener
 	 */
 	public void setEditTextEventListener(EditTextEventListener mEditTextEventListener) {
 		this.mEditTextEventListener = mEditTextEventListener;
@@ -45,7 +44,6 @@ public class EditTextMultiLineNoEnter extends EditText {
 
 	/**
 	 * Overriding InputConnectionWrapper to throw delete key pressions
-	 *
 	 */
 	private class DelCatcherInputConnection extends InputConnectionWrapper {
 
@@ -57,7 +55,6 @@ public class EditTextMultiLineNoEnter extends EditText {
         public boolean sendKeyEvent(KeyEvent event) {
             if (event.getAction() == KeyEvent.ACTION_DOWN
                     && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
-//            	onKeyDown(KeyEvent.KEYCODE_DEL, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
             	mEditTextEventListener.onDeletePressed();
             }
             return super.sendKeyEvent(event);
@@ -65,7 +62,6 @@ public class EditTextMultiLineNoEnter extends EditText {
         
         @Override
         public boolean deleteSurroundingText(int beforeLength, int afterLength) {
-//        	onKeyDown(KeyEvent.KEYCODE_DEL, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
         	mEditTextEventListener.onDeletePressed();
         	return super.deleteSurroundingText(beforeLength, afterLength);
         }

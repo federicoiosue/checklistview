@@ -8,6 +8,8 @@ android {
         applicationId "it.feio.android.checklistview"
         minSdkVersion 8
         targetSdkVersion 19
+        versionCode 3
+        versionName "2.1"
     }
 
     buildTypes {

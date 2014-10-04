@@ -26,8 +26,6 @@ import com.neopixl.pixlui.links.TextLinkClickListener;
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
 
 	private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
-	private boolean keepChecked = Constants.KEEP_CHECKED;
-	private boolean showChecks = Constants.SHOW_CHECKS;
 	private boolean showHintItem = Constants.SHOW_HINT_ITEM;
 	private String newEntryHint = "";
 	private int moveCheckedOnBottom = Settings.CHECKED_HOLD;
@@ -47,30 +45,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		if (Build.VERSION.SDK_INT >= 11) {
 			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
 			this.setOnDragListener(mChecklistViewItemOnDragListener);
-
-			// this.setOnDragListener(new OnDragListener() {
-			// @Override
-			// public boolean onDrag(View v, DragEvent event) {
-			// switch (event.getAction()) {
-			// case DragEvent.ACTION_DRAG_LOCATION:
-			// Log.v(Constants.TAG, "dehaneee " + event.getX() + ", " + event.getY());
-			// // performScroll(dragged, target);
-			// return true;
-			//
-			// default:
-			// return true;
-			// }
-			// }
-			// });
-
 		}
 	}
 
 
 	/**
 	 * Declare if a checked item must be moved on bottom of the list or not
-	 * 
-	 * @param moveCheckedOnBottom
 	 */
 	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
@@ -79,9 +59,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	/**
 	 * Set if show or not a delete icon at the end of the line. Default true.
-	 * 
-	 * @param showDeleteIcon
-	 *            True to show icon, false otherwise.
 	 */
 	public void setShowDeleteIcon(boolean showDeleteIcon) {
 		this.showDeleteIcon = showDeleteIcon;
@@ -90,8 +67,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	/**
 	 * Set if an empty line on bottom of the checklist must be shown or not
-	 * 
-	 * @param showHintItem
 	 */
 	public void setShowHintItem(boolean showHintItem) {
 		this.showHintItem = showHintItem;
@@ -100,8 +75,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	/**
 	 * Text to be used as hint for the last empty line (hint item)
-	 * 
-	 * @param hint
 	 */
 	public void setNewEntryHint(String hint) {
 		setShowHintItem(true);
@@ -113,7 +86,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	@SuppressWarnings("deprecation")
 	public void cloneStyles(EditText v) {
 		for (int i = 0; i < getChildCount(); i++) {
-			((CheckListViewItem) getChildAt(i)).cloneStyles(v);
+			getChildAt(i).cloneStyles(v);
 		}
 	}
 
@@ -123,15 +96,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	}
 
 
-	/**
-	 * Retrieve the edittext of a child line to be used to copy the typography
-	 * 
-	 * @return
-	 */
 	public EditText getEditText() {
 		EditText res = null;
-		CheckListViewItem child = (CheckListViewItem) getChildAt(0);
-		if (child != null) res = child.getEditText();
+		CheckListViewItem child = getChildAt(0);
+		if (child != null) {
+            res = child.getEditText();
+        }
 		return res;
 	}
 
@@ -161,7 +131,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						// Otherwise all items at bottom than the actual will be
 						// cycled until a good position is find.
 						Log.v(Constants.TAG, "Moving item at position " + i);
-						CheckListViewItem lineAfter;
 
 						// The newly checked item will be positioned at last position.
 						if (moveCheckedOnBottom == Settings.CHECKED_ON_BOTTOM) {
@@ -173,8 +142,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 						// Or at the top of checked ones
 						if (moveCheckedOnBottom == Settings.CHECKED_ON_TOP_OF_CHECKED) {
 							for (int j = lastIndex; j > i; j--) {
-								lineAfter = ((CheckListViewItem) getChildAt(j));
-								if (!lineAfter.isChecked()) {
+								if (!getChildAt(j).isChecked()) {
 									removeView(checked);
 									addView(checked, j);
 									return;
@@ -192,9 +160,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 				CheckListViewItem line;
 				int position = 0;
 				for (int i = 0; i < getChildCount(); i++) {
-					line = ((CheckListViewItem) getChildAt(i));
+					line = getChildAt(i);
 					position = i;
-					if (line.isChecked() || line.isHintItem()) break;
+					if (line.isChecked() || line.isHintItem()) {
+                        break;
+                    }
 				}
 				removeView(checked);
 				addView(checked, position);
@@ -221,7 +191,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	@Override
 	public void onEditorActionPerformed(CheckListViewItem mCheckListViewItem, int actionId, KeyEvent event) {
 
-		if (actionId != EditorInfo.IME_ACTION_NEXT) return;
+		if (actionId != EditorInfo.IME_ACTION_NEXT) {
+            return;
+        }
 
 		EditTextMultiLineNoEnter v = mCheckListViewItem.getEditText();
 
@@ -236,7 +208,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		int index = indexOfChild(mCheckListViewItem);
 		int lastIndex = getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
-		CheckListViewItem nextItem = (CheckListViewItem) getChildAt(index + 1);
+		CheckListViewItem nextItem = getChildAt(index + 1);
 
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
@@ -256,7 +228,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 																												// below
 				|| (nextItem != null && !isTextSelected && !isTruncating && start == 0)	// On first characther
 		) {
-			// focusView(mCheckListViewItem, FOCUS_DOWN);
 			nextItem.requestFocus();
 			nextItem.getEditText().setSelection(0);
 			return;
@@ -339,44 +310,13 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private void enableDragAndDrop(CheckListViewItem mCheckListViewItem) {
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
 			mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
-			// mCheckListViewItem.setOnDragListener(new ChecklistViewItemOnDragListener());
 			mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
-
-			// mActivity.getWindow().getDecorView()
-			// //.findViewById(android.R.id.content)
-			// .setOnDragListener(this);
 		}
 	}
 
 
-	// /**
-	// * Add a new item to the checklist
-	// * @param text String to be inserted as item text
-	// */
-	// public void addHintItem(int position){
-	// CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
-	// mCheckListViewItem.cloneStyles(getEditText());
-	// mCheckListViewItem.setHint(newEntryHint);
-	// mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
-	// // Set the checkbox initially disabled
-	// CheckBox c = mCheckListViewItem.getCheckBox();
-	// c.setEnabled(false);
-	// mCheckListViewItem.setCheckBox(c);
-	// // Attach listener
-	// mCheckListViewItem.setItemCheckedListener(this);
-	// // Set text changed listener if is asked to do this
-	// if (mCheckListChangedListener != null) {
-	// mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
-	// }
-	// // Add view
-	// addView(mCheckListViewItem, position);
-	// }
-
 	/**
 	 * Add a new item to the checklist
-	 * 
-	 * @param text
-	 *            String to be inserted as item text
 	 */
 	public void addHintItem() {
 		CheckListViewItem mCheckListViewItem = new CheckListViewItem(mContext, false, false);
@@ -398,7 +338,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		int hintItemPosition = getChildCount();
 		if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
 			for (int i = 0; i < getChildCount(); i++) {
-				if (((CheckListViewItem) getChildAt(i)).isChecked()) {
+				if (getChildAt(i).isChecked()) {
 					hintItemPosition = i;
 					break;
 				}
@@ -437,19 +377,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	}
 
 
-	// @Override
-	// public void afterTextChanged(Editable s) {}
-	// @Override
-	// public void beforeTextChanged(CharSequence s, int start, int count,
-	// int after) {}
-	// @Override
-	// public void onTextChanged(CharSequence s, int start, int before, int count) {
-	// // Eventually notify something is changed
-	// if (mCheckListChangedListener != null) {
-	// mCheckListChangedListener.onCheckListChanged();
-	// }
-	// }
-
 	@Override
 	public void onLineDeleted(CheckListViewItem checkableLine) {
 		// Eventually notify something is changed
@@ -461,68 +388,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mTextLinkClickListener = textlinkclicklistener;
 	}
 
-	// public boolean onTouch(View view, MotionEvent motionEvent) {
-	// if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-	// View v = (View) view.getParent();
-	// DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-	// v.startDrag(null, shadowBuilder, v, 0);
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
 
-	// public boolean onDrag(View target, DragEvent event) {
-	// int action = event.getAction();
-	// final View dragged = (View) event.getLocalState();
-	// switch (action) {
-	// case DragEvent.ACTION_DRAG_STARTED:
-	// Log.d(Constants.TAG, "Drag event started");
-	// dragged.setVisibility(View.INVISIBLE);
-	// break;
-	// case DragEvent.ACTION_DRAG_ENTERED:
-	// Log.d(Constants.TAG, "Drag event entered into " + target.toString());
-	// if (target.getClass().isAssignableFrom(CheckListViewItem.class)) {
-	// dragged.setVisibility(View.INVISIBLE);
-	// ViewGroup container = (ViewGroup) dragged.getParent();
-	// int index = container.indexOfChild(target);
-	// container.removeView(dragged);
-	// container.addView(dragged, index);
-	// }
-	// break;
-	// case DragEvent.ACTION_DRAG_EXITED:
-	// Log.d(Constants.TAG, "Drag event exited from " + target.toString());
-	// if (target.equals(dragged.getParent())) {
-	// showViewWithDelay(dragged);
-	// }
-	// break;
-	// case DragEvent.ACTION_DRAG_LOCATION:
-	// // x = event.getX();
-	// // y = event.getY();
-	// // Log.v(Constants.TAG, "Drag event position " + x + ", " + y);
-	// break;
-	// case DragEvent.ACTION_DROP:
-	// Log.d(Constants.TAG, "Dropped into " + target.toString());
-	// showViewWithDelay(dragged);
-	// break;
-	// case DragEvent.ACTION_DRAG_ENDED:
-	// Log.d(Constants.TAG, "Drag ended");
-	// break;
-	// default:
-	// break;
-	// }
-	// return true;
-	// }
-	//
-	// private void showViewWithDelay(final View v) {
-	// v.post(new Runnable() {
-	// @Override
-	// public void run() {
-	// v.setVisibility(View.VISIBLE);
-	// }
-	// });
-	// }
-	
 	
 	@Override
 	public boolean dispatchDragEvent(DragEvent ev) {

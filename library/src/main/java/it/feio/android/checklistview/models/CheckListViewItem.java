@@ -141,8 +141,9 @@ import android.widget.TextView.OnEditorActionListener;
 			
 			// Alpha is set just for newer API because using AlphaManager helper class I should use 
 			// an animation making this way impossible to set visibility to INVISIBLE
-			if (Build.VERSION.SDK_INT >= 11)
-				imageView.setAlpha( 0.7f);
+			if (Build.VERSION.SDK_INT >= 11) {
+                imageView.setAlpha(0.7f);
+            }
 			imageView.setVisibility(View.INVISIBLE);
 			imageView.setOnClickListener(this);
 			addView(imageView);
@@ -189,10 +190,11 @@ import android.widget.TextView.OnEditorActionListener;
 	}
 
 	public String getHint() {
-		if (getEditText().getHint() != null)
-			return getEditText().getHint().toString();
-		else 
-			return ""; 
+		if (getEditText().getHint() != null) {
+            return getEditText().getHint().toString();
+        } else {
+            return "";
+        }
 	}
 
 	public void setHint(String text) {
@@ -205,13 +207,13 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	
 	public boolean isFirstItem(){
-		return (this.equals(getParentView().getChildAt(0)));
+		return equals(getParentView().getChildAt(0));
 	}
 	
 	
 	public boolean isLastItem(){
 		int lastIndex = getParentView().getChildCount() - 1;
-		return (this.equals(getParentView().getChildAt(lastIndex)));
+		return equals(getParentView().getChildAt(lastIndex));
 	}
 	
 
@@ -219,8 +221,9 @@ import android.widget.TextView.OnEditorActionListener;
 	public void onFocusChange(View v, boolean hasFocus) {
 		// When a line gains focus deletion icon (if present) will be shown
 		if (hasFocus) {
-			if (imageView != null)
-				imageView.setVisibility(View.VISIBLE);
+			if (imageView != null) {
+                imageView.setVisibility(View.VISIBLE);
+            }
 		} else {
 			// When a line loose focus checkbox will be activated
 			// but only if some text has been inserted
@@ -230,8 +233,9 @@ import android.widget.TextView.OnEditorActionListener;
 				setCheckBox(c);
 			}
 			// And deletion icon (if present) will hide
-			if (imageView != null)
-				imageView.setVisibility(View.INVISIBLE);
+			if (imageView != null) {
+                imageView.setVisibility(View.INVISIBLE);
+            }
 		}
 	}
 	
@@ -248,27 +252,27 @@ import android.widget.TextView.OnEditorActionListener;
 			AlphaManager.setAlpha(editText, 1F);
 		}
 		// Item checked is notified
-		if (mCheckListEventListener != null)
-			mCheckListEventListener.onItemChecked(this, isChecked);
+		if (mCheckListEventListener != null) {
+            mCheckListEventListener.onItemChecked(this, isChecked);
+        }
 	}
 
 	
 	/**
 	 * Deletion icon click
-	 * @param v
 	 */
 	@Override
 	public void onClick(View v) {
 		final ViewGroup parent = (ViewGroup) getParent();
-		final View mCheckabeLine = this;
+		final View mCheckableLine = this;
 		if (parent != null) {
 			// Deletion is delayed of a second
 			new Handler().postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					focusView(View.FOCUS_DOWN);
-					parent.removeView(mCheckabeLine);
-					mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckabeLine);
+					parent.removeView(mCheckableLine);
+					mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckableLine);
 				}
 			}, Constants.DELETE_ITEM_DELAY);
 
@@ -284,7 +288,9 @@ import android.widget.TextView.OnEditorActionListener;
 	
 
 	@Override
-	public void afterTextChanged(Editable s) {}
+	public void afterTextChanged(Editable s) {
+        // Nothing to do
+    }
 
 	
 	@Override
@@ -306,15 +312,13 @@ import android.widget.TextView.OnEditorActionListener;
 			showDeleteIcon = true;
 			addDeleteIcon();
 			setHint("");
-		} else if (s.length() == 0) {
-			if (isLastItem()) {
-				// An upper line is searched to give it focus
-				focusView(View.FOCUS_DOWN);					
-				getParentView().removeView(this);
-			}
+		} else if (s.length() == 0 && isLastItem()) {
+            // An upper line is searched to give it focus
+            focusView(View.FOCUS_DOWN);
+            getParentView().removeView(this);
 		}		
 		
-		// Notify somethign is changed
+		// Notify something is changed
 		if (this.mCheckListChangedListener != null) {
 			mCheckListChangedListener.onCheckListChanged();
 		}
@@ -362,7 +366,6 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	/**
 	 * Checks if is the hint item
-	 * @return
 	 */
 	public boolean isHintItem() {
 		boolean res = false;
@@ -377,13 +380,10 @@ import android.widget.TextView.OnEditorActionListener;
 	public void onDeletePressed() {
 		// When this is catched if text is empty the current item will 
 		// be removed and focus moved to item above.
-		if (!isHintItem() && getText().length() == 0) {
-			if (imageView != null) {
-//				imageView.performClick();
-				focusView(View.FOCUS_UP);
-				((ViewGroup) getParent()).removeView(this);
-				mCheckListEventListener.onLineDeleted(this);
-			}
+		if (!isHintItem() && getText().length() == 0 && imageView != null) {
+            focusView(View.FOCUS_UP);
+            ((ViewGroup) getParent()).removeView(this);
+            mCheckListEventListener.onLineDeleted(this);
 		}
 	}
 	
@@ -394,33 +394,25 @@ import android.widget.TextView.OnEditorActionListener;
 		this.getEditText().setOnDragListener(new OnDragListener() {
 			@Override
 			public boolean onDrag(View v, DragEvent event) {
-				switch (event.getAction()) {					
-					case DragEvent.ACTION_DRAG_STARTED:
-						return true;
-					case DragEvent.ACTION_DRAG_LOCATION:
-//						return l.onDrag(v, event);
-						return false;
-					case DragEvent.ACTION_DROP:
-						return l.onDrag(v, event);
-					default:
-						return true;
-				}	
-//				if (event.getAction() == DragEvent.ACTION_DRAG_LOCATION) {
-//					return false;
-//				}
-//				else if (event.getAction() == DragEvent.ACTION_DROP) {
-//					return l.onDrag(v, event);
-//				}
-//				else {
-//					return true;
-//				}
-			}
+                return manageDragEvents(v, event, l);
+            }
 		});
-//		this.getEditText().setOnDragListener(new ChecklistViewItemOnDragListener());
 	}
-	
-	
-	public CheckListView getParentView() {
+
+    private boolean manageDragEvents(View v, DragEvent event, OnDragListener l) {
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                return true;
+            case DragEvent.ACTION_DRAG_LOCATION:
+                return false;
+            case DragEvent.ACTION_DROP:
+                return l.onDrag(v, event);
+            default:
+                return true;
+        }
+    }
+
+    public CheckListView getParentView() {
 		return (CheckListView)getParent();
 	}
 }
