@@ -18,8 +18,8 @@ import it.feio.android.checklistview.utils.DensityUtil;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
-	private final int DIRECTION_UP = 0;
-	private final int DIRECTION_DOWN = 1;
+	private static final int DIRECTION_UP = 0;
+	private static final int DIRECTION_DOWN = 1;
 
 	private int dragDirection;
 	private float y;
@@ -32,7 +32,6 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		int action = event.getAction();
 		final View dragged = (View) event.getLocalState();
 		scrollView = (ScrollView) getScrollableAncestor(dragged);
-
 		switch (action) {
 			case DragEvent.ACTION_DRAG_STARTED:
                 return actionDragStarted(event, dragged);
@@ -144,11 +143,9 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 	class Scroller implements Runnable {
 		View target;
 
-
 		public Scroller(View target) {
-			this.target = target;
+            this.target = target;
 		}
-
 
 		@Override
 		public void run() {

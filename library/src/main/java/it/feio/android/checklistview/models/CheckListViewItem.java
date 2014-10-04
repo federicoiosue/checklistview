@@ -1,14 +1,6 @@
 package it.feio.android.checklistview.models;
 
 
-import it.feio.android.checklistview.App;
-import it.feio.android.checklistview.R;
-import it.feio.android.checklistview.interfaces.CheckListChangedListener;
-import it.feio.android.checklistview.interfaces.CheckListEventListener;
-import it.feio.android.checklistview.interfaces.Constants;
-import it.feio.android.checklistview.interfaces.EditTextEventListener;
-import it.feio.android.checklistview.utils.AlphaManager;
-import it.feio.android.checklistview.utils.DensityUtil;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -36,6 +28,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import it.feio.android.checklistview.App;
+import it.feio.android.checklistview.R;
+import it.feio.android.checklistview.interfaces.CheckListChangedListener;
+import it.feio.android.checklistview.interfaces.CheckListEventListener;
+import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.interfaces.EditTextEventListener;
+import it.feio.android.checklistview.utils.AlphaManager;
+import it.feio.android.checklistview.utils.DensityUtil;
+
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
 	
@@ -47,7 +48,7 @@ import android.widget.TextView.OnEditorActionListener;
 	private boolean showDeleteIcon;
 	private CheckListEventListener mCheckListEventListener;
 	private CheckListChangedListener mCheckListChangedListener;
-	private int lenghtBeforeTextChanged;
+	private int lengthBeforeTextChanged;
 
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
 		super(context);
@@ -215,9 +216,18 @@ import android.widget.TextView.OnEditorActionListener;
 		int lastIndex = getParentView().getChildCount() - 1;
 		return equals(getParentView().getChildAt(lastIndex));
 	}
-	
 
-	@Override
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		// When a line gains focus deletion icon (if present) will be shown
 		if (hasFocus) {
@@ -295,14 +305,14 @@ import android.widget.TextView.OnEditorActionListener;
 	
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		lenghtBeforeTextChanged = s.length();
+		lengthBeforeTextChanged = s.length();
 	}
 
 	
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// Checks if is the first text written here
-		if (lenghtBeforeTextChanged == 0) {			
+		if (lengthBeforeTextChanged == 0) {
 			// If the actual edited line is the last but one a new empty 
 			// line is cremCheckableLineated at its bottom
 			if (isHintItem()) {
@@ -330,24 +340,18 @@ import android.widget.TextView.OnEditorActionListener;
 		View v = focusSearch(focusDirection);
 		if (v != null && v.getClass().isAssignableFrom(EditTextMultiLineNoEnter.class)) {
 			EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) v;
-			if (focusableEditText != null) {
-				focusableEditText.requestFocus();
-				focusableEditText.setSelection(focusableEditText.getText().length());
-			}	
+            focusableEditText.requestFocus();
+            focusableEditText.setSelection(focusableEditText.getText().length());
 		}	
 	}
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
-	public void cloneStyles(EditText edittext)
-    {
-        if (edittext != null)
-        {
+    public void cloneStyles(EditText edittext) {
+        if (edittext != null) {
             Drawable drawable = edittext.getBackground();
-            if (android.os.Build.VERSION.SDK_INT < 16)
-            {
+            if (android.os.Build.VERSION.SDK_INT < 16) {
                 getEditText().setBackgroundDrawable(drawable);
-            } else
-            {
+            } else {
                 getEditText().setBackground(drawable);
             }
             getEditText().setTypeface(edittext.getTypeface());

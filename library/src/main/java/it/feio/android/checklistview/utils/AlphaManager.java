@@ -7,7 +7,9 @@ import android.view.animation.AlphaAnimation;
 
 public class AlphaManager {
 
-    private AlphaManager(){}
+    private AlphaManager(){
+
+    }
 
 	@SuppressLint("NewApi")
 	public static void setAlpha(View v, float alpha) {

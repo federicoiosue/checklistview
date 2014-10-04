@@ -1,12 +1,5 @@
 package it.feio.android.checklistview.models;
 
-import it.feio.android.checklistview.App;
-import it.feio.android.checklistview.Settings;
-import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
-import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
-import it.feio.android.checklistview.interfaces.CheckListChangedListener;
-import it.feio.android.checklistview.interfaces.CheckListEventListener;
-import it.feio.android.checklistview.interfaces.Constants;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -20,7 +13,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
 import com.neopixl.pixlui.links.TextLinkClickListener;
+
+import it.feio.android.checklistview.App;
+import it.feio.android.checklistview.Settings;
+import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
+import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
+import it.feio.android.checklistview.interfaces.CheckListChangedListener;
+import it.feio.android.checklistview.interfaces.CheckListEventListener;
+import it.feio.android.checklistview.interfaces.Constants;
 
 @SuppressLint("NewApi")
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
@@ -108,79 +110,87 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onItemChecked(CheckListViewItem checked, boolean isChecked) {
-		if (isChecked) {
-			// If is not selected to HOLD checked items on position then the checked
-			// item will be moved on bottom of the list
-			if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
-				Log.v(Constants.TAG, "Moving checked on bottom");
-
-				CheckListViewItem line;
-				for (int i = 0; i < getChildCount(); i++) {
-
-					line = ((CheckListViewItem) getChildAt(i));
-					if (checked.equals(line)) {
-
-						// If it's on last position yet nothing will be done
-						// int lastIndex = showHintItem ? getChildCount() -2 : getChildCount() -1;
-						int lastIndex = getChildCount() - 1;
-						if (i == lastIndex) {
-							Log.v(Constants.TAG, "Not moving item it's the last one");
-							return;
-						}
-
-						// Otherwise all items at bottom than the actual will be
-						// cycled until a good position is find.
-						Log.v(Constants.TAG, "Moving item at position " + i);
-
-						// The newly checked item will be positioned at last position.
-						if (moveCheckedOnBottom == Settings.CHECKED_ON_BOTTOM) {
-							removeView(checked);
-							addView(checked, lastIndex);
-							return;
-						}
-
-						// Or at the top of checked ones
-						if (moveCheckedOnBottom == Settings.CHECKED_ON_TOP_OF_CHECKED) {
-							for (int j = lastIndex; j > i; j--) {
-								if (!getChildAt(j).isChecked()) {
-									removeView(checked);
-									addView(checked, j);
-									return;
-								}
-							}
-						}
-					}
-				}
-			}
-			// Item has been unchecked and have to be (eventually) moved up
-		} else {
-			if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
-				Log.v(Constants.TAG, "Moving up item");
-
-				CheckListViewItem line;
-				int position = 0;
-				for (int i = 0; i < getChildCount(); i++) {
-					line = getChildAt(i);
-					position = i;
-					if (line.isChecked() || line.isHintItem()) {
-                        break;
-                    }
-				}
-				removeView(checked);
-				addView(checked, position);
-
-			}
-		}
-
-		// Notify something is changed
-		if (mCheckListChangedListener != null) {
-			mCheckListChangedListener.onCheckListChanged();
-		}
-
+        if (isChecked) {
+            doOnCheck(checked);
+        } else {
+            doOnUncheck(checked);
+        }
 	}
 
 
-	@Override
+    /**
+     * If is not selected to HOLD checked items on position then the checked
+     * item will be moved on bottom of the list
+     */
+    private void doOnCheck(CheckListViewItem checked) {
+        if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
+            for (int i = 0; i < getChildCount(); i++) {
+                if (moveOnChecked(checked, i)) return;
+            }
+        }
+        // Notify something is changed
+        if (mCheckListChangedListener != null) {
+            mCheckListChangedListener.onCheckListChanged();
+        }
+    }
+
+
+    private boolean moveOnChecked(CheckListViewItem checked, int i) {
+        if (checked.equals(getChildAt(i))) {
+
+            // If it's on last position yet nothing will be done
+            int lastIndex = getChildCount() - 1;
+            if (i == lastIndex) {
+                Log.v(Constants.TAG, "Not moving item it's the last one");
+                return true;
+            }
+
+            // Otherwise all items at bottom than the actual will be
+            // cycled until a good position is find.
+            Log.v(Constants.TAG, "Moving item at position " + i);
+
+            // The newly checked item will be positioned at last position.
+            if (moveCheckedOnBottom == Settings.CHECKED_ON_BOTTOM) {
+                removeView(checked);
+                addView(checked, lastIndex);
+                return true;
+            }
+
+            // Or at the top of checked ones
+            if (moveCheckedOnBottom == Settings.CHECKED_ON_TOP_OF_CHECKED) {
+                for (int j = lastIndex; j > i; j--) {
+                    if (!getChildAt(j).isChecked()) {
+                        removeView(checked);
+                        addView(checked, j);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Item has been unchecked and have to be (eventually) moved up
+     */
+    private void doOnUncheck(CheckListViewItem checked) {
+        if (moveCheckedOnBottom != Settings.CHECKED_HOLD) {
+            CheckListViewItem line;
+            int position = 0;
+            for (int i = 0; i < getChildCount(); i++) {
+                line = getChildAt(i);
+                position = i;
+                if (line.isChecked() || line.isHintItem()) {
+                    break;
+                }
+            }
+            removeView(checked);
+            addView(checked, position);
+        }
+    }
+
+
+    @Override
 	public void onNewLineItemEdited(CheckListViewItem checkableLine) {
 		checkableLine.getCheckBox().setEnabled(true);
 		enableDragAndDrop(checkableLine);
@@ -197,22 +207,19 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 		EditTextMultiLineNoEnter v = mCheckListViewItem.getEditText();
 
-		// Text lenght, start and end selection points, and other derived flags are retrieved
-		int textLenght = mCheckListViewItem.getText().length();
+		// Text length, start and end selection points, and other derived flags are retrieved
+		int textLength = mCheckListViewItem.getText().length();
 		int start = v.getSelectionStart();
 		int end = v.getSelectionEnd();
 		boolean isTextSelected = end != start;
-		boolean isTruncating = !isTextSelected && start > 0 && start < textLenght;
-
-		// A check on the view position is done
+		boolean isTruncating = !isTextSelected && start > 0 && start < textLength;
 		int index = indexOfChild(mCheckListViewItem);
 		int lastIndex = getChildCount() - 1;
 		boolean isLastItem = index == lastIndex;
-		CheckListViewItem nextItem = getChildAt(index + 1);
 
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
-		if ((mCheckListViewItem.isHintItem() || isLastItem) && textLenght == 0) {
+		if (mCheckListViewItem.isHintItem() || isLastItem) {
 			InputMethodManager inputManager = (InputMethodManager) mContext
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(mCheckListViewItem.getWindowToken(),
@@ -220,14 +227,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			return;
 		}
 
-		// If line is empty a newline will not be created but the focus will be moved on bottom.
-		// This must happen also if an empty line is already present under the actual one.
-		if (textLenght == 0 	// Empty line
-				|| (nextItem != null && nextItem.getText().length() == 0 && !isTextSelected && !isTruncating) // Empty
-																												// item
-																												// below
-				|| (nextItem != null && !isTextSelected && !isTruncating && start == 0)	// On first characther
-		) {
+        CheckListViewItem nextItem = getChildAt(index + 1);
+
+		if (newItemIsNeeded(textLength, start, isTextSelected, isTruncating, nextItem)) {
 			nextItem.requestFocus();
 			nextItem.getEditText().setSelection(0);
 			return;
@@ -244,16 +246,26 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		v.setText(oldViewText);
 
 		// A new checkable item is eventually created (optionally with text content)
-		// if (newViewText.length() > 0) {
 		addItem(newViewText, mCheckListViewItem.isChecked(), index + 1);
-		// }
 
 		// The new view is focused
 		getChildAt(index + 1).requestFocus();
 	}
 
 
-	/**
+    /*
+    * If line is empty a newline will not be created but the focus will be moved on bottom.
+	* This must happen also if an empty line is already present under the actual one.
+    */
+    private boolean newItemIsNeeded(int textLength, int start, boolean isTextSelected, boolean isTruncating, CheckListViewItem nextItem) {
+        boolean transposeSomeText = isTextSelected || isTruncating;
+        return textLength == 0    // Empty line
+                || (nextItem.getText().length() == 0 && !transposeSomeText)
+                || (!transposeSomeText && start == 0);
+    }
+
+
+    /**
 	 * Add a new item into the checklist
 	 * 
 	 * @param text
