@@ -347,18 +347,19 @@ import it.feio.android.checklistview.utils.DensityUtil;
 
 	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
     public void cloneStyles(EditText edittext) {
-        if (edittext != null) {
-            Drawable drawable = edittext.getBackground();
-            if (android.os.Build.VERSION.SDK_INT < 16) {
-                getEditText().setBackgroundDrawable(drawable);
-            } else {
-                getEditText().setBackground(drawable);
-            }
-            getEditText().setTypeface(edittext.getTypeface());
-            getEditText().setTextSize(0, edittext.getTextSize());
-            getEditText().setTextColor(edittext.getTextColors());
-            getEditText().setLinkTextColor(edittext.getLinkTextColors());
+        if (edittext == null) {
+            return;
         }
+        Drawable drawable = edittext.getBackground();
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            getEditText().setBackgroundDrawable(drawable);
+        } else {
+            getEditText().setBackground(drawable);
+        }
+        getEditText().setTypeface(edittext.getTypeface());
+        getEditText().setTextSize(0, edittext.getTextSize());
+        getEditText().setTextColor(edittext.getTextColors());
+        getEditText().setLinkTextColor(edittext.getLinkTextColors());
     }
 
 

@@ -179,7 +179,6 @@ public class ChecklistManager {
 	 * @return converted view to replace
 	 */
 	private View convert(EditText v) {
-
 		mCheckListView = new CheckListView(mContext);
 		mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
 		mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
@@ -199,30 +198,9 @@ public class ChecklistManager {
 		String text = v.getText().toString();
 
 		// Parse all lines if text is not empty
-		if (text.length() > 0) {
-			String[] lines = text.split(Pattern.quote(App.getSettings().getLinesSeparator()));
+        convertToChecklist(text);
 
-			// All text lines will be cycled to build checklist items
-			String lineText;
-			boolean isChecked = false;
-			for (int i = 0; i < lines.length; i++) {
-
-				String line = lines[i];
-
-				if (line.length() == 0) {
-                    continue;
-                }
-
-				// Line text content will be now stripped from checks symbols if they're present
-				// (ex. [x] Task done -> lineText="Task done", lineChecked=true)
-				isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
-				lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
-
-				mCheckListView.addItem(lineText, isChecked);
-			}
-		}
-
-		// Add new fillable line if newEntryText has some text value or showHintItem is set to true
+        // Add new fillable line if newEntryText has some text value or showHintItem is set to true
 		if (App.getSettings().getShowHintItem()) {
 			mCheckListView.addHintItem();
 		}
@@ -233,7 +211,29 @@ public class ChecklistManager {
 	}
 
 
-	/**
+    private void convertToChecklist(String text) {
+        if (text.length() == 0) {
+            return;
+        }
+        for (String line : text.split(Pattern.quote(App.getSettings().getLinesSeparator()))) {
+            convertLineToChecklist(line);
+        }
+    }
+
+
+    private void convertLineToChecklist(String line) {
+        if (line.length() == 0) {
+            return;
+        }
+        // Line text content will be now stripped from checks symbols if they're present
+        // (ex. [x] Task done -> lineText="Task done", lineChecked=true)
+        boolean isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
+        String lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
+        mCheckListView.addItem(lineText, isChecked);
+    }
+
+
+    /**
 	 * Conversion from checklist view to EditText
 	 *
 	 * @param v
