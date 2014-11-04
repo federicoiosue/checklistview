@@ -16,9 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
-    compile project(':library')
+    compile project(':checklistview')
     compile 'com.android.support:appcompat-v7:19.1.0'
 }

@@ -291,7 +291,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	
 
 	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		mCheckListEventListener.onEditorActionPerformed(this, actionId, event);		
 		return true;
 	}
