@@ -13,6 +13,9 @@ allprojects {
     repositories {
         mavenLocal()
         jcenter()
+        maven {
+            url "https://github.com/federicoiosue/repository/raw/master/"
+        }
     }
     apply plugin: 'maven'
 }

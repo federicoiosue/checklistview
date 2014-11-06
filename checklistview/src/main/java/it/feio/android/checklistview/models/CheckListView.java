@@ -14,8 +14,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.neopixl.pixlui.links.TextLinkClickListener;
-
 import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
@@ -23,6 +21,7 @@ import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.pixlui.links.TextLinkClickListener;
 
 @SuppressLint("NewApi")
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
