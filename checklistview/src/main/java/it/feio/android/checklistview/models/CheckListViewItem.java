@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -339,9 +340,13 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	private void focusView(int focusDirection) {
 		View v = focusSearch(focusDirection);
 		if (v != null && v.getClass().isAssignableFrom(EditTextMultiLineNoEnter.class)) {
-			EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) v;
-            focusableEditText.requestFocus();
-            focusableEditText.setSelection(focusableEditText.getText().length());
+			try {
+				EditTextMultiLineNoEnter focusableEditText = (EditTextMultiLineNoEnter) v;
+				focusableEditText.requestFocus();
+				focusableEditText.setSelection(focusableEditText.getText().length());
+			} catch (ClassCastException e) {
+				Log.e(Constants.TAG, "Cast exception on focus", e);
+			}
 		}	
 	}
 
