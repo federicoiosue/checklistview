@@ -322,9 +322,9 @@ import it.feio.android.checklistview.utils.DensityUtil;
 			showDeleteIcon = true;
 			addDeleteIcon();
 			setHint("");
-		} else if (s.length() == 0 && isLastItem()) {
+		} else if (s.length() == 0) {
             // An upper line is searched to give it focus
-            focusView(View.FOCUS_DOWN);
+            focusView(View.FOCUS_UP);
             getParentView().removeView(this);
 		}		
 		
