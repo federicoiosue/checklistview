@@ -8,7 +8,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
         versionCode 3
-        versionName "2.1"
+        versionName "2.2"
     }
 
     buildTypes {
@@ -29,7 +29,7 @@ dependencies {
 }
 
 group 'it.feio.android'
-version '2.1'
+version '2.2'
 def archives = uploadArchives {
     repositories {
         mavenDeployer {
