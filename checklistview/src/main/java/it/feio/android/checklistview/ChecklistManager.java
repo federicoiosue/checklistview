@@ -35,7 +35,7 @@ public class ChecklistManager {
 
 	public static synchronized ChecklistManager getInstance(Context mContext) {
 		if (instance == null) {
-			instance = new ChecklistManager(mContext);
+			instance = new ChecklistManager(mContext.getApplicationContext());
 		}
 		return instance;
 	}
