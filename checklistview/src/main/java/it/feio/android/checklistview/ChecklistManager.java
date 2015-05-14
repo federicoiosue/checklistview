@@ -35,7 +35,7 @@ public class ChecklistManager {
 
 	public static synchronized ChecklistManager getInstance(Context mContext) {
 		if (instance == null) {
-			instance = new ChecklistManager(mContext.getApplicationContext());
+			instance = new ChecklistManager(mContext);
 		}
 		return instance;
 	}
@@ -158,6 +158,9 @@ public class ChecklistManager {
 		return App.getSettings().getDragVibrationDuration();
 	}
 
+	public static void unregister() {
+		instance = null;
+	}
 
 	public View convert(View v) throws ViewNotSupportedException {
 		if (EditText.class.isAssignableFrom(v.getClass())) {
