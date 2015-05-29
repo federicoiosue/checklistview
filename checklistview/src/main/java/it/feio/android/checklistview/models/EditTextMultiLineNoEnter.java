@@ -18,7 +18,7 @@ public class EditTextMultiLineNoEnter extends EditText {
 	private EditTextEventListener mEditTextEventListener;
 
 	public EditTextMultiLineNoEnter(Context context) {
-		super(context);
+		super(context.getApplicationContext());
 	}
 
 	@Override
