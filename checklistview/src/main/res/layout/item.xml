@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/draghandle"
+            android:tag="dh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_drag_handle" android:layout_alignBottom="@+id/deleteicon"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
+
+    <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/checkbox"
+              android:tag=""
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignTop="@+id/deleteicon" android:layout_toRightOf="@+id/draghandle"
+              android:layout_toEndOf="@+id/draghandle"/>
+
+    <it.feio.android.checklistview.models.EditTextMultiLineNoEnter
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:textAlignment="viewStart"
+            android:textCursorDrawable="@null"
+            android:text="asdasdads"
+            android:tag="et" android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/deleteicon" android:id="@+id/view"/>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+               android:id="@+id/deleteicon"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_action_cancel"
+               android:background="@drawable/icon_selector"
+               android:visibility="invisible"
+               android:layout_centerVertical="true" android:layout_alignParentRight="true"
+               android:layout_alignParentEnd="true"/>
+</RelativeLayout>

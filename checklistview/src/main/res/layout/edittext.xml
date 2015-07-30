@@ -1,0 +1,10 @@
+<it.feio.android.checklistview.models.EditTextMultiLineNoEnter
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/checkbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:imeOptions="actionNext"
+        android:textAlignment="viewStart"
+        android:textCursorDrawable="@null"
+        android:tag="et"/>

@@ -58,7 +58,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 		
 		setOrientation(HORIZONTAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		
+
 		initDragHandler();
 		initCheckBox();
 		initEditText();
@@ -77,41 +77,43 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	
 	private void initDragHandler(){
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
-			dragHandler = new ImageView(mContext);
-			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			lp.gravity = Gravity.TOP;
-			lp.setMargins(0, DensityUtil.dpToPx(6, mContext), 0, 0);
-			dragHandler.setLayoutParams(lp);
-			dragHandler.setImageResource(R.drawable.ic_drag_handle);
-			dragHandler.setPadding(2, 2, 2, 2);
-			dragHandler.setTag(Constants.TAG_DRAG_HANDLER);
+			dragHandler = (ImageView) inflate(getContext(), R.layout.draghandle, null);
+//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//			lp.gravity = Gravity.TOP;
+//			lp.setMargins(0, DensityUtil.dpToPx(6, mContext), 0, 0);
+//			dragHandler.setLayoutParams(lp);
+//			dragHandler.setImageResource(R.drawable.ic_drag_handle);
+//			dragHandler.setPadding(2, 2, 2, 2);
+//			dragHandler.setTag(Constants.TAG_DRAG_HANDLER);
 			addView(dragHandler);
 		}
 	}
 	
 	
 	private void initCheckBox() {
-		checkBox = new CheckBox(mContext);
-		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		lp.gravity = Gravity.TOP;
-		checkBox.setLayoutParams(lp);
-		checkBox.setPadding(2, 5, 2, 2);
+//		checkBox = new CheckBox(mContext);
+//		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//		lp.gravity = Gravity.TOP;
+//		checkBox.setLayoutParams(lp);
+//		checkBox.setPadding(2, 5, 2, 2);
+		checkBox = (CheckBox) inflate(getContext(), R.layout.checkbox, null);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
 	}
 	
 	
 	private void initEditText() {
-		editText = new EditTextMultiLineNoEnter(mContext);
-		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
-		lp.weight = 1;
-		lp.gravity = Gravity.TOP;
-		editText.setLayoutParams(lp);
-		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-		// Alignment to support RTL
-		if (Build.VERSION.SDK_INT >= 18) {
-			editText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
-		}
+//		editText = new EditTextMultiLineNoEnter(mContext);
+//		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
+//		lp.weight = 1;
+//		lp.gravity = Gravity.TOP;
+//		editText.setLayoutParams(lp);
+//		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+//		// Alignment to support RTL
+//		if (Build.VERSION.SDK_INT >= 18) {
+//			editText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
+//		}
+		editText = (EditTextMultiLineNoEnter) inflate(getContext(), R.layout.edittext, null);
 		// Listeners
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
@@ -130,23 +132,24 @@ import it.feio.android.checklistview.utils.DensityUtil;
 
 	@SuppressLint("NewApi") private void addDeleteIcon() {
 		if (showDeleteIcon && imageView == null) {
-			imageView = new ImageView(mContext);
-			imageView.setImageResource(R.drawable.ic_action_cancel);
-			imageView.setBackgroundResource(R.drawable.icon_selector);
-			int size = DensityUtil.dpToPx(30, mContext);
-			LayoutParams lp = new LayoutParams(size, size);
-			lp.setMargins(0, DensityUtil.dpToPx(5, mContext), 0, 0);
-			imageView.setLayoutParams(lp);
-			
-			int padding = DensityUtil.dpToPx(2, mContext);
-			imageView.setPadding(padding, padding, padding, padding);
-			
-			// Alpha is set just for newer API because using AlphaManager helper class I should use 
-			// an animation making this way impossible to set visibility to INVISIBLE
-			if (Build.VERSION.SDK_INT >= 11) {
-                imageView.setAlpha(0.7f);
-            }
-			imageView.setVisibility(View.INVISIBLE);
+//			imageView = new ImageView(mContext);
+//			imageView.setImageResource(R.drawable.ic_action_cancel);
+//			imageView.setBackgroundResource(R.drawable.icon_selector);
+//			int size = DensityUtil.dpToPx(30, mContext);
+//			LayoutParams lp = new LayoutParams(size, size);
+//			lp.setMargins(0, DensityUtil.dpToPx(5, mContext), 0, 0);
+//			imageView.setLayoutParams(lp);
+//
+//			int padding = DensityUtil.dpToPx(2, mContext);
+//			imageView.setPadding(padding, padding, padding, padding);
+//
+//			// Alpha is set just for newer API because using AlphaManager helper class I should use
+//			// an animation making this way impossible to set visibility to INVISIBLE
+//			if (Build.VERSION.SDK_INT >= 11) {
+//                imageView.setAlpha(0.7f);
+//            }
+//			imageView.setVisibility(View.INVISIBLE);
+			imageView = (ImageView) inflate(getContext(), R.layout.deleteicon, null);
 			imageView.setOnClickListener(this);
 			addView(imageView);
 		}
