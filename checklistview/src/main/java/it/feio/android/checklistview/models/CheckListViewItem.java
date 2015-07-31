@@ -12,23 +12,12 @@ import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-
 import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.R;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
@@ -36,16 +25,14 @@ import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
-import it.feio.android.checklistview.utils.DensityUtil;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
 	
-	private Context mContext;
 	private ImageView dragHandler;
 	private CheckBox checkBox;
 	private EditTextMultiLineNoEnter editText;
-	private ImageView imageView;
+	private ImageView deleteIcon;
 	private boolean showDeleteIcon;
 	private CheckListEventListener mCheckListEventListener;
 	private CheckListChangedListener mCheckListChangedListener;
@@ -53,16 +40,17 @@ import it.feio.android.checklistview.utils.DensityUtil;
 
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
 		super(context);
-		this.mContext = context;
 		this.showDeleteIcon = showDeleteIcon;
 		
 		setOrientation(HORIZONTAL);
-		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		lp.gravity = Gravity.CENTER_VERTICAL;
+		setLayoutParams(lp);
 
 		initDragHandler();
 		initCheckBox();
 		initEditText();
-		addDeleteIcon();
+		initDeleteIcon();
 		
 		// If row was previously checked its state have to be restored
 		if (isChecked) {
@@ -78,24 +66,12 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	private void initDragHandler(){
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
 			dragHandler = (ImageView) inflate(getContext(), R.layout.draghandle, null);
-//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//			lp.gravity = Gravity.TOP;
-//			lp.setMargins(0, DensityUtil.dpToPx(6, mContext), 0, 0);
-//			dragHandler.setLayoutParams(lp);
-//			dragHandler.setImageResource(R.drawable.ic_drag_handle);
-//			dragHandler.setPadding(2, 2, 2, 2);
-//			dragHandler.setTag(Constants.TAG_DRAG_HANDLER);
 			addView(dragHandler);
 		}
 	}
 	
 	
 	private void initCheckBox() {
-//		checkBox = new CheckBox(mContext);
-//		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		lp.gravity = Gravity.TOP;
-//		checkBox.setLayoutParams(lp);
-//		checkBox.setPadding(2, 5, 2, 2);
 		checkBox = (CheckBox) inflate(getContext(), R.layout.checkbox, null);
 		checkBox.setOnCheckedChangeListener(this);
 		addView(checkBox);
@@ -103,18 +79,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	
 	
 	private void initEditText() {
-//		editText = new EditTextMultiLineNoEnter(mContext);
-//		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
-//		lp.weight = 1;
-//		lp.gravity = Gravity.TOP;
-//		editText.setLayoutParams(lp);
-//		editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-//		// Alignment to support RTL
-//		if (Build.VERSION.SDK_INT >= 18) {
-//			editText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
-//		}
 		editText = (EditTextMultiLineNoEnter) inflate(getContext(), R.layout.edittext, null);
-		// Listeners
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
@@ -130,28 +95,16 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	}
 	
 
-	@SuppressLint("NewApi") private void addDeleteIcon() {
-		if (showDeleteIcon && imageView == null) {
-//			imageView = new ImageView(mContext);
-//			imageView.setImageResource(R.drawable.ic_action_cancel);
-//			imageView.setBackgroundResource(R.drawable.icon_selector);
-//			int size = DensityUtil.dpToPx(30, mContext);
-//			LayoutParams lp = new LayoutParams(size, size);
-//			lp.setMargins(0, DensityUtil.dpToPx(5, mContext), 0, 0);
-//			imageView.setLayoutParams(lp);
-//
-//			int padding = DensityUtil.dpToPx(2, mContext);
-//			imageView.setPadding(padding, padding, padding, padding);
-//
-//			// Alpha is set just for newer API because using AlphaManager helper class I should use
-//			// an animation making this way impossible to set visibility to INVISIBLE
-//			if (Build.VERSION.SDK_INT >= 11) {
-//                imageView.setAlpha(0.7f);
-//            }
-//			imageView.setVisibility(View.INVISIBLE);
-			imageView = (ImageView) inflate(getContext(), R.layout.deleteicon, null);
-			imageView.setOnClickListener(this);
-			addView(imageView);
+	@SuppressLint("NewApi") private void initDeleteIcon() {
+		if (showDeleteIcon && deleteIcon == null) {
+			deleteIcon = (ImageView) inflate(getContext(), R.layout.deleteicon, null);
+			// Alpha is set just for newer API because using AlphaManager helper class I should use
+			// an animation making this way impossible to set visibility to INVISIBLE
+			if (Build.VERSION.SDK_INT >= 11) {
+				deleteIcon.setAlpha(0.7f);
+			}
+			deleteIcon.setOnClickListener(this);
+			addView(deleteIcon);
 		}
 	}
 
@@ -235,8 +188,8 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	public void onFocusChange(View v, boolean hasFocus) {
 		// When a line gains focus deletion icon (if present) will be shown
 		if (hasFocus) {
-			if (imageView != null) {
-                imageView.setVisibility(View.VISIBLE);
+			if (deleteIcon != null) {
+                deleteIcon.setVisibility(View.VISIBLE);
             }
 		} else {
 			// When a line loose focus checkbox will be activated
@@ -247,8 +200,8 @@ import it.feio.android.checklistview.utils.DensityUtil;
 				setCheckBox(c);
 			}
 			// And deletion icon (if present) will hide
-			if (imageView != null) {
-                imageView.setVisibility(View.INVISIBLE);
+			if (deleteIcon != null) {
+                deleteIcon.setVisibility(View.INVISIBLE);
             }
 		}
 	}
@@ -324,7 +277,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 			}
 			// Add delete icon and remove hint 
 			showDeleteIcon = true;
-			addDeleteIcon();
+			initDeleteIcon();
 			setHint("");
 		} else if (s.length() == 0) {
             // An upper line is searched to give it focus
@@ -393,7 +346,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 	public void onDeletePressed() {
 		// When this is catched if text is empty the current item will 
 		// be removed and focus moved to item above.
-		if (!isHintItem() && getText().length() == 0 && imageView != null) {
+		if (!isHintItem() && getText().length() == 0 && deleteIcon != null) {
             focusView(View.FOCUS_UP);
             ((ViewGroup) getParent()).removeView(this);
             mCheckListEventListener.onLineDeleted(this);

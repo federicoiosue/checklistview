@@ -17,4 +17,47 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+
+
+    <style name="CheckListViewDragHandle">
+        <item name="android:layout_gravity">top</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/ic_drag_handle</item>
+    </style>
+
+    <style name="CheckListViewCheckbox">
+        <item name="android:layout_marginLeft">4.0dip</item>
+    </style>
+
+    <style name="CheckListViewEditText">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColorLink">@color/primary_text_color</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:autoLink">all</item>
+        <item name="android:linksClickable">false</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingLeft">@dimen/list_details_content_padding</item>
+        <item name="android:paddingRight">@dimen/list_details_content_padding</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+        <item name="android:inputType">textAutoCorrect|textCapSentences|textMultiLine</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
+    </style>
+
+    <style name="CheckListViewDeleteIcon">
+        <item name="android:layout_gravity">center|right|top</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:padding">4.0dip</item>
+        <item name="android:layout_width">32.0dip</item>
+        <item name="android:layout_height">32.0dip</item>
+        <item name="android:layout_marginRight">16.0dip</item>
+        <item name="android:src">@drawable/ic_action_cancel</item>
+    </style>
+
 </resources>
