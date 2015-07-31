@@ -28,6 +28,7 @@
 
     <style name="CheckListViewCheckbox">
         <item name="android:layout_marginLeft">4.0dip</item>
+        <item name="android:focusable">false</item>
     </style>
 
     <style name="CheckListViewEditText">
