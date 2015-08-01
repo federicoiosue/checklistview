@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView.OnEditorActionListener;
@@ -25,10 +26,13 @@ import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
+import it.feio.android.checklistview.utils.DensityUtil;
+
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
-	
+
+
 	private ImageView dragHandler;
 	private CheckBox checkBox;
 	private EditTextMultiLineNoEnter editText;
@@ -51,13 +55,12 @@ import it.feio.android.checklistview.utils.AlphaManager;
 		initCheckBox();
 		initEditText();
 		initDeleteIcon();
-		
+
 		// If row was previously checked its state have to be restored
 		if (isChecked) {
 			checkBox.setChecked(true);
 			onCheckedChanged(checkBox, true);
 		}
-		
 		setTag(Constants.TAG_ITEM);
 	}
 	
@@ -80,6 +83,9 @@ import it.feio.android.checklistview.utils.AlphaManager;
 	
 	private void initEditText() {
 		editText = (EditTextMultiLineNoEnter) inflate(getContext(), R.layout.edittext, null);
+		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
+		lp.weight = 1;
+		editText.setLayoutParams(lp);
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
@@ -87,8 +93,7 @@ import it.feio.android.checklistview.utils.AlphaManager;
 		editText.setTag(Constants.TAG_EDITTEXT);
 		addView(editText);
 	}
-	
-	
+
 
 	public void setItemCheckedListener(CheckListEventListener listener) {
 		this.mCheckListEventListener = listener;
