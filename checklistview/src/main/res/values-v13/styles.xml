@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="CheckListViewEditText" parent="BaseCheckListViewEditText">
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+</resources>
