@@ -261,11 +261,7 @@ import it.feio.android.checklistview.utils.DensityUtil;
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if (s.length() == 0) {
-			// An upper line is searched to give it focus
-            focusView(View.FOCUS_UP);
-            getParentView().removeView(this);
-		}
+		// Nothing to do
 	}
 
 	
