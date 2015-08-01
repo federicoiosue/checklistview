@@ -24,6 +24,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:src">@drawable/ic_drag_handle</item>
+        <item name="android:paddingTop">3dp</item>
     </style>
 
     <style name="CheckListViewCheckbox">
