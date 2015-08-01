@@ -261,8 +261,12 @@ import it.feio.android.checklistview.utils.DensityUtil;
 
 	@Override
 	public void afterTextChanged(Editable s) {
-        // Nothing to do
-    }
+		if (s.length() == 0) {
+			// An upper line is searched to give it focus
+            focusView(View.FOCUS_UP);
+            getParentView().removeView(this);
+		}
+	}
 
 	
 	@Override
@@ -280,22 +284,18 @@ import it.feio.android.checklistview.utils.DensityUtil;
 			if (isHintItem()) {
 				mCheckListEventListener.onNewLineItemEdited(this);
 			}
-			// Add delete icon and remove hint 
+
+			// Adds delete icon and remove hint
 			showDeleteIcon = true;
 			initDeleteIcon();
 			setHint("");
-		} else if (s.length() == 0) {
-            // An upper line is searched to give it focus
-            focusView(View.FOCUS_UP);
-            getParentView().removeView(this);
-		}		
+		}
 		
 		// Notify something is changed
 		if (this.mCheckListChangedListener != null) {
 			mCheckListChangedListener.onCheckListChanged();
 		}
 	}
-
 
 
 	private void focusView(int focusDirection) {

@@ -33,8 +33,7 @@ public class EditTextMultiLineNoEnter extends EditText {
 	@Override
 	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
 		InputConnection connection = super.onCreateInputConnection(outAttrs);
-		// By default setting android:inputType="textMultiLine" will remove any
-		// imeAction like NEXT, DONE...
+		// By default setting android:inputType="textMultiLine" will remove any imeAction like NEXT, DONE...
 		// So here is where this behaviour is changed
 		if ((outAttrs.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) != 0) {
 			outAttrs.imeOptions &= ~EditorInfo.IME_FLAG_NO_ENTER_ACTION;
@@ -62,8 +61,7 @@ public class EditTextMultiLineNoEnter extends EditText {
 
         @Override
         public boolean sendKeyEvent(KeyEvent event) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN
-                    && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
             	mEditTextEventListener.onDeletePressed();
             }
             return super.sendKeyEvent(event);
