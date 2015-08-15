@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView.OnEditorActionListener;
@@ -26,7 +25,7 @@ import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
-import it.feio.android.checklistview.utils.DensityUtil;
+import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements

@@ -21,6 +21,7 @@ import it.feio.android.checklistview.dragging.ChecklistViewOnTouchListener;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.CheckListEventListener;
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 import it.feio.android.pixlui.links.TextLinkClickListener;
 
 @SuppressLint("NewApi")
@@ -200,7 +201,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	@Override
 	public void onEditorActionPerformed(CheckListViewItem mCheckListViewItem, int actionId, KeyEvent event) {
 
-		if (actionId != EditorInfo.IME_ACTION_NEXT) {
+		if (actionId != EditorInfo.IME_ACTION_NEXT && event.getKeyCode() != KeyEvent.KEYCODE_ENTER) {
             return;
         }
 
