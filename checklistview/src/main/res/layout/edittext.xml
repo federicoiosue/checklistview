@@ -1,4 +1,4 @@
-<it.feio.android.checklistview.models.EditTextMultiLineNoEnter
+<it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/checkbox"
         android:textAlignment="viewStart"
