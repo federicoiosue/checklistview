@@ -1,4 +1,3 @@
 <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/checkbox"
-          android:tag=""
+          android:tag="checklistview_checkbox"
           style="@style/CheckListViewCheckbox"/>
