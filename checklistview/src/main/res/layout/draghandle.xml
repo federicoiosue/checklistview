@@ -1,7 +1,6 @@
 <ImageView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/draghandle"
-        android:tag="dh"
+        android:tag="checklistview_draghandle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_drag_handle"
