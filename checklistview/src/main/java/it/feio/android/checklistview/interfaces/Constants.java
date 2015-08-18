@@ -37,10 +37,9 @@ public interface Constants {
 	public static final int DELETE_ITEM_DELAY = 350;
 	
 	// Views tags
-	static final String TAG_LIST = "lt";
-	static final String TAG_ITEM = "it";
-	static final String TAG_DRAG_HANDLER = "dh";
-	static final String TAG_EDITTEXT = "et";
+	static final String TAG_LIST = "checklistview_list";
+	static final String TAG_ITEM = "checklistview_item";
+	static final String TAG_EDITTEXT = "checklistview_edittext";
 
 	// Drag and drop parameters
 	public static final boolean DRAG_VIBRATION_ENABLED = false;
@@ -48,6 +47,4 @@ public interface Constants {
 	public static final int SCROLLING_DELAY = 10;
 	public static final int SCROLLING_STEP = 5;
 	public static final int SCROLLING_THREESHOLD = 100;
-	
-	
 }
