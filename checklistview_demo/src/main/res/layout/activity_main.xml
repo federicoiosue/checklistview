@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent" android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -32,14 +32,16 @@
                     android:text="@string/template_phrase"/>
 
             <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/bottom_banner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/site"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="15dp"
-                    android:padding="5dp"
+                    android:padding="7dp"
                     android:textColor="#ffffff"
-                    android:background="#77000000"/>
+                    android:background="#3F51B5"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
     </ScrollView>
