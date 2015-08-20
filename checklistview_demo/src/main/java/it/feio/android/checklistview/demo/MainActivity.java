@@ -1,26 +1,27 @@
 package it.feio.android.checklistview.demo;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.TextView;
 import it.feio.android.checklistview.ChecklistManager;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 
-public class MainActivity extends Activity implements CheckListChangedListener {
+public class MainActivity extends AppCompatActivity implements CheckListChangedListener {
 
-	Button b;
 	View switchView;
 	private SharedPreferences prefs;
 	boolean isChecklist;
@@ -30,20 +31,36 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		isChecklist = prefs.getBoolean("isChecklist", false);
 
 		switchView = findViewById(R.id.edittext);		
 		((EditText)switchView).setText(prefs.getString("text", getString(R.string.template_phrase)));
 		
-		if (isChecklist) {
+		if (prefs.getBoolean("isChecklist", false)) {
 			isChecklist = false;
 			toggleCheckList();
 		}
+
+		initTextView();
 	}
 
-	
+
+	private void initTextView() {
+		TextView textview = (TextView) findViewById(R.id.bottom_banner);
+		textview.setText(Html.fromHtml(getString(R.string.omninotes)));
+		textview.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.omninotes_link))));
+			}
+		});
+	}
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -71,21 +88,22 @@ public class MainActivity extends Activity implements CheckListChangedListener {
 		return true;
 	}
 
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_toggle_checklist:
-			toggleCheckList();
-			break;
 
-		case R.id.settings:
-			Intent settingsIntent = new Intent(this, SettingsActivity.class);
-			startActivity(settingsIntent);
-			break;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_toggle_checklist:
+				toggleCheckList();
+				break;
+
+			case R.id.settings:
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				startActivity(settingsIntent);
+				break;
 		}
-		return super.onMenuItemSelected(featureId, item);
+		return super.onOptionsItemSelected(item);
 	}
+
 
 	private void toggleCheckList() {
 		View newView;
