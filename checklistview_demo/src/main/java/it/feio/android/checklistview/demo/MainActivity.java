@@ -2,15 +2,18 @@ package it.feio.android.checklistview.demo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import it.feio.android.checklistview.ChecklistManager;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
@@ -41,9 +44,23 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			isChecklist = false;
 			toggleCheckList();
 		}
+
+		initTextView();
 	}
 
-	
+
+	private void initTextView() {
+		TextView textview = (TextView) findViewById(R.id.bottom_banner);
+		textview.setText(Html.fromHtml(getString(R.string.omninotes)));
+		textview.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.omninotes_link))));
+			}
+		});
+	}
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
