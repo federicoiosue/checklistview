@@ -1,3 +1,5 @@
+[![Release](https://img.shields.io/github/tag/federicoiosue/CheckListView.svg?label=JitPack)](https://jitpack.io/#federicoiosue/CheckListView/3.0.2)
+
 CheckListView
 =============
 
