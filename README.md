@@ -67,6 +67,12 @@ private void toggleCheckList() {
 }
 ```
 
+##How to include
+
+In your app's module *gradle.build* file add the following compile inclusion:
+
+```compile 'com.github.federicoiosue:CheckListView:3.0.2'```
+
 ##Dependencies
 
 There are no dependencies for the library, but if you want to compile the demo project you'll need to add [AppCompat](http://developer.android.com/tools/support-library/features.html) as library too
