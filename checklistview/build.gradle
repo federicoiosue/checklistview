@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile 'com.github.federicoiosue:pixlUI:2.2'
+    compile 'com.github.federicoiosue:pixlUI:2.3'
 }
 
 group 'it.feio.android'
