@@ -326,9 +326,8 @@ public class ChecklistManager {
 
 	public String getText() {
 		if (mCheckListView == null) {
-            return "";
-        }
-
+			return "";
+		}
 		StringBuilder stringbuilder = new StringBuilder();
 		int i = 0;
 		do {
@@ -336,24 +335,17 @@ public class ChecklistManager {
 			if (i >= mCheckListView.getChildCount()) {
 				if (stringbuilder.length() > App.getSettings().getLinesSeparator().length()) {
 					return stringbuilder.substring(App.getSettings().getLinesSeparator().length());
-				} else {
-					return "";
 				}
+				return "";
 			}
 			checklistviewitem = mCheckListView.getChildAt(i);
 			if (!checklistviewitem.isHintItem()) {
 				boolean flag = checklistviewitem.isChecked();
 				if (!flag || flag && App.getSettings().getKeepChecked()) {
 					StringBuilder stringbuilder1 = stringbuilder.append(App.getSettings().getLinesSeparator());
-					String s;
-				if (App.getSettings().getShowChecks()) {
-						if (flag) {
-							s = "[x] ";
-						} else {
-							s = "[ ] ";
-						}
-					} else {
-						s = "";
+					String s = "";
+					if (App.getSettings().getShowChecks()) {
+						s = flag ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM;
 					}
 					stringbuilder1.append(s).append(checklistviewitem.getText());
 				}
