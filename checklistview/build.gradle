@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.federicoiosue'
 
 android {
     compileSdkVersion 22
@@ -20,21 +23,8 @@ android {
     lintOptions {
         abortOnError false
     }
-
 }
 
 dependencies {
     compile 'com.github.federicoiosue:pixlUI:2.3'
 }
-
-group 'it.feio.android'
-version project.VERSION_NAME
-def archives = uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
-        }
-    }
-}
-archives
-task install(dependsOn: uploadArchives)
