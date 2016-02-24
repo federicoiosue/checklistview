@@ -26,8 +26,7 @@ public class ChecklistViewOnTouchListener implements OnTouchListener {
 
     private boolean actionDown(View view) {
         View v = (View) view.getParent();
-        ChecklistViewDragShadowBuilder shadowBuilder = new ChecklistViewDragShadowBuilder(v);
-        v.startDrag(null, shadowBuilder, v, 0);
+        v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
         if (App.getSettings().getDragVibrationEnabled()) {
             ((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(App.getSettings()
                     .getDragVibrationDuration());

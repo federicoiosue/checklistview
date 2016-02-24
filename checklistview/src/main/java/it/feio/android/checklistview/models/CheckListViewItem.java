@@ -28,8 +28,9 @@ import it.feio.android.checklistview.utils.AlphaManager;
 import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) public class CheckListViewItem extends LinearLayout implements
-		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher, EditTextEventListener {
+public class CheckListViewItem extends LinearLayout implements
+		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher,
+		EditTextEventListener {
 
 
 	private ImageView dragHandler;
@@ -41,14 +42,12 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lengthBeforeTextChanged;
 
+
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
+
 		super(context);
 		this.showDeleteIcon = showDeleteIcon;
-		
-		setOrientation(HORIZONTAL);
-		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		lp.gravity = Gravity.CENTER_VERTICAL;
-		setLayoutParams(lp);
+		inflate(context, R.layout.checklistview_item, this);
 
 		initDragHandler();
 		initCheckBox();
@@ -62,53 +61,43 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 		}
 		setTag(Constants.TAG_ITEM);
 	}
-	
-	
-	
-	private void initDragHandler(){
+
+
+	private void initDragHandler() {
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
-			dragHandler = (ImageView) inflate(getContext(), R.layout.draghandle, null);
-			addView(dragHandler);
+			dragHandler = (ImageView) findViewById(R.id.checklistview_handler);
 		}
 	}
-	
-	
+
+
 	private void initCheckBox() {
-		checkBox = (CheckBox) inflate(getContext(), R.layout.checkbox, null);
+		checkBox = (CheckBox) findViewById(R.id.checklistview_checkbox);
 		checkBox.setOnCheckedChangeListener(this);
-		addView(checkBox);
 	}
-	
-	
+
+
 	private void initEditText() {
-		editText = (EditTextMultiLineNoEnter) inflate(getContext(), R.layout.edittext, null);
-		LayoutParams lp = new LayoutParams(0, LayoutParams.WRAP_CONTENT);
-		lp.weight = 1;
-		editText.setLayoutParams(lp);
+		editText = (EditTextMultiLineNoEnter) findViewById(R.id.checklistview_edittext);
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
 		editText.setEditTextEventListener(this);
-		editText.setTag(Constants.TAG_EDITTEXT);
-		addView(editText);
 	}
 
 
 	public void setItemCheckedListener(CheckListEventListener listener) {
 		this.mCheckListEventListener = listener;
 	}
-	
 
-	@SuppressLint("NewApi") private void initDeleteIcon() {
+
+	@SuppressLint("NewApi")
+	private void initDeleteIcon() {
 		if (showDeleteIcon && deleteIcon == null) {
-			deleteIcon = (ImageView) inflate(getContext(), R.layout.deleteicon, null);
+			deleteIcon = (ImageView) findViewById(R.id.checklistview_delete);
 			// Alpha is set just for newer API because using AlphaManager helper class I should use
 			// an animation making this way impossible to set visibility to INVISIBLE
-			if (Build.VERSION.SDK_INT >= 11) {
-				deleteIcon.setAlpha(0.7f);
-			}
+			if (Build.VERSION.SDK_INT >= 11) deleteIcon.setAlpha(0.7f);
 			deleteIcon.setOnClickListener(this);
-			addView(deleteIcon);
 		}
 	}
 
@@ -117,12 +106,14 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 		return this.dragHandler;
 	}
 
+
 	public CheckBox getCheckBox() {
 		return checkBox;
 	}
 
+
 	public void setCheckBox(CheckBox checkBox) {
-		for (int i = 0; i <	getChildCount(); i++){
+		for (int i = 0; i < getChildCount(); i++) {
 			if (getChildAt(i).equals(this.checkBox)) {
 				removeViewAt(i);
 				addView(checkBox, i);
@@ -131,70 +122,81 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 		this.checkBox = checkBox;
 	}
 
+
 	public EditTextMultiLineNoEnter getEditText() {
 		return editText;
 	}
+
 
 	public void setEditText(EditTextMultiLineNoEnter editText) {
 		this.editText = editText;
 	}
 
+
 	public boolean isChecked() {
 		return getCheckBox().isChecked();
 	}
+
 
 	public String getText() {
 		return getEditText().getText().toString();
 	}
 
+
 	public void setText(String text) {
 		getEditText().setText(text);
 	}
 
+
 	public String getHint() {
 		if (getEditText().getHint() != null) {
-            return getEditText().getHint().toString();
-        } else {
-            return "";
-        }
+			return getEditText().getHint().toString();
+		} else {
+			return "";
+		}
 	}
+
 
 	public void setHint(String text) {
 		getEditText().setHint(text);
 	}
 
+
 	public void setHint(Spanned text) {
 		getEditText().setHint(text);
 	}
-	
-	
-	public boolean isFirstItem(){
+
+
+	public boolean isFirstItem() {
 		return equals(getParentView().getChildAt(0));
 	}
-	
-	
-	public boolean isLastItem(){
+
+
+	public boolean isLastItem() {
 		int lastIndex = getParentView().getChildCount() - 1;
 		return equals(getParentView().getChildAt(lastIndex));
 	}
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
 
-    @Override
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+
+	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		// When a line gains focus deletion icon (if present) will be shown
 		if (hasFocus) {
 			if (deleteIcon != null) {
-                deleteIcon.setVisibility(View.VISIBLE);
-            }
+				deleteIcon.setVisibility(View.VISIBLE);
+			}
 		} else {
 			// When a line loose focus checkbox will be activated
 			// but only if some text has been inserted
@@ -205,11 +207,11 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 			}
 			// And deletion icon (if present) will hide
 			if (deleteIcon != null) {
-                deleteIcon.setVisibility(View.INVISIBLE);
-            }
+				deleteIcon.setVisibility(View.INVISIBLE);
+			}
 		}
 	}
-	
+
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -224,11 +226,11 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 		}
 		// Item checked is notified
 		if (mCheckListEventListener != null) {
-            mCheckListEventListener.onItemChecked(this, isChecked);
-        }
+			mCheckListEventListener.onItemChecked(this, isChecked);
+		}
 	}
 
-	
+
 	/**
 	 * Deletion icon click
 	 */
@@ -249,27 +251,27 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 
 		}
 	}
-	
+
 
 	@Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		mCheckListEventListener.onEditorActionPerformed(this, actionId, event);		
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		mCheckListEventListener.onEditorActionPerformed(this, actionId, event);
 		return true;
 	}
-	
+
 
 	@Override
 	public void afterTextChanged(Editable s) {
 		// Nothing to do
 	}
 
-	
+
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 		lengthBeforeTextChanged = s.length();
 	}
 
-	
+
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// Checks if is the first text written here
@@ -285,7 +287,7 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 			initDeleteIcon();
 			setHint("");
 		}
-		
+
 		// Notify something is changed
 		if (this.mCheckListChangedListener != null) {
 			mCheckListChangedListener.onCheckListChanged();
@@ -303,33 +305,33 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 			} catch (ClassCastException e) {
 				Log.e(Constants.TAG, "Cast exception on focus", e);
 			}
-		}	
+		}
 	}
 
-	@SuppressLint("NewApi") @SuppressWarnings("deprecation")
-    public void cloneStyles(EditText edittext) {
-        if (edittext == null) {
-            return;
-        }
-        Drawable drawable = edittext.getBackground();
-        if (android.os.Build.VERSION.SDK_INT < 16) {
-            getEditText().setBackgroundDrawable(drawable);
-        } else {
-            getEditText().setBackground(drawable);
-        }
-        getEditText().setTypeface(edittext.getTypeface());
-        getEditText().setTextSize(0, edittext.getTextSize());
-        getEditText().setTextColor(edittext.getTextColors());
-        getEditText().setLinkTextColor(edittext.getLinkTextColors());
-    }
+
+	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
+	public void cloneStyles(EditText edittext) {
+		if (edittext != null) {
+			Drawable drawable = edittext.getBackground();
+			if (android.os.Build.VERSION.SDK_INT < 16) {
+				getEditText().setBackgroundDrawable(drawable);
+			} else {
+				getEditText().setBackground(drawable);
+			}
+			getEditText().setTypeface(edittext.getTypeface());
+			getEditText().setTextSize(0, edittext.getTextSize());
+			getEditText().setTextColor(edittext.getTextColors());
+			getEditText().setLinkTextColor(edittext.getLinkTextColors());
+		}
+	}
 
 
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
-	
-	
-	
+
+
 	/**
 	 * Checks if is the hint item
 	 */
@@ -347,38 +349,42 @@ import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 		// When this is catched if text is empty the current item will 
 		// be removed and focus moved to item above.
 		if (!isHintItem() && getText().length() == 0 && deleteIcon != null) {
-            focusView(View.FOCUS_UP);
-            ((ViewGroup) getParent()).removeView(this);
-            mCheckListEventListener.onLineDeleted(this);
+			focusView(View.FOCUS_UP);
+			((ViewGroup) getParent()).removeView(this);
+			mCheckListEventListener.onLineDeleted(this);
 		}
 	}
-	
-	
+
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void setOnDragListener(final OnDragListener l) {
 		super.setOnDragListener(l);
 		this.getEditText().setOnDragListener(new OnDragListener() {
 			@Override
 			public boolean onDrag(View v, DragEvent event) {
-                return manageDragEvents(v, event, l);
-            }
+				return manageDragEvents(v, event, l);
+			}
 		});
 	}
 
-    private boolean manageDragEvents(View v, DragEvent event, OnDragListener l) {
-        switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                return true;
-            case DragEvent.ACTION_DRAG_LOCATION:
-                return false;
-            case DragEvent.ACTION_DROP:
-                return l.onDrag(v, event);
-            default:
-                return true;
-        }
-    }
 
-    public CheckListView getParentView() {
-		return (CheckListView)getParent();
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private boolean manageDragEvents(View v, DragEvent event, OnDragListener l) {
+		switch (event.getAction()) {
+			case DragEvent.ACTION_DRAG_STARTED:
+				return true;
+			case DragEvent.ACTION_DRAG_LOCATION:
+				return false;
+			case DragEvent.ACTION_DROP:
+				return l.onDrag(v, event);
+			default:
+				return true;
+		}
+	}
+
+
+	public CheckListView getParentView() {
+		return (CheckListView) getParent();
 	}
 }

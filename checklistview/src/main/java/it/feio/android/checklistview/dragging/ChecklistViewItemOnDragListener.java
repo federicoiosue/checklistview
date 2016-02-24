@@ -18,6 +18,8 @@ import it.feio.android.checklistview.utils.DensityUtil;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
+	private static final String TAG = ChecklistViewItemOnDragListener.class.getSimpleName();
+
 	private static final int DIRECTION_UP = 0;
 	private static final int DIRECTION_DOWN = 1;
 
@@ -30,7 +32,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 	public boolean onDrag(View target, DragEvent event) {
 		int action = event.getAction();
-		final View dragged = (View) event.getLocalState();
+		final View dragged = (View) ((View) event.getLocalState()).getParent();
 		scrollView = (ScrollView) getScrollableAncestor(dragged);
 		switch (action) {
 			case DragEvent.ACTION_DRAG_STARTED:
@@ -97,7 +99,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
     }
 
     private boolean actionDragStarted(DragEvent event, View dragged) {
-        Log.d(Constants.TAG, "Drag event started");
+        Log.d(TAG, "Drag event started");
         dragged.setVisibility(View.INVISIBLE);
         y = event.getY();
         return true;
@@ -155,7 +157,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 				try {
 					Thread.sleep(Constants.SCROLLING_DELAY);
 				} catch (InterruptedException e) {
-					Log.d("ChecklistViewItemOnDragListener", "InterruptedException");
+					Log.d(TAG, "InterruptedException");
 				}
 			}
 		}
@@ -176,16 +178,15 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 
 	private boolean targetCanAcceptDrop(View dragged, View target) {
-		boolean canAcceptDrop = false;
-		if (checkTag(target, Constants.TAG_ITEM)) {
+		if (checkTag(target, Constants.TAG_ITEM) && checkTag(dragged, Constants.TAG_ITEM)) {
 			CheckListViewItem draggedItem = (CheckListViewItem) dragged;
 			CheckListViewItem targetItem = (CheckListViewItem) target;
 			if (App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD
 					|| !(draggedItem.isChecked() ^ targetItem.isChecked())) {
-				canAcceptDrop = true;
+				return true;
 			}
 		}
-		return canAcceptDrop;
+		return false;
 	}
 
 

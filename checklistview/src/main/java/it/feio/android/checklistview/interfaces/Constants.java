@@ -38,7 +38,7 @@ public interface Constants {
 	
 	// Views tags
 	String TAG_LIST = "checklistview_list";
-	String TAG_ITEM = "checklistview_item";
+	String TAG_ITEM = "checklistview_item_bak";
 	String TAG_EDITTEXT = "checklistview_edittext";
 
 	// Drag and drop parameters

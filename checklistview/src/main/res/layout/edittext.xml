@@ -1,6 +1,5 @@
 <it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:tag="checklistview_edittext"
-        android:textAlignment="viewStart"
         android:gravity="start"
         style="@style/CheckListViewEditText"/>
