@@ -1,22 +1,19 @@
 package it.feio.android.checklistview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import java.util.regex.Pattern;
-
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListView;
 import it.feio.android.checklistview.models.CheckListViewItem;
 import it.feio.android.pixlui.links.TextLinkClickListener;
+
+import java.util.regex.Pattern;
 
 public class ChecklistManager {
 
@@ -26,6 +23,7 @@ public class ChecklistManager {
 	private CheckListChangedListener mCheckListChangedListener;
 	private CheckListView mCheckListView;
 	private TextLinkClickListener mTextLinkClickListener;
+	private EditText originalView;
 
 
 	private ChecklistManager(Context mContext) {
@@ -181,6 +179,9 @@ public class ChecklistManager {
 	 * @return converted view to replace
 	 */
 	private View convert(EditText v) {
+
+		this.originalView = v;
+
 		mCheckListView = new CheckListView(mContext);
 		mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
 		mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
@@ -235,41 +236,27 @@ public class ChecklistManager {
     }
 
 
-    /**
+	/**
 	 * Conversion from checklist view to EditText
 	 *
-	 * @param v
-	 *            CheckListView to be re-converted
+	 * @param v CheckListView to be re-converted
 	 * @return EditText
 	 */
-	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
 	private View convert(CheckListView v) {
-		EditText returnView = new EditText(mContext);
 
 		StringBuilder sb = new StringBuilder();
-        removeChecked(v, sb);
+		removeChecked(v, sb);
+		originalView.setText(sb.toString());
 
-		returnView.setText(sb.toString());
-		returnView.setId(v.getId());
-
-		if (Build.VERSION.SDK_INT < 16) {
-			returnView.setBackgroundDrawable(v.getBackground());
-		} else {
-			returnView.setBackground(v.getBackground());
-		}
-
-        restoreTypography(v, returnView);
-
-        // Associating textChangedListener
+		// Associating textChangedListener
 		if (this.mTextWatcher != null) {
-			returnView.addTextChangedListener(this.mTextWatcher);
+			originalView.addTextChangedListener(this.mTextWatcher);
 		}
 
 		// Reset to null the field
 		mCheckListView = null;
 
-		return returnView;
+		return originalView;
 	}
 
     private void restoreTypography(CheckListView v, EditText returnView) {
@@ -328,7 +315,6 @@ public class ChecklistManager {
 		if (mCheckListView == null) {
             return "";
         }
-
 		StringBuilder stringbuilder = new StringBuilder();
 		int i = 0;
 		do {
@@ -336,24 +322,17 @@ public class ChecklistManager {
 			if (i >= mCheckListView.getChildCount()) {
 				if (stringbuilder.length() > App.getSettings().getLinesSeparator().length()) {
 					return stringbuilder.substring(App.getSettings().getLinesSeparator().length());
-				} else {
-					return "";
 				}
+				return "";
 			}
 			checklistviewitem = mCheckListView.getChildAt(i);
 			if (!checklistviewitem.isHintItem()) {
 				boolean flag = checklistviewitem.isChecked();
 				if (!flag || flag && App.getSettings().getKeepChecked()) {
 					StringBuilder stringbuilder1 = stringbuilder.append(App.getSettings().getLinesSeparator());
-					String s;
-				if (App.getSettings().getShowChecks()) {
-						if (flag) {
-							s = "[x] ";
-						} else {
-							s = "[ ] ";
-						}
-					} else {
-						s = "";
+					String s = "";
+					if (App.getSettings().getShowChecks()) {
+						s = flag ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM;
 					}
 					stringbuilder1.append(s).append(checklistviewitem.getText());
 				}
