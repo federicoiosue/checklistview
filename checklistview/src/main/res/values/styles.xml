@@ -1,59 +1,9 @@
 <resources>
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
-
-    <style name="CheckListViewDragHandle">
-        <!--<item name="android:layout_gravity">top</item>-->
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:src">@drawable/ic_drag_handle</item>
-        <!--<item name="android:paddingTop">3dp</item>-->
-    </style>
-
-    <style name="CheckListViewCheckbox">
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:focusable">false</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <style name="BaseCheckListViewEditText">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <!--<item name="android:gravity">top</item>-->
-        <item name="android:imeOptions">actionNext</item>
         <item name="android:cursorVisible">true</item>
     </style>
 
-    <style name="CheckListViewEditText" parent="BaseCheckListViewEditText">
-    </style>
-
-    <style name="CheckListViewDeleteIcon">
-        <!--<item name="android:layout_gravity">center|right|top</item>-->
-        <item name="android:background">?android:selectableItemBackground</item>
-        <!--<item name="android:padding">4.0dip</item>-->
-        <!--<item name="android:layout_width">32.0dip</item>-->
-        <!--<item name="android:layout_height">32.0dip</item>-->
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:src">@drawable/ic_action_cancel</item>
-    </style>
+    <style name="CheckListViewEditText" parent="BaseCheckListViewEditText"/>
 
 </resources>
