@@ -33,6 +33,7 @@ public class CheckListViewItem extends LinearLayout implements
 		EditTextEventListener {
 
 
+	private final Context context;
 	private ImageView dragHandler;
 	private CheckBox checkBox;
 	private EditTextMultiLineNoEnter editText;
@@ -46,6 +47,7 @@ public class CheckListViewItem extends LinearLayout implements
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
 
 		super(context);
+		this.context = context;
 		this.showDeleteIcon = showDeleteIcon;
 		inflate(context, R.layout.checklistview_item, this);
 
@@ -65,19 +67,19 @@ public class CheckListViewItem extends LinearLayout implements
 
 	private void initDragHandler() {
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
-			dragHandler = (ImageView) findViewById(R.id.checklistview_handler);
+			dragHandler = (ImageView) findViewWithTag(context.getString(R.string.tag_draghandle));
 		}
 	}
 
 
 	private void initCheckBox() {
-		checkBox = (CheckBox) findViewById(R.id.checklistview_checkbox);
+		checkBox = (CheckBox) findViewWithTag(context.getString(R.string.tag_checkbox));
 		checkBox.setOnCheckedChangeListener(this);
 	}
 
 
 	private void initEditText() {
-		editText = (EditTextMultiLineNoEnter) findViewById(R.id.checklistview_edittext);
+		editText = (EditTextMultiLineNoEnter) findViewWithTag(context.getString(R.string.tag_edittext));
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
@@ -93,7 +95,7 @@ public class CheckListViewItem extends LinearLayout implements
 	@SuppressLint("NewApi")
 	private void initDeleteIcon() {
 		if (showDeleteIcon && deleteIcon == null) {
-			deleteIcon = (ImageView) findViewById(R.id.checklistview_delete);
+			deleteIcon = (ImageView) findViewWithTag(context.getString(R.string.tag_deleteicon));
 			// Alpha is set just for newer API because using AlphaManager helper class I should use
 			// an animation making this way impossible to set visibility to INVISIBLE
 			if (Build.VERSION.SDK_INT >= 11) deleteIcon.setAlpha(0.7f);
