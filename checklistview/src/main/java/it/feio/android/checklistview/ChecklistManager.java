@@ -25,6 +25,7 @@ public class ChecklistManager {
 	private CheckListView mCheckListView;
 	private TextLinkClickListener mTextLinkClickListener;
 	private EditText originalView;
+	private View undoBarContainerView;
 
 
 	private ChecklistManager(Context mContext) {
@@ -154,6 +155,15 @@ public class ChecklistManager {
 	}
 
 
+	/**
+	 * Used to set a custom View to contain item undo deletion SnackBar
+	 * @param undoBarContainerView Container view
+	 */
+	public void setUndoBarContainerView(final View undoBarContainerView) {
+		this.undoBarContainerView = undoBarContainerView;
+	}
+
+
 	public static void unregister() {
 		instance = null;
 	}
@@ -179,9 +189,9 @@ public class ChecklistManager {
 	private View convert(EditText v) {
 
 		this.originalView = v;
-
 		mCheckListView = new CheckListView(mContext);
 		mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
+		mCheckListView.setUndoBarContainerView(undoBarContainerView);
 		mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
 		mCheckListView.setNewEntryHint(App.getSettings().getNewEntryHint());
 		mCheckListView.setId(v.getId());

@@ -43,6 +43,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lengthBeforeTextChanged;
 	private boolean deletionUndone;
+	private View undoBarContainerView;
 
 
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
@@ -232,7 +233,9 @@ public class CheckListViewItem extends LinearLayout implements
 			focusView(View.FOCUS_DOWN);
 			final int index = parent.indexOfChild(mCheckableLine);
 			parent.removeView(mCheckableLine);
-			Snackbar.make(parent.getRootView().findViewById(android.R.id.content), R.string.item_deleted, Snackbar
+			View snackBarContainer = undoBarContainerView != null ? undoBarContainerView : getRootView().findViewById
+					(android.R.id.content);
+			Snackbar.make(snackBarContainer, R.string.item_deleted, Snackbar
 					.LENGTH_LONG)
 					.setAction(R.string.undo, new OnClickListener() {
 						@Override
@@ -322,6 +325,15 @@ public class CheckListViewItem extends LinearLayout implements
 
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
+	}
+
+
+	/**
+	 * Used to set a custom View to contain item undo deletion SnackBar
+	 * @param undoBarContainerView Container view
+	 */
+	public void setUndoBarContainerView(final View undoBarContainerView) {
+		this.undoBarContainerView = undoBarContainerView;
 	}
 
 

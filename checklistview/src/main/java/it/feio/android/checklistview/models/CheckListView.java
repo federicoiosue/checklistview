@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -36,6 +37,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
 	private ChecklistViewItemOnDragListener mChecklistViewItemOnDragListener;
+	private View undoBarContainerView;
 
 
 	public CheckListView(Context activity) {
@@ -81,6 +83,15 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void setNewEntryHint(String hint) {
 		setShowHintItem(true);
 		this.newEntryHint = hint;
+	}
+
+
+	/**
+	 * Used to set a custom View to contain item undo deletion SnackBar
+	 * @param undoBarContainerView Container view
+	 */
+	public void setUndoBarContainerView(final View undoBarContainerView) {
+		this.undoBarContainerView = undoBarContainerView;
 	}
 
 
@@ -340,6 +351,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		if (mCheckListChangedListener != null) {
 			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
 		}
+		mCheckListViewItem.setUndoBarContainerView(undoBarContainerView);
 
 		// Defining position (default last, but if checked items behavior is not HOLD if changes)
 		int hintItemPosition = getChildCount();
