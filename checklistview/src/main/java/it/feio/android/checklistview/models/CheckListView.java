@@ -99,12 +99,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 
 	public EditText getEditText() {
-		EditText res = null;
 		CheckListViewItem child = getChildAt(0);
 		if (child != null) {
-            res = child.getEditText();
+            return child.getEditText();
         }
-		return res;
+		return null;
 	}
 
 
@@ -314,7 +313,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			addView(mCheckListViewItem);
 		}
 
-		// Drag & drop
 		enableDragAndDrop(mCheckListViewItem);
 	}
 
@@ -370,7 +368,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			});
 		}
 
-		// Add view
 		addView(mCheckListViewItem, hintItemPosition);
 	}
 
@@ -391,7 +388,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onLineDeleted(CheckListViewItem checkableLine) {
-		// Eventually notify something is changed
 		mCheckListChangedListener.onCheckListChanged();
 	}
 
@@ -399,7 +395,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void setOnTextLinkClickListener(TextLinkClickListener textlinkclicklistener) {
 		mTextLinkClickListener = textlinkclicklistener;
 	}
-
 
 	
 	@Override

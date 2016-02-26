@@ -14,15 +14,10 @@ import it.feio.android.checklistview.App;
 public class ChecklistViewOnTouchListener implements OnTouchListener {
 
 	public boolean onTouch(View view, MotionEvent motionEvent) {
-		int action = motionEvent.getAction();
+		return motionEvent.getAction() == MotionEvent.ACTION_DOWN ? actionDown(view) : false;
 
-		switch (action) {
-			case MotionEvent.ACTION_DOWN:
-                return actionDown(view);
-			default:
-				return false;
-		}
 	}
+
 
     private boolean actionDown(View view) {
         View v = (View) view.getParent();

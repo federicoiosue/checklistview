@@ -36,77 +36,77 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		scrollView = (ScrollView) getScrollableAncestor(dragged);
 		switch (action) {
 			case DragEvent.ACTION_DRAG_STARTED:
-                return actionDragStarted(event, dragged);
+				return actionDragStarted(event, dragged);
 			case DragEvent.ACTION_DRAG_ENTERED:
-                return actionDragEntered(target, dragged);
+				return actionDragEntered(target, dragged);
 			case DragEvent.ACTION_DRAG_EXITED:
-                return actionDragExited(target, dragged);
+				return actionDragExited(target, dragged);
 			case DragEvent.ACTION_DRAG_LOCATION:
-                return actionDragLocation(target, event);
-            case DragEvent.ACTION_DROP:
-                return actionDrop(dragged);
+				return actionDragLocation(target, event);
+			case DragEvent.ACTION_DROP:
+				return actionDrop(dragged);
 			default:
-                return true;
+				return true;
 		}
 	}
 
-    private boolean actionDrop(View dragged) {
-        stopScrolling();
-        showViewWithDelay(dragged);
-        return true;
-    }
+	private boolean actionDrop(View dragged) {
+		stopScrolling();
+		showViewWithDelay(dragged);
+		return true;
+	}
 
-    private boolean actionDragLocation(View target, DragEvent event) {
-        // Control demanded to the container to scroll
-        if (checkTag(target, Constants.TAG_LIST)) {
-            y = event.getY();
-            int scroll = getScroll(scrollView, target);
-            if (y - scroll < Constants.SCROLLING_THREESHOLD) {
-                dragDirection = DIRECTION_UP;
-                startScrolling(target);
-            } else if (scrollView.getHeight() - (y - scroll) < Constants.SCROLLING_THREESHOLD) {
-                dragDirection = DIRECTION_DOWN;
-                startScrolling(target);
-            } else {
-                stopScrolling();
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
+	private boolean actionDragLocation(View target, DragEvent event) {
+		// Control demanded to the container to scroll
+		if (checkTag(target, Constants.TAG_LIST)) {
+			y = event.getY();
+			int scroll = getScroll(scrollView, target);
+			if (y - scroll < Constants.SCROLLING_THREESHOLD) {
+				dragDirection = DIRECTION_UP;
+				startScrolling(target);
+			} else if (scrollView.getHeight() - (y - scroll) < Constants.SCROLLING_THREESHOLD) {
+				dragDirection = DIRECTION_DOWN;
+				startScrolling(target);
+			} else {
+				stopScrolling();
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    private boolean actionDragExited(View target, View dragged) {
-        if (checkTag(target, Constants.TAG_LIST)) {
-            stopScrolling();
-        }
-        if (target.equals(dragged.getParent())) {
-            showViewWithDelay(dragged);
-        }
-        return true;
-    }
+	private boolean actionDragExited(View target, View dragged) {
+		if (checkTag(target, Constants.TAG_LIST)) {
+			stopScrolling();
+		}
+		if (target.equals(dragged.getParent())) {
+			showViewWithDelay(dragged);
+		}
+		return true;
+	}
 
-    private boolean actionDragEntered(View target, View dragged) {
-        if (targetCanAcceptDrop(dragged, target)) {
-            stopScrolling();
-            dragged.setVisibility(View.INVISIBLE);
-            ViewGroup container = (ViewGroup) dragged.getParent();
-            int index = container.indexOfChild(target);
-            container.removeView(dragged);
-            container.addView(dragged, index);
-        }
-        return true;
-    }
+	private boolean actionDragEntered(View target, View dragged) {
+		if (targetCanAcceptDrop(dragged, target)) {
+			stopScrolling();
+			dragged.setVisibility(View.INVISIBLE);
+			ViewGroup container = (ViewGroup) dragged.getParent();
+			int index = container.indexOfChild(target);
+			container.removeView(dragged);
+			container.addView(dragged, index);
+		}
+		return true;
+	}
 
-    private boolean actionDragStarted(DragEvent event, View dragged) {
-        Log.d(TAG, "Drag event started");
-        dragged.setVisibility(View.INVISIBLE);
-        y = event.getY();
-        return true;
-    }
+	private boolean actionDragStarted(DragEvent event, View dragged) {
+		Log.d(TAG, "Drag event started");
+		dragged.setVisibility(View.INVISIBLE);
+		y = event.getY();
+		return true;
+	}
 
 
-    private int getScroll(ScrollView scrollView, View target) {
+	private int getScroll(ScrollView scrollView, View target) {
 		int scroll = 0;
 		scroll += scrollView.getScrollY();
 		int sum = 0;
@@ -146,7 +146,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		View target;
 
 		public Scroller(View target) {
-            this.target = target;
+			this.target = target;
 		}
 
 		@Override

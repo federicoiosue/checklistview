@@ -56,7 +56,6 @@ public class CheckListViewItem extends LinearLayout implements
 		initEditText();
 		initDeleteIcon();
 
-		// If row was previously checked its state have to be restored
 		if (isChecked) {
 			checkBox.setChecked(true);
 			onCheckedChanged(checkBox, true);
@@ -151,11 +150,7 @@ public class CheckListViewItem extends LinearLayout implements
 
 
 	public String getHint() {
-		if (getEditText().getHint() != null) {
-			return getEditText().getHint().toString();
-		} else {
-			return "";
-		}
+		return getEditText().getHint() != null ? getEditText().getHint().toString() : "";
 	}
 
 
@@ -175,8 +170,7 @@ public class CheckListViewItem extends LinearLayout implements
 
 
 	public boolean isLastItem() {
-		int lastIndex = getParentView().getChildCount() - 1;
-		return equals(getParentView().getChildAt(lastIndex));
+		return equals(getParentView().getChildAt(getParentView().getChildCount() - 1));
 	}
 
 
@@ -338,11 +332,7 @@ public class CheckListViewItem extends LinearLayout implements
 	 * Checks if is the hint item
 	 */
 	public boolean isHintItem() {
-		boolean res = false;
-		if (!getCheckBox().isEnabled()) {
-			res = true;
-		}
-		return res;
+		return !getCheckBox().isEnabled();
 	}
 
 

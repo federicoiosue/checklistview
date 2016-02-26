@@ -15,6 +15,7 @@ import it.feio.android.pixlui.links.TextLinkClickListener;
 
 import java.util.regex.Pattern;
 
+
 public class ChecklistManager {
 
 	private static ChecklistManager instance = null;
@@ -43,8 +44,7 @@ public class ChecklistManager {
 	 * Set the string to be used to split initial text into checklist items. Default System line separator (carriage
 	 * return).
 	 *
-	 * @param linesSeparator
-	 *            String separator
+	 * @param linesSeparator String separator
 	 */
 	public void setLinesSeparator(String linesSeparator) {
 		App.getSettings().setLinesSeparator(linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator);
@@ -54,8 +54,7 @@ public class ChecklistManager {
 	/**
 	 * Set if show or not a delete icon at the end of the line. Default true.
 	 *
-	 * @param showDeleteIcon
-	 *            True to show icon, false otherwise.
+	 * @param showDeleteIcon True to show icon, false otherwise.
 	 */
 	public void setShowDeleteIcon(boolean showDeleteIcon) {
 		App.getSettings().setShowDeleteIcon(showDeleteIcon);
@@ -65,8 +64,7 @@ public class ChecklistManager {
 	/**
 	 * Set if keep or remove checked items when converting back from checklist to simple text. Default false.
 	 *
-	 * @param keepChecked
-	 *            True to keep checks, false otherwise.
+	 * @param keepChecked True to keep checks, false otherwise.
 	 */
 	public void setKeepChecked(boolean keepChecked) {
 		App.getSettings().setKeepChecked(keepChecked);
@@ -118,8 +116,7 @@ public class ChecklistManager {
 	/**
 	 * Adds a new fillable line at the end of the checklist with hint text. Set an empty string to remove.
 	 *
-	 * @param newEntryHint
-	 *            Hint text
+	 * @param newEntryHint Hint text
 	 */
 	public void setNewEntryHint(String newEntryHint) {
 		setShowHintItem(true);
@@ -156,9 +153,11 @@ public class ChecklistManager {
 		return App.getSettings().getDragVibrationDuration();
 	}
 
+
 	public static void unregister() {
 		instance = null;
 	}
+
 
 	public View convert(View v) throws ViewNotSupportedException {
 		if (EditText.class.isAssignableFrom(v.getClass())) {
@@ -174,8 +173,7 @@ public class ChecklistManager {
 	/**
 	 * Conversion from EditText to checklist
 	 *
-	 * @param v
-	 *            EditText view
+	 * @param v EditText view
 	 * @return converted view to replace
 	 */
 	private View convert(EditText v) {
@@ -201,9 +199,9 @@ public class ChecklistManager {
 		String text = v.getText().toString();
 
 		// Parse all lines if text is not empty
-        convertToChecklist(text);
+		convertToChecklist(text);
 
-        // Add new fillable line if newEntryText has some text value or showHintItem is set to true
+		// Add new fillable line if newEntryText has some text value or showHintItem is set to true
 		if (App.getSettings().getShowHintItem()) {
 			mCheckListView.addHintItem();
 		}
@@ -214,26 +212,25 @@ public class ChecklistManager {
 	}
 
 
-    private void convertToChecklist(String text) {
-        if (text.length() == 0) {
-            return;
-        }
-        for (String line : text.split(Pattern.quote(App.getSettings().getLinesSeparator()))) {
-            convertLineToChecklist(line);
-        }
-    }
+	private void convertToChecklist(String text) {
+		if (text.length() > 0) {
+			for (String line : text.split(Pattern.quote(App.getSettings().getLinesSeparator()))) {
+				convertLineToChecklist(line);
+			}
+		}
+	}
 
 
-    private void convertLineToChecklist(String line) {
-        if (line.length() == 0) {
-            return;
-        }
-        // Line text content will be now stripped from checks symbols if they're present
-        // (ex. [x] Task done -> lineText="Task done", lineChecked=true)
-        boolean isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
-        String lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
-        mCheckListView.addItem(lineText, isChecked);
-    }
+	private void convertLineToChecklist(String line) {
+		if (line.length() == 0) {
+			return;
+		}
+		// Line text content will be now stripped from checks symbols if they're present
+		// (ex. [x] Task done -> lineText="Task done", lineChecked=true)
+		boolean isChecked = line.indexOf(Constants.CHECKED_SYM) == 0;
+		String lineText = line.replace(Constants.CHECKED_SYM, "").replace(Constants.UNCHECKED_SYM, "");
+		mCheckListView.addItem(lineText, isChecked);
+	}
 
 
 	/**
@@ -259,45 +256,45 @@ public class ChecklistManager {
 		return originalView;
 	}
 
-    private void restoreTypography(CheckListView v, EditText returnView) {
-        if (v.getEditText() != null) {
-            returnView.setTypeface(v.getEditText().getTypeface());
-            returnView.setTextSize(0, v.getEditText().getTextSize());
-            returnView.setTextColor(v.getEditText().getTextColors());
-            returnView.setLinkTextColor(v.getEditText().getLinkTextColors());
-        }
-    }
 
-    private void removeChecked(CheckListView v, StringBuilder sb) {
-        boolean isChecked;
-        for (int i = 0; i < v.getChildCount(); i++) {
-            CheckListViewItem mCheckListViewItem = v.getChildAt(i);
-            if (mCheckListViewItem.isHintItem()) {
-                continue;
-            }
-            // If item is checked it will be removed if requested
-            isChecked = mCheckListViewItem.isChecked();
-            if (!isChecked || (isChecked && App.getSettings().getKeepChecked())) {
-                sb.append(i > 0 ? App.getSettings().getLinesSeparator() : "")
-                        .append(App.getSettings().getShowChecks() ? isChecked ? Constants.CHECKED_SYM
-                                : Constants.UNCHECKED_SYM : "").append(mCheckListViewItem.getText());
-            }
-        }
-    }
+	private void restoreTypography(CheckListView v, EditText returnView) {
+		if (v.getEditText() != null) {
+			returnView.setTypeface(v.getEditText().getTypeface());
+			returnView.setTextSize(0, v.getEditText().getTextSize());
+			returnView.setTextColor(v.getEditText().getTextColors());
+			returnView.setLinkTextColor(v.getEditText().getLinkTextColors());
+		}
+	}
 
 
-    /**
+	private void removeChecked(CheckListView v, StringBuilder sb) {
+		boolean isChecked;
+		for (int i = 0; i < v.getChildCount(); i++) {
+			CheckListViewItem mCheckListViewItem = v.getChildAt(i);
+			if (mCheckListViewItem.isHintItem()) {
+				continue;
+			}
+			// If item is checked it will be removed if requested
+			isChecked = mCheckListViewItem.isChecked();
+			if (!isChecked || (isChecked && App.getSettings().getKeepChecked())) {
+				sb.append(i > 0 ? App.getSettings().getLinesSeparator() : "")
+						.append(App.getSettings().getShowChecks() ? isChecked ? Constants.CHECKED_SYM
+								: Constants.UNCHECKED_SYM : "").append(mCheckListViewItem.getText());
+			}
+		}
+	}
+
+
+	/**
 	 * Replace a view with another
 	 */
 	public void replaceViews(View oldView, View newView) {
-		if (oldView == null || newView == null) {
-            return;
-        }
-
-		ViewGroup parent = (ViewGroup) oldView.getParent();
-		int index = parent.indexOfChild(oldView);
-		parent.removeView(oldView);
-		parent.addView(newView, index);
+		if (oldView != null && newView != null) {
+			ViewGroup parent = (ViewGroup) oldView.getParent();
+			int index = parent.indexOfChild(oldView);
+			parent.removeView(oldView);
+			parent.addView(newView, index);
+		}
 	}
 
 
@@ -313,8 +310,8 @@ public class ChecklistManager {
 
 	public String getText() {
 		if (mCheckListView == null) {
-            return "";
-        }
+			return "";
+		}
 		StringBuilder stringbuilder = new StringBuilder();
 		int i = 0;
 		do {
@@ -342,53 +339,49 @@ public class ChecklistManager {
 	}
 
 
-
 	/**
 	 * Counts the number of checked items in the list
 	 */
 	public int getCheckedCount() {
-		if (mCheckListView == null) {
-            return 0;
-        }
-        int count = 0;
-		for (int i = 0; i < mCheckListView.getChildCount(); i++) {
-			CheckListViewItem mCheckListViewItem = mCheckListView.getChildAt(i);
-			if (!mCheckListViewItem.isHintItem() && mCheckListViewItem.isChecked()) {
-				count++;
+		int count = 0;
+		if (mCheckListView != null) {
+			for (int i = 0; i < mCheckListView.getChildCount(); i++) {
+				CheckListViewItem mCheckListViewItem = mCheckListView.getChildAt(i);
+				if (!mCheckListViewItem.isHintItem() && mCheckListViewItem.isChecked()) {
+					count++;
+				}
 			}
 		}
 		return count;
 	}
 
 
-    /**
-     * Counts the number of items excluding the hint item
-     */
-    public int getCount() {
-        if (mCheckListView == null) {
-            return 0;
-        }
-        int count = 0;
-        for (int i = 0; i < mCheckListView.getChildCount(); i++) {
-            if (!mCheckListView.getChildAt(i).isHintItem()) {
-                count++;
-            }
-        }
-        return count;
-    }
+	/**
+	 * Counts the number of items excluding the hint item
+	 */
+	public int getCount() {
+		int count = 0;
+		if (mCheckListView != null) {
+			for (int i = 0; i < mCheckListView.getChildCount(); i++) {
+				if (!mCheckListView.getChildAt(i).isHintItem()) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
 
 
 	/**
 	 * Returns the eventually focused item in the list
 	 */
 	public CheckListViewItem getFocusedItemView() {
-		if (mCheckListView == null || !mCheckListView.hasFocus()) {
-            return null;
-        }
-		for (int i = 0; i < mCheckListView.getChildCount(); i++) {
-			if (mCheckListView.getChildAt(i).hasFocus()) {
-                return mCheckListView.getChildAt(i);
-            }
+		if (mCheckListView != null && mCheckListView.hasFocus()) {
+			for (int i = 0; i < mCheckListView.getChildCount(); i++) {
+				if (mCheckListView.getChildAt(i).hasFocus()) {
+					return mCheckListView.getChildAt(i);
+				}
+			}
 		}
 		return null;
 	}
