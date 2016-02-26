@@ -27,13 +27,12 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 	boolean isChecklist;
 	private ChecklistManager mChecklistManager;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -65,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 	protected void onResume() {
 		super.onResume();
 		if (prefs.getBoolean("refresh", false)) {
-			if (isChecklist) {
-			} else {
+			if (!isChecklist) {
 				toggleCheckList();
 			}
 			prefs.edit().putBoolean("refresh", false).commit();
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -176,8 +173,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 		}
 	}
 	
-	
-	
+
 	private void save(){
 		String text = "";
 		if (isChecklist) {
@@ -196,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			.commit();
 	}
 
-	
 
 	@Override
 	public void onCheckListChanged() {
