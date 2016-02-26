@@ -13,7 +13,8 @@
     <CheckBox
             android:tag="checklistview_checkbox"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:focusable="false"/>
 
     <it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter
             android:tag="checklistview_edittext"
