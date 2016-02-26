@@ -127,10 +127,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
                 if (moveOnChecked(checked, i)) return;
             }
         }
-        // Notify something is changed
-        if (mCheckListChangedListener != null) {
-            mCheckListChangedListener.onCheckListChanged();
-        }
+        if (mCheckListChangedListener != null) mCheckListChangedListener.onCheckListChanged();
     }
 
 

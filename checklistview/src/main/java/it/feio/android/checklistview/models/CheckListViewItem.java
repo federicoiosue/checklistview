@@ -98,7 +98,7 @@ public class CheckListViewItem extends LinearLayout implements
 			deleteIcon = (ImageView) findViewWithTag(context.getString(R.string.tag_deleteicon));
 			// Alpha is set just for newer API because using AlphaManager helper class I should use
 			// an animation making this way impossible to set visibility to INVISIBLE
-			if (Build.VERSION.SDK_INT >= 11) deleteIcon.setAlpha(0.7f);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) deleteIcon.setAlpha(0.7f);
 			deleteIcon.setOnClickListener(this);
 		}
 	}
@@ -190,10 +190,8 @@ public class CheckListViewItem extends LinearLayout implements
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		// When a line gains focus deletion icon (if present) will be shown
-		if (hasFocus) {
-			if (deleteIcon != null) {
-				deleteIcon.setVisibility(View.VISIBLE);
-			}
+		if (hasFocus && deleteIcon != null) {
+			deleteIcon.setVisibility(View.VISIBLE);
 		} else {
 			// When a line loose focus checkbox will be activated
 			// but only if some text has been inserted
@@ -203,9 +201,7 @@ public class CheckListViewItem extends LinearLayout implements
 				setCheckBox(c);
 			}
 			// And deletion icon (if present) will hide
-			if (deleteIcon != null) {
-				deleteIcon.setVisibility(View.INVISIBLE);
-			}
+			if (deleteIcon != null) deleteIcon.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -221,10 +217,7 @@ public class CheckListViewItem extends LinearLayout implements
 					& (~Paint.STRIKE_THRU_TEXT_FLAG));
 			AlphaManager.setAlpha(editText, 1F);
 		}
-		// Item checked is notified
-		if (mCheckListEventListener != null) {
-			mCheckListEventListener.onItemChecked(this, isChecked);
-		}
+		if (mCheckListEventListener != null) mCheckListEventListener.onItemChecked(this, isChecked);
 	}
 
 
@@ -284,20 +277,14 @@ public class CheckListViewItem extends LinearLayout implements
 		if (lengthBeforeTextChanged == 0) {
 			// If the actual edited line is the last but one a new empty 
 			// line is cremCheckableLineated at its bottom
-			if (isHintItem()) {
-				mCheckListEventListener.onNewLineItemEdited(this);
-			}
-
+			if (isHintItem()) mCheckListEventListener.onNewLineItemEdited(this);
 			// Adds delete icon and remove hint
 			showDeleteIcon = true;
 			initDeleteIcon();
 			setHint("");
 		}
 
-		// Notify something is changed
-		if (this.mCheckListChangedListener != null) {
-			mCheckListChangedListener.onCheckListChanged();
-		}
+		if (this.mCheckListChangedListener != null) mCheckListChangedListener.onCheckListChanged();
 	}
 
 

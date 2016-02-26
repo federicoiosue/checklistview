@@ -182,7 +182,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 			CheckListViewItem draggedItem = (CheckListViewItem) dragged;
 			CheckListViewItem targetItem = (CheckListViewItem) target;
 			if (App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD
-					|| !(draggedItem.isChecked() ^ targetItem.isChecked())) {
+					|| draggedItem.isChecked() == targetItem.isChecked()) {
 				return true;
 			}
 		}
