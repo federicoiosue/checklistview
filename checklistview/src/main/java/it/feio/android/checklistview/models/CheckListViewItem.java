@@ -7,7 +7,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
@@ -42,6 +42,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private CheckListEventListener mCheckListEventListener;
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lengthBeforeTextChanged;
+	private boolean deletionUndone;
 
 
 	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
@@ -235,16 +236,25 @@ public class CheckListViewItem extends LinearLayout implements
 		final ViewGroup parent = (ViewGroup) getParent();
 		final View mCheckableLine = this;
 		if (parent != null) {
-			// Deletion is delayed of a second
-			new Handler().postDelayed(new Runnable() {
+			focusView(View.FOCUS_DOWN);
+			final int index = parent.indexOfChild(mCheckableLine);
+			parent.removeView(mCheckableLine);
+			Snackbar.make(parent.getRootView().findViewById(android.R.id.content), R.string.item_deleted, Snackbar
+					.LENGTH_LONG)
+					.setAction(R.string.undo, new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							parent.addView(mCheckableLine, index);
+							deletionUndone = true;
+						}
+					}).setCallback(new Snackbar.Callback() {
 				@Override
-				public void run() {
-					focusView(View.FOCUS_DOWN);
-					parent.removeView(mCheckableLine);
-					mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckableLine);
+				public void onDismissed(Snackbar snackbar, int event) {
+					if (!deletionUndone) {
+						mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckableLine);
+					}
 				}
-			}, Constants.DELETE_ITEM_DELAY);
-
+			}).show();
 		}
 	}
 

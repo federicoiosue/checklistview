@@ -6,4 +6,7 @@
     <string name="tag_edittext">checklistview_edittext</string>
     <string name="tag_deleteicon">checklistview_deleteicon</string>
 
+    <string name="item_deleted">Item deleted</string>
+    <string name="undo">Undo</string>
+
 </resources>
