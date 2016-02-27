@@ -43,7 +43,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lengthBeforeTextChanged;
 	private boolean deletionUndone;
-	private boolean undoBarEnabled;
+	private boolean undoBarEnabled = true;
 	private View undoBarContainerView;
 
 

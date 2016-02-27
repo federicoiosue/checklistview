@@ -1,5 +1,6 @@
 package it.feio.android.checklistview.models;
 
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -47,6 +48,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		setLayoutTransition(new LayoutTransition());
 		if (Build.VERSION.SDK_INT >= 11) {
 			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
 			this.setOnDragListener(mChecklistViewItemOnDragListener);

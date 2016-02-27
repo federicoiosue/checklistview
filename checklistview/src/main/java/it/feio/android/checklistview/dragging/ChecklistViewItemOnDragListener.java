@@ -1,5 +1,6 @@
 package it.feio.android.checklistview.dragging;
 
+import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
@@ -90,13 +91,22 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		if (targetCanAcceptDrop(dragged, target)) {
 			stopScrolling();
 			dragged.setVisibility(View.INVISIBLE);
-			ViewGroup container = (ViewGroup) dragged.getParent();
-			int index = container.indexOfChild(target);
-			container.removeView(dragged);
-			container.addView(dragged, index);
+			moveView(target, dragged);
 		}
 		return true;
 	}
+
+
+	private void moveView(View target, View dragged) {
+		ViewGroup container = (ViewGroup) dragged.getParent();
+		LayoutTransition containerLayoutTransition = container.getLayoutTransition();
+		container.setLayoutTransition(null);
+		int index = container.indexOfChild(target);
+		container.removeView(dragged);
+		container.addView(dragged, index);
+		container.setLayoutTransition(containerLayoutTransition);
+	}
+
 
 	private boolean actionDragStarted(DragEvent event, View dragged) {
 		Log.d(TAG, "Drag event started");
