@@ -37,6 +37,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
 	private ChecklistViewItemOnDragListener mChecklistViewItemOnDragListener;
+	private boolean undoBarEnabled;
 	private View undoBarContainerView;
 
 
@@ -83,6 +84,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void setNewEntryHint(String hint) {
 		setShowHintItem(true);
 		this.newEntryHint = hint;
+	}
+
+
+	public void setUndoBarEnabled(boolean undoBarEnabled) {
+		this.undoBarEnabled = undoBarEnabled;
 	}
 
 
@@ -306,6 +312,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mCheckListViewItem.setText(text);
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		mCheckListViewItem.setItemCheckedListener(this);
+		mCheckListViewItem.setUndoBarEnabled(undoBarEnabled);
+		mCheckListViewItem.setUndoBarContainerView(undoBarContainerView);
 		// Links recognition
 		if (mTextLinkClickListener != null) {
 			mCheckListViewItem.getEditText().gatherLinksForText();
@@ -417,5 +425,4 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		}
 		return r;
 	}
-
 }

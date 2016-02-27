@@ -43,6 +43,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private CheckListChangedListener mCheckListChangedListener;
 	private int lengthBeforeTextChanged;
 	private boolean deletionUndone;
+	private boolean undoBarEnabled;
 	private View undoBarContainerView;
 
 
@@ -233,25 +234,30 @@ public class CheckListViewItem extends LinearLayout implements
 			focusView(View.FOCUS_DOWN);
 			final int index = parent.indexOfChild(mCheckableLine);
 			parent.removeView(mCheckableLine);
-			View snackBarContainer = undoBarContainerView != null ? undoBarContainerView : getRootView().findViewById
-					(android.R.id.content);
-			Snackbar.make(snackBarContainer, R.string.item_deleted, Snackbar
-					.LENGTH_LONG)
-					.setAction(R.string.undo, new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							parent.addView(mCheckableLine, index);
-							deletionUndone = true;
-						}
-					}).setCallback(new Snackbar.Callback() {
-				@Override
-				public void onDismissed(Snackbar snackbar, int event) {
-					if (!deletionUndone) {
-						mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckableLine);
-					}
-				}
-			}).show();
+			if (undoBarEnabled) showUndoBar(parent, mCheckableLine, index);
 		}
+	}
+
+
+	private void showUndoBar(final ViewGroup parent, final View mCheckableLine, final int index) {
+		View snackBarContainer = undoBarContainerView != null ? undoBarContainerView : parent.getRootView()
+				.findViewById(android.R.id.content);
+		Snackbar.make(snackBarContainer, R.string.item_deleted, Snackbar.LENGTH_LONG)
+				.setAction(R.string.undo, new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						parent.addView(mCheckableLine, index);
+						deletionUndone = true;
+					}
+				})
+				.setCallback(new Snackbar.Callback() {
+					@Override
+					public void onDismissed(Snackbar snackbar, int event) {
+						if (!deletionUndone) {
+							mCheckListEventListener.onLineDeleted((CheckListViewItem) mCheckableLine);
+						}
+					}
+				}).show();
 	}
 
 
@@ -325,6 +331,11 @@ public class CheckListViewItem extends LinearLayout implements
 
 	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
+	}
+
+
+	public void setUndoBarEnabled(boolean undoBarEnabled) {
+		this.undoBarEnabled = undoBarEnabled;
 	}
 
 

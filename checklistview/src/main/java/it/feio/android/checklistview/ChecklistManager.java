@@ -26,6 +26,7 @@ public class ChecklistManager {
 	private TextLinkClickListener mTextLinkClickListener;
 	private EditText originalView;
 	private View undoBarContainerView;
+	private boolean undoBarEnabled = true;
 
 
 	private ChecklistManager(Context mContext) {
@@ -47,8 +48,9 @@ public class ChecklistManager {
 	 *
 	 * @param linesSeparator String separator
 	 */
-	public void setLinesSeparator(String linesSeparator) {
+	public ChecklistManager linesSeparator(String linesSeparator) {
 		App.getSettings().setLinesSeparator(linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator);
+		return instance;
 	}
 
 
@@ -57,8 +59,9 @@ public class ChecklistManager {
 	 *
 	 * @param showDeleteIcon True to show icon, false otherwise.
 	 */
-	public void setShowDeleteIcon(boolean showDeleteIcon) {
+	public ChecklistManager showDeleteIcon(boolean showDeleteIcon) {
 		App.getSettings().setShowDeleteIcon(showDeleteIcon);
+		return instance;
 	}
 
 
@@ -67,8 +70,9 @@ public class ChecklistManager {
 	 *
 	 * @param keepChecked True to keep checks, false otherwise.
 	 */
-	public void setKeepChecked(boolean keepChecked) {
+	public ChecklistManager keepChecked(boolean keepChecked) {
 		App.getSettings().setKeepChecked(keepChecked);
+		return instance;
 	}
 
 
@@ -76,8 +80,9 @@ public class ChecklistManager {
 	 * Set if show checked or unchecked sequence symbols when converting back from checklist to simple text. Default
 	 * false.
 	 */
-	public void setShowChecks(boolean showChecks) {
+	public ChecklistManager showCheckMarks(boolean showChecks) {
 		App.getSettings().setShowChecks(showChecks);
+		return instance;
 	}
 
 
@@ -91,8 +96,9 @@ public class ChecklistManager {
 	 *
 	 * @param moveCheckedOnBottom
 	 */
-	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
+	public ChecklistManager moveCheckedOnBottom(int moveCheckedOnBottom) {
 		App.getSettings().setMoveCheckedOnBottom(moveCheckedOnBottom);
+		return instance;
 	}
 
 
@@ -101,8 +107,9 @@ public class ChecklistManager {
 	 *
 	 * @param showHintItem
 	 */
-	public void setShowHintItem(boolean showHintItem) {
+	public ChecklistManager showHintItem(boolean showHintItem) {
 		App.getSettings().setShowHintItem(showHintItem);
+		return instance;
 	}
 
 
@@ -119,14 +126,16 @@ public class ChecklistManager {
 	 *
 	 * @param newEntryHint Hint text
 	 */
-	public void setNewEntryHint(String newEntryHint) {
-		setShowHintItem(true);
+	public ChecklistManager newEntryHint(String newEntryHint) {
+		showHintItem(true);
 		App.getSettings().setNewEntryHint(newEntryHint);
+		return instance;
 	}
 
 
-	public void setDragEnabled(boolean dragEnabled) {
+	public ChecklistManager dragEnabled(boolean dragEnabled) {
 		App.getSettings().setDragEnabled(dragEnabled);
+		return instance;
 	}
 
 
@@ -135,8 +144,9 @@ public class ChecklistManager {
 	}
 
 
-	public void setDragVibrationEnabled(boolean dragVibrationEnabled) {
+	public ChecklistManager dragVibrationEnabled(boolean dragVibrationEnabled) {
 		App.getSettings().setDragVibrationEnabled(dragVibrationEnabled);
+		return instance;
 	}
 
 
@@ -145,8 +155,10 @@ public class ChecklistManager {
 	}
 
 
-	public void setDragVibrationDuration(int dragVibrationDuration) {
+	public ChecklistManager dragVibrationDuration(int dragVibrationDuration) {
 		App.getSettings().setDragVibrationDuration(dragVibrationDuration);
+		return instance;
+
 	}
 
 
@@ -156,11 +168,21 @@ public class ChecklistManager {
 
 
 	/**
+	 * Disable undo snackbar
+	 */
+	public ChecklistManager disableUndoBar() {
+		this.undoBarEnabled= false;
+		return instance;
+	}
+
+
+	/**
 	 * Used to set a custom View to contain item undo deletion SnackBar
 	 * @param undoBarContainerView Container view
 	 */
-	public void setUndoBarContainerView(final View undoBarContainerView) {
+	public ChecklistManager undoBarContainerView(final View undoBarContainerView) {
 		this.undoBarContainerView = undoBarContainerView;
+		return instance;
 	}
 
 
@@ -191,6 +213,7 @@ public class ChecklistManager {
 		this.originalView = v;
 		mCheckListView = new CheckListView(mContext);
 		mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
+		mCheckListView.setUndoBarEnabled(undoBarEnabled);
 		mCheckListView.setUndoBarContainerView(undoBarContainerView);
 		mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
 		mCheckListView.setNewEntryHint(App.getSettings().getNewEntryHint());
