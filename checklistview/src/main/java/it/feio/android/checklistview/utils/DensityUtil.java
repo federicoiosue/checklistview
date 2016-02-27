@@ -5,10 +5,6 @@ import android.util.DisplayMetrics;
 
 public class DensityUtil {
 
-    private DensityUtil(){
-
-    }
-
     /**
      * This method converts dp unit to equivalent pixels, depending on device
      * density.
@@ -21,8 +17,7 @@ public class DensityUtil {
      */
     public static int dpToPx(float dp, Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.densityDpi / 160f));
-        return px;
+        return Math.round(dp * (displayMetrics.densityDpi / 160f));
     }
 
     /**
@@ -35,7 +30,6 @@ public class DensityUtil {
      */
     public static int pxToDp(float px, Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int dp = Math.round(px / (displayMetrics.densityDpi / 160f));
-        return dp;
+        return Math.round(px / (displayMetrics.densityDpi / 160f));
     }
 }
