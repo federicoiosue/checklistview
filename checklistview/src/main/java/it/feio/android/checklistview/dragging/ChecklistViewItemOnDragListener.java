@@ -51,11 +51,13 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		}
 	}
 
+
 	private boolean actionDrop(View dragged) {
 		stopScrolling();
-		showViewWithDelay(dragged);
+		dragged.setVisibility(View.VISIBLE);
 		return true;
 	}
+
 
 	private boolean actionDragLocation(View target, DragEvent event) {
 		// Control demanded to the container to scroll
@@ -77,15 +79,15 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		}
 	}
 
+
 	private boolean actionDragExited(View target, View dragged) {
 		if (checkTag(target, Constants.TAG_LIST)) {
 			stopScrolling();
 		}
-		if (target.equals(dragged.getParent())) {
-			showViewWithDelay(dragged);
-		}
+		if (target.equals(dragged.getParent())) dragged.setVisibility(View.VISIBLE);
 		return true;
 	}
+
 
 	private boolean actionDragEntered(View target, View dragged) {
 		if (targetCanAcceptDrop(dragged, target)) {
@@ -197,16 +199,6 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 			}
 		}
 		return false;
-	}
-
-
-	private void showViewWithDelay(final View v) {
-		v.post(new Runnable() {
-			@Override
-			public void run() {
-				v.setVisibility(View.VISIBLE);
-			}
-		});
 	}
 
 
