@@ -6,4 +6,6 @@
 
     <dimen name="list_details_content_padding">12.0dip</dimen>
 
+    <dimen name="icons_top_margin">7dp</dimen>
+
 </resources>

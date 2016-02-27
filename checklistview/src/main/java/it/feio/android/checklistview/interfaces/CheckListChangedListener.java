@@ -1,8 +1,11 @@
 package it.feio.android.checklistview.interfaces;
 
+/**
+ *  Generic purpose checklist view listener.
+ */
 public interface CheckListChangedListener {
 	/**
-	 * This is called when anything happens
+	 * This is called when anything happens.
 	 */
-	public void onCheckListChanged();
+	void onCheckListChanged();
 }

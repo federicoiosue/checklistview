@@ -1,5 +1,6 @@
 package it.feio.android.checklistview.models;
 
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -36,6 +38,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
 	private ChecklistViewItemOnDragListener mChecklistViewItemOnDragListener;
+	private boolean undoBarEnabled;
+	private View undoBarContainerView;
 
 
 	public CheckListView(Context activity) {
@@ -44,6 +48,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		setLayoutTransition(new LayoutTransition());
 		if (Build.VERSION.SDK_INT >= 11) {
 			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
 			this.setOnDragListener(mChecklistViewItemOnDragListener);
@@ -54,7 +59,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Declare if a checked item must be moved on bottom of the list or not
 	 */
-	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
+	void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
@@ -62,7 +67,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Set if show or not a delete icon at the end of the line. Default true.
 	 */
-	public void setShowDeleteIcon(boolean showDeleteIcon) {
+	void setShowDeleteIcon(boolean showDeleteIcon) {
 		this.showDeleteIcon = showDeleteIcon;
 	}
 
@@ -70,7 +75,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Set if an empty line on bottom of the checklist must be shown or not
 	 */
-	public void setShowHintItem(boolean showHintItem) {
+	void setShowHintItem(boolean showHintItem) {
 		this.showHintItem = showHintItem;
 	}
 
@@ -78,15 +83,29 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Text to be used as hint for the last empty line (hint item)
 	 */
-	public void setNewEntryHint(String hint) {
+	void setNewEntryHint(String hint) {
 		setShowHintItem(true);
 		this.newEntryHint = hint;
 	}
 
 
+	void setUndoBarEnabled(boolean undoBarEnabled) {
+		this.undoBarEnabled = undoBarEnabled;
+	}
+
+
+	/**
+	 * Used to set a custom View to contain item undo deletion SnackBar
+	 * @param undoBarContainerView Container view
+	 */
+	void setUndoBarContainerView(final View undoBarContainerView) {
+		this.undoBarContainerView = undoBarContainerView;
+	}
+
+
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-	public void cloneStyles(EditText v) {
+	void cloneStyles(EditText v) {
 		for (int i = 0; i < getChildCount(); i++) {
 			getChildAt(i).cloneStyles(v);
 		}
@@ -98,13 +117,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	}
 
 
-	public EditText getEditText() {
-		EditText res = null;
+	EditText getEditText() {
 		CheckListViewItem child = getChildAt(0);
 		if (child != null) {
-            res = child.getEditText();
+            return child.getEditText();
         }
-		return res;
+		return null;
 	}
 
 
@@ -128,10 +146,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
                 if (moveOnChecked(checked, i)) return;
             }
         }
-        // Notify something is changed
-        if (mCheckListChangedListener != null) {
-            mCheckListChangedListener.onCheckListChanged();
-        }
+        if (mCheckListChangedListener != null) mCheckListChangedListener.onCheckListChanged();
     }
 
 
@@ -299,6 +314,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		mCheckListViewItem.setText(text);
 		mCheckListViewItem.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
 		mCheckListViewItem.setItemCheckedListener(this);
+		mCheckListViewItem.setUndoBarEnabled(undoBarEnabled);
+		mCheckListViewItem.setUndoBarContainerView(undoBarContainerView);
 		// Links recognition
 		if (mTextLinkClickListener != null) {
 			mCheckListViewItem.getEditText().gatherLinksForText();
@@ -314,7 +331,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			addView(mCheckListViewItem);
 		}
 
-		// Drag & drop
 		enableDragAndDrop(mCheckListViewItem);
 	}
 
@@ -345,6 +361,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		if (mCheckListChangedListener != null) {
 			mCheckListViewItem.setCheckListChangedListener(this.mCheckListChangedListener);
 		}
+		mCheckListViewItem.setUndoBarContainerView(undoBarContainerView);
 
 		// Defining position (default last, but if checked items behavior is not HOLD if changes)
 		int hintItemPosition = getChildCount();
@@ -370,7 +387,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 			});
 		}
 
-		// Add view
 		addView(mCheckListViewItem, hintItemPosition);
 	}
 
@@ -391,7 +407,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onLineDeleted(CheckListViewItem checkableLine) {
-		// Eventually notify something is changed
 		mCheckListChangedListener.onCheckListChanged();
 	}
 
@@ -399,7 +414,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	public void setOnTextLinkClickListener(TextLinkClickListener textlinkclicklistener) {
 		mTextLinkClickListener = textlinkclicklistener;
 	}
-
 
 	
 	@Override
@@ -413,5 +427,4 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		}
 		return r;
 	}
-
 }
