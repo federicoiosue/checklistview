@@ -89,7 +89,7 @@ public class CheckListViewItem extends LinearLayout implements
 	}
 
 
-	public void setItemCheckedListener(CheckListEventListener listener) {
+	void setItemCheckedListener(CheckListEventListener listener) {
 		this.mCheckListEventListener = listener;
 	}
 
@@ -106,17 +106,17 @@ public class CheckListViewItem extends LinearLayout implements
 	}
 
 
-	public ImageView getDragHandler() {
+	ImageView getDragHandler() {
 		return this.dragHandler;
 	}
 
 
-	public CheckBox getCheckBox() {
+	CheckBox getCheckBox() {
 		return checkBox;
 	}
 
 
-	public void setCheckBox(CheckBox checkBox) {
+	void setCheckBox(CheckBox checkBox) {
 		for (int i = 0; i < getChildCount(); i++) {
 			if (getChildAt(i).equals(this.checkBox)) {
 				removeViewAt(i);
@@ -329,12 +329,12 @@ public class CheckListViewItem extends LinearLayout implements
 	}
 
 
-	public void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
+	void setCheckListChangedListener(CheckListChangedListener mCheckListChangedListener) {
 		this.mCheckListChangedListener = mCheckListChangedListener;
 	}
 
 
-	public void setUndoBarEnabled(boolean undoBarEnabled) {
+	void setUndoBarEnabled(boolean undoBarEnabled) {
 		this.undoBarEnabled = undoBarEnabled;
 	}
 
@@ -343,7 +343,7 @@ public class CheckListViewItem extends LinearLayout implements
 	 * Used to set a custom View to contain item undo deletion SnackBar
 	 * @param undoBarContainerView Container view
 	 */
-	public void setUndoBarContainerView(final View undoBarContainerView) {
+	void setUndoBarContainerView(final View undoBarContainerView) {
 		this.undoBarContainerView = undoBarContainerView;
 	}
 

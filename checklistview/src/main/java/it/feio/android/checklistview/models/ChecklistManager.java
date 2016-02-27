@@ -1,4 +1,4 @@
-package it.feio.android.checklistview;
+package it.feio.android.checklistview.models;
 
 import android.content.Context;
 import android.text.TextWatcher;
@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
-import it.feio.android.checklistview.models.CheckListView;
-import it.feio.android.checklistview.models.CheckListViewItem;
 import it.feio.android.pixlui.links.TextLinkClickListener;
 
 import java.util.regex.Pattern;

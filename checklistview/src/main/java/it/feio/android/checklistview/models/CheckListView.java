@@ -57,7 +57,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Declare if a checked item must be moved on bottom of the list or not
 	 */
-	public void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
+	void setMoveCheckedOnBottom(int moveCheckedOnBottom) {
 		this.moveCheckedOnBottom = moveCheckedOnBottom;
 	}
 
@@ -65,7 +65,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Set if show or not a delete icon at the end of the line. Default true.
 	 */
-	public void setShowDeleteIcon(boolean showDeleteIcon) {
+	void setShowDeleteIcon(boolean showDeleteIcon) {
 		this.showDeleteIcon = showDeleteIcon;
 	}
 
@@ -73,7 +73,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Set if an empty line on bottom of the checklist must be shown or not
 	 */
-	public void setShowHintItem(boolean showHintItem) {
+	void setShowHintItem(boolean showHintItem) {
 		this.showHintItem = showHintItem;
 	}
 
@@ -81,13 +81,13 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	/**
 	 * Text to be used as hint for the last empty line (hint item)
 	 */
-	public void setNewEntryHint(String hint) {
+	void setNewEntryHint(String hint) {
 		setShowHintItem(true);
 		this.newEntryHint = hint;
 	}
 
 
-	public void setUndoBarEnabled(boolean undoBarEnabled) {
+	void setUndoBarEnabled(boolean undoBarEnabled) {
 		this.undoBarEnabled = undoBarEnabled;
 	}
 
@@ -96,14 +96,14 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	 * Used to set a custom View to contain item undo deletion SnackBar
 	 * @param undoBarContainerView Container view
 	 */
-	public void setUndoBarContainerView(final View undoBarContainerView) {
+	void setUndoBarContainerView(final View undoBarContainerView) {
 		this.undoBarContainerView = undoBarContainerView;
 	}
 
 
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
-	public void cloneStyles(EditText v) {
+	void cloneStyles(EditText v) {
 		for (int i = 0; i < getChildCount(); i++) {
 			getChildAt(i).cloneStyles(v);
 		}
@@ -115,7 +115,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	}
 
 
-	public EditText getEditText() {
+	EditText getEditText() {
 		CheckListViewItem child = getChildAt(0);
 		if (child != null) {
             return child.getEditText();
