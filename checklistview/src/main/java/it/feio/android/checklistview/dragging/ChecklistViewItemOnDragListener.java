@@ -99,7 +99,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 	}
 
 
-	private void moveView(View target, View dragged) {
+	public void moveView(View target, View dragged) {
 		ViewGroup container = (ViewGroup) dragged.getParent();
 		LayoutTransition containerLayoutTransition = container.getLayoutTransition();
 		container.setLayoutTransition(null);
