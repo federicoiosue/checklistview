@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import it.feio.android.checklistview.App;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
@@ -48,8 +46,10 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		setLayoutTransition(new LayoutTransition());
-		if (Build.VERSION.SDK_INT >= 11) {
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			setLayoutTransition(new LayoutTransition());
+		}
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
 			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
 			this.setOnDragListener(mChecklistViewItemOnDragListener);
 		}
@@ -336,7 +336,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 
 	private void enableDragAndDrop(CheckListViewItem mCheckListViewItem) {
-		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1 && App.getSettings().getDragEnabled()) {
 			mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
 			mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
 		}
