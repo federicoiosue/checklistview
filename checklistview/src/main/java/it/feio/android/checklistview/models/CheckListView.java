@@ -46,9 +46,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			setLayoutTransition(new LayoutTransition());
-		}
+		setLayoutTransition(new LayoutTransition());
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
 			mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
 			this.setOnDragListener(mChecklistViewItemOnDragListener);

@@ -29,6 +29,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 	private Thread scrollerThread;
 	private boolean scroll = false;
 	private ScrollView scrollView;
+	private LayoutTransition containerLayoutTransition;
 
 
 	public boolean onDrag(View target, DragEvent event) {
@@ -53,6 +54,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 
 	private boolean actionDrop(View dragged) {
+		((ViewGroup) dragged.getParent()).setLayoutTransition(containerLayoutTransition);
 		stopScrolling();
 		dragged.setVisibility(View.VISIBLE);
 		return true;
@@ -101,19 +103,18 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 	public void moveView(View target, View dragged) {
 		ViewGroup container = (ViewGroup) dragged.getParent();
-		LayoutTransition containerLayoutTransition = container.getLayoutTransition();
-		container.setLayoutTransition(null);
 		int index = container.indexOfChild(target);
 		container.removeView(dragged);
 		container.addView(dragged, index);
-		container.setLayoutTransition(containerLayoutTransition);
 	}
 
 
 	private boolean actionDragStarted(DragEvent event, View dragged) {
-		Log.d(TAG, "Drag event started");
-		dragged.setVisibility(View.INVISIBLE);
-		y = event.getY();
+		ViewGroup container = (ViewGroup) dragged.getParent();
+		if (container.getLayoutTransition() != null) {
+			containerLayoutTransition = container.getLayoutTransition();
+			container.setLayoutTransition(null);
+		}
 		return true;
 	}
 
