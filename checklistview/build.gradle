@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.federicoiosue'
+version project.VERSION_NAME
 
 android {
     compileSdkVersion 23
@@ -27,9 +28,9 @@ android {
 
 dependencies {
     compile 'com.github.federicoiosue:pixlUI:2.3'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:design:23.2.0'
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:23.1.1'
+    androidTestCompile 'com.android.support:support-annotations:23.2.0'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
 }

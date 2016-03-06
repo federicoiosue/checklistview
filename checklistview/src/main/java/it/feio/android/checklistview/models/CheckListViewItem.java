@@ -385,7 +385,7 @@ public class CheckListViewItem extends LinearLayout implements
 	private boolean manageDragEvents(View v, DragEvent event, OnDragListener l) {
 		switch (event.getAction()) {
 			case DragEvent.ACTION_DRAG_STARTED:
-				return true;
+				return l.onDrag(v, event);
 			case DragEvent.ACTION_DRAG_LOCATION:
 				return false;
 			case DragEvent.ACTION_DROP:
