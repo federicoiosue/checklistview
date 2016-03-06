@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.federicoiosue'
+version project.VERSION_NAME
 
 android {
     compileSdkVersion 23
