@@ -1,4 +1,5 @@
 [![Release](https://img.shields.io/github/tag/federicoiosue/CheckListView.svg?label=JitPack)](https://jitpack.io/#federicoiosue/CheckListView/3.0.2)
+[![Build Status](https://travis-ci.org/federicoiosue/checklistview.svg?branch=develop)](https://travis-ci.org/federicoiosue/checklistview)
 
 CheckListView
 =============
