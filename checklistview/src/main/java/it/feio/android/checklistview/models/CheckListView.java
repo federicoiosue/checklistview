@@ -405,7 +405,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 	@Override
 	public void onLineDeleted(CheckListViewItem checkableLine) {
-		mCheckListChangedListener.onCheckListChanged();
+		if (mCheckListChangedListener != null) mCheckListChangedListener.onCheckListChanged();
 	}
 
 
