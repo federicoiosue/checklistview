@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.DragShadowBuilder;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ChecklistViewDragShadowBuilder extends DragShadowBuilder {
+class ChecklistViewDragShadowBuilder extends DragShadowBuilder {
 
 
     ChecklistViewDragShadowBuilder(View view) {
