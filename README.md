@@ -1,12 +1,26 @@
 [![Release](https://jitpack.io/v/federicoiosue/checklistview.svg)](https://jitpack.io/#federicoiosue/checklistview)
 [![Build Status](https://travis-ci.org/federicoiosue/checklistview.svg?branch=develop)](https://travis-ci.org/federicoiosue/checklistview)
 
-CheckListView
-=============
+# ChecklistView
+
+## Overview
 
 Library to convert an EditText into a View capable of acting as checklist
 
-![Example Image](./01.png) ![Example Image](./02.png) ![Example Image](./03.png)
+## Features
+- Single line view conversion
+- Lot of options
+  - Custom item separator for conversion
+  - Show/hide hint item at bottom
+  - Custom behavior on item's check
+  - Keep/remove checked item on reverse conversion to EditText
+  - Keep/unkeep check symbols on reverse conversion to EditText
+
+
+
+## Demo screenshots
+
+<img src="01.png" width="256"><img src="02.png" width="256"> <img src="03.png" width="256">
 
 
 Try out the app on the [Play Store](https://play.google.com/store/apps/details?id=it.feio.android.checklistview.demo).
@@ -15,6 +29,9 @@ Try out the app on the [Play Store](https://play.google.com/store/apps/details?i
 ##Usage
 
 ```java
+// Getting instance
+ChecklistManager mChecklistManager = new ChecklistManager(mActivity);
+
 private void toggleCheckList() {
     View newView;
 
@@ -23,10 +40,6 @@ private void toggleCheckList() {
      * ChecklistManager we can call its methods.
      */
     try {
-        // Getting instance
-        ChecklistManager mChecklistManager = ChecklistManager
-            .getInstance(mActivity);
-
         /* 
          * These method are useful when converting from EditText to ChecklistView
          * (but can be set anytime, they'll be used at appropriate moment)
@@ -61,9 +74,8 @@ private void toggleCheckList() {
         // eventual reverse conversion
         switchView = newView;
     } catch (ViewNotSupportedException e) {
-        // This exception is fired if the source view class is
-        // not supported
-        e.printStackTrace();
+        // This exception is fired if the source view class is not supported
+        ...
     }
 }
 ```
@@ -72,34 +84,34 @@ private void toggleCheckList() {
 
 In your app's module *gradle.build* file add the following compile inclusion:
 
-```compile 'com.github.federicoiosue:CheckListView:3.0.2'```
+``` groovy
+compile 'com.github.federicoiosue:checklistview:test3.2.0'
+```
 
-##Dependencies
+## Dependencies
 
 There are no dependencies for the library, but if you want to compile the demo project you'll need to add [AppCompat](http://developer.android.com/tools/support-library/features.html) as library too
 
-
 ##Developed By
 
-* Federico Iosue - <federico.iosue@gmail.com>
+* Federico Iosue - <federico@iosue.it>
 
 
+## License
 
-##License
-
-    Copyright 2015 Federico Iosue
+    Copyright 2015-2017 Federico Iosue
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-
+    
        http://www.apache.org/licenses/LICENSE-2.0
-
+    
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
-    
-    
+
+
+​    
