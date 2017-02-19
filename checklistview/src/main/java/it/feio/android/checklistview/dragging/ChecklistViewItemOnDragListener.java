@@ -36,6 +36,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 		int action = event.getAction();
 		final View dragged = (View) ((View) event.getLocalState()).getParent();
 		scrollView = (ScrollView) getScrollableAncestor(dragged);
+		Log.v(TAG, "Dragging item. Action: " + action);
 		switch (action) {
 			case DragEvent.ACTION_DRAG_STARTED:
 				return actionDragStarted(event, dragged);

@@ -12,13 +12,13 @@ import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.pixlui.links.TextLinkClickListener;
 
+import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;
 
 
 public class ChecklistManager {
 
-	private static ChecklistManager instance = null;
-	private Context mContext;
+	private WeakReference<Context> mContext;
 	private TextWatcher mTextWatcher;
 	private CheckListChangedListener mCheckListChangedListener;
 	private CheckListView mCheckListView;
@@ -28,16 +28,8 @@ public class ChecklistManager {
 	private boolean undoBarEnabled = true;
 
 
-	private ChecklistManager(Context mContext) {
-		this.mContext = mContext;
-	}
-
-
-	public static synchronized ChecklistManager getInstance(Context mContext) {
-		if (instance == null) {
-			instance = new ChecklistManager(mContext);
-		}
-		return instance;
+	public ChecklistManager(Context context) {
+		this.mContext = new WeakReference<>(context);
 	}
 
 
@@ -49,7 +41,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager linesSeparator(String linesSeparator) {
 		App.getSettings().setLinesSeparator(linesSeparator.length() == 0 ? Constants.LINES_SEPARATOR : linesSeparator);
-		return instance;
+		return this;
 	}
 
 
@@ -60,7 +52,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager showDeleteIcon(boolean showDeleteIcon) {
 		App.getSettings().setShowDeleteIcon(showDeleteIcon);
-		return instance;
+		return this;
 	}
 
 
@@ -71,7 +63,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager keepChecked(boolean keepChecked) {
 		App.getSettings().setKeepChecked(keepChecked);
-		return instance;
+		return this;
 	}
 
 
@@ -81,7 +73,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager showCheckMarks(boolean showChecks) {
 		App.getSettings().setShowChecks(showChecks);
-		return instance;
+		return this;
 	}
 
 
@@ -97,7 +89,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager moveCheckedOnBottom(int moveCheckedOnBottom) {
 		App.getSettings().setMoveCheckedOnBottom(moveCheckedOnBottom);
-		return instance;
+		return this;
 	}
 
 
@@ -108,7 +100,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager showHintItem(boolean showHintItem) {
 		App.getSettings().setShowHintItem(showHintItem);
-		return instance;
+		return this;
 	}
 
 
@@ -128,13 +120,13 @@ public class ChecklistManager {
 	public ChecklistManager newEntryHint(String newEntryHint) {
 		showHintItem(true);
 		App.getSettings().setNewEntryHint(newEntryHint);
-		return instance;
+		return this;
 	}
 
 
 	public ChecklistManager dragEnabled(boolean dragEnabled) {
 		App.getSettings().setDragEnabled(dragEnabled);
-		return instance;
+		return this;
 	}
 
 
@@ -145,7 +137,7 @@ public class ChecklistManager {
 
 	public ChecklistManager dragVibrationEnabled(boolean dragVibrationEnabled) {
 		App.getSettings().setDragVibrationEnabled(dragVibrationEnabled);
-		return instance;
+		return this;
 	}
 
 
@@ -156,7 +148,7 @@ public class ChecklistManager {
 
 	public ChecklistManager dragVibrationDuration(int dragVibrationDuration) {
 		App.getSettings().setDragVibrationDuration(dragVibrationDuration);
-		return instance;
+		return this;
 
 	}
 
@@ -171,7 +163,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager disableUndoBar() {
 		this.undoBarEnabled= false;
-		return instance;
+		return this;
 	}
 
 
@@ -181,12 +173,7 @@ public class ChecklistManager {
 	 */
 	public ChecklistManager undoBarContainerView(final View undoBarContainerView) {
 		this.undoBarContainerView = undoBarContainerView;
-		return instance;
-	}
-
-
-	public static void unregister() {
-		instance = null;
+		return this;
 	}
 
 

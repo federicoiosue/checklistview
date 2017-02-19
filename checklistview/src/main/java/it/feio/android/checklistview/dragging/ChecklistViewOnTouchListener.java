@@ -14,18 +14,24 @@ import it.feio.android.checklistview.App;
 public class ChecklistViewOnTouchListener implements OnTouchListener {
 
 	public boolean onTouch(View view, MotionEvent motionEvent) {
-		return motionEvent.getAction() == MotionEvent.ACTION_DOWN ? actionDown(view) : false;
-
+		if (MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
+			actionDown(view);
+			return true;
+		}
+		return false;
 	}
 
 
-    private boolean actionDown(View view) {
+    private void actionDown(View view) {
         View v = (View) view.getParent();
-        v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+			v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
+		} else {
+			v.startDragAndDrop(null, new ChecklistViewDragShadowBuilder(v), v, 0);
+		}
         if (App.getSettings().getDragVibrationEnabled()) {
             ((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(App.getSettings()
                     .getDragVibrationDuration());
         }
-        return true;
     }
 }

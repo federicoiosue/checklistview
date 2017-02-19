@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			if (!isChecklist) {
 				toggleCheckList();
 			}
-			prefs.edit().putBoolean("refresh", false).commit();
+			prefs.edit().putBoolean("refresh", false).apply();
 		}
 	}
 	
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 		 */
 		try {
 			// Getting instance
-			mChecklistManager = ChecklistManager.getInstance(getApplicationContext());
+			mChecklistManager = mChecklistManager == null ? new ChecklistManager(getApplicationContext()) : mChecklistManager;
 
 			/*
 			 * These method are useful when converting from EditText to
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 		prefs.edit()
 			.putString("text", text)
 			.putBoolean("isChecklist", isChecklist)
-			.commit();
+			.apply();
 	}
 
 
