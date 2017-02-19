@@ -12,13 +12,14 @@ import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.pixlui.links.TextLinkClickListener;
 
+import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;
 
 
 public class ChecklistManager {
 
 	private static ChecklistManager instance = null;
-	private Context mContext;
+	private WeakReference<Context> mContext;
 	private TextWatcher mTextWatcher;
 	private CheckListChangedListener mCheckListChangedListener;
 	private CheckListView mCheckListView;
@@ -28,8 +29,8 @@ public class ChecklistManager {
 	private boolean undoBarEnabled = true;
 
 
-	private ChecklistManager(Context mContext) {
-		this.mContext = mContext;
+	private ChecklistManager(Context context) {
+		this.mContext = new WeakReference<>(context);
 	}
 
 

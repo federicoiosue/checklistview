@@ -27,13 +27,15 @@ import it.feio.android.checklistview.interfaces.EditTextEventListener;
 import it.feio.android.checklistview.utils.AlphaManager;
 import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 
+import java.lang.ref.WeakReference;
+
 
 public class CheckListViewItem extends LinearLayout implements
 		OnCheckedChangeListener, OnClickListener, OnFocusChangeListener, OnEditorActionListener, TextWatcher,
 		EditTextEventListener {
 
 
-	private final Context context;
+	private final WeakReference<Context> mContext;
 	private ImageView dragHandler;
 	private CheckBox checkBox;
 	private EditTextMultiLineNoEnter editText;
@@ -47,12 +49,11 @@ public class CheckListViewItem extends LinearLayout implements
 	private View undoBarContainerView;
 
 
-	public CheckListViewItem(Context context, boolean isChecked, boolean showDeleteIcon) {
-
-		super(context);
-		this.context = context;
+	public CheckListViewItem(WeakReference<Context> context, boolean isChecked, boolean showDeleteIcon) {
+		super(context.get());
+		this.mContext = context;
 		this.showDeleteIcon = showDeleteIcon;
-		inflate(context, R.layout.checklistview_item, this);
+		inflate(context.get(), R.layout.checklistview_item, this);
 
 		initDragHandler();
 		initCheckBox();
@@ -69,19 +70,19 @@ public class CheckListViewItem extends LinearLayout implements
 
 	private void initDragHandler() {
 		if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
-			dragHandler = (ImageView) findViewWithTag(context.getString(R.string.tag_draghandle));
+			dragHandler = (ImageView) findViewWithTag(mContext.get().getString(R.string.tag_draghandle));
 		}
 	}
 
 
 	private void initCheckBox() {
-		checkBox = (CheckBox) findViewWithTag(context.getString(R.string.tag_checkbox));
+		checkBox = (CheckBox) findViewWithTag(mContext.get().getString(R.string.tag_checkbox));
 		checkBox.setOnCheckedChangeListener(this);
 	}
 
 
 	private void initEditText() {
-		editText = (EditTextMultiLineNoEnter) findViewWithTag(context.getString(R.string.tag_edittext));
+		editText = (EditTextMultiLineNoEnter) findViewWithTag(mContext.get().getString(R.string.tag_edittext));
 		editText.setOnFocusChangeListener(this);
 		editText.setOnEditorActionListener(this);
 		editText.addTextChangedListener(this);
@@ -97,7 +98,7 @@ public class CheckListViewItem extends LinearLayout implements
 	@SuppressLint("NewApi")
 	private void initDeleteIcon() {
 		if (showDeleteIcon && deleteIcon == null) {
-			deleteIcon = (ImageView) findViewWithTag(context.getString(R.string.tag_deleteicon));
+			deleteIcon = (ImageView) findViewWithTag(mContext.get().getString(R.string.tag_deleteicon));
 			// Alpha is set just for newer API because using AlphaManager helper class I should use
 			// an animation making this way impossible to set visibility to INVISIBLE
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) deleteIcon.setAlpha(0.7f);

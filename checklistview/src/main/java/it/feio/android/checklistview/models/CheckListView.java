@@ -24,6 +24,9 @@ import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.widgets.EditTextMultiLineNoEnter;
 import it.feio.android.pixlui.links.TextLinkClickListener;
 
+import java.lang.ref.WeakReference;
+
+
 @SuppressLint("NewApi")
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
 
@@ -32,7 +35,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private String newEntryHint = "";
 	private int moveCheckedOnBottom = Settings.CHECKED_HOLD;
 
-	private Context mContext;
+	private WeakReference<Context> mContext;
 	private CheckListChangedListener mCheckListChangedListener;
 	private TextLinkClickListener mTextLinkClickListener;
 	private ChecklistViewItemOnDragListener mChecklistViewItemOnDragListener;
@@ -40,9 +43,9 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 	private View undoBarContainerView;
 
 
-	public CheckListView(Context activity) {
-		super(activity);
-		this.mContext = activity;
+	public CheckListView(WeakReference<Context> context) {
+		super(context.get());
+		this.mContext = context;
 		setTag(Constants.TAG_LIST);
 		setOrientation(VERTICAL);
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -233,7 +236,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 		// If the "next" ime key is pressed being into the hint item of the list the
 		// softkeyboard will be hidden and focus assigned out of the checklist items.
 		if (mCheckListViewItem.isHintItem() || isLastItem) {
-			InputMethodManager inputManager = (InputMethodManager) mContext
+			InputMethodManager inputManager = (InputMethodManager) mContext.get()
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(mCheckListViewItem.getWindowToken(),
 					InputMethodManager.HIDE_NOT_ALWAYS);
