@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
-            android:inputType="textCapSentences"
+            android:inputType="textCapSentences|textMultiLine"
             style="@style/CheckListViewEditText"/>
 
     <ImageView
