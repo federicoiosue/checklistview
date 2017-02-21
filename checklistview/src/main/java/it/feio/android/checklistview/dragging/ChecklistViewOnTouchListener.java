@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -24,14 +25,11 @@ public class ChecklistViewOnTouchListener implements OnTouchListener {
 
     private void actionDown(View view) {
         View v = (View) view.getParent();
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-			v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
-		} else {
-			v.startDragAndDrop(null, new ChecklistViewDragShadowBuilder(v), v, 0);
-		}
+        v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
         if (App.getSettings().getDragVibrationEnabled()) {
             ((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(App.getSettings()
                     .getDragVibrationDuration());
         }
     }
+
 }
