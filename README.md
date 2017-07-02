@@ -30,7 +30,7 @@ Try out the app on the [Play Store](https://play.google.com/store/apps/details?i
 
 ```java
 // Getting instance
-ChecklistManager mChecklistManager = ChecklistManager.getInstance(mActivity);
+ChecklistManager mChecklistManager = new ChecklistManager(mActivity);
 
 private void toggleCheckList() {
     View newView;
