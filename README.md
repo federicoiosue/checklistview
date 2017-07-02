@@ -26,11 +26,11 @@ Library to convert an EditText into a View capable of acting as checklist
 Try out the app on the [Play Store](https://play.google.com/store/apps/details?id=it.feio.android.checklistview.demo).
 
 
-##Usage
+## Usage
 
 ```java
 // Getting instance
-ChecklistManager mChecklistManager = new ChecklistManager(mActivity);
+ChecklistManager mChecklistManager = ChecklistManager.getInstance(mActivity);
 
 private void toggleCheckList() {
     View newView;
@@ -80,7 +80,7 @@ private void toggleCheckList() {
 }
 ```
 
-##How to include
+## How to include
 
 In your app's module *gradle.build* file add the following compile inclusion:
 
@@ -92,7 +92,7 @@ compile 'com.github.federicoiosue:checklistview:test3.2.0'
 
 There are no dependencies for the library, but if you want to compile the demo project you'll need to add [AppCompat](http://developer.android.com/tools/support-library/features.html) as library too
 
-##Developed By
+## Developed By
 
 * Federico Iosue - <federico@iosue.it>
 
