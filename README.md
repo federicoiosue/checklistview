@@ -85,7 +85,7 @@ private void toggleCheckList() {
 In your app's module *gradle.build* file add the following compile inclusion:
 
 ``` groovy
-compile 'com.github.federicoiosue:checklistview:test3.2.0'
+compile 'com.github.federicoiosue:checklistview:3.2.1'
 ```
 
 ## Dependencies
