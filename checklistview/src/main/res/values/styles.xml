@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="BaseCheckListViewEditText">
-        <item name="android:cursorVisible">true</item>
-    </style>
+  <style name="BaseCheckListViewEditText">
+    <item name="android:cursorVisible">true</item>
+  </style>
 
-    <style name="CheckListViewEditText" parent="BaseCheckListViewEditText"/>
+  <style name="CheckListViewEditText" parent="BaseCheckListViewEditText" />
 
 </resources>

@@ -17,52 +17,52 @@ import org.junit.runner.RunWith;
 @SmallTest
 public class ViewGroupTest extends InstrumentationTestCase {
 
-	private Context context;
-	private CheckListView checkListView;
-	private CheckListViewItem checkListViewItem;
+  private Context context;
+  private CheckListView checkListView;
+  private CheckListViewItem checkListViewItem;
 
 
-	@Before
-	protected void setUp() {
-		context = getInstrumentation().getContext();
-		checkListView = new CheckListView(context);
-		checkListViewItem = new CheckListViewItem(context, false, false);
-	}
+  @Before
+  protected void setUp () {
+    context = getInstrumentation().getContext();
+    checkListView = new CheckListView(context);
+    checkListViewItem = new CheckListViewItem(context, false, false);
+  }
 
 
-	@Test
-	public void testChildAddRemoval() {
-		checkListView.addView(checkListViewItem);
-		assertTrue(checkListView.indexOfChild(checkListViewItem) >= 0);
-		assertTrue(checkListViewItem.getParent().equals(checkListView));
+  @Test
+  public void testChildAddRemoval () {
+    checkListView.addView(checkListViewItem);
+    assertTrue(checkListView.indexOfChild(checkListViewItem) >= 0);
+    assertTrue(checkListViewItem.getParent().equals(checkListView));
 
-		checkListView.removeView(checkListViewItem);
-		assertFalse(checkListView.indexOfChild(checkListViewItem) >= 0);
-		assertFalse(checkListView.equals(checkListViewItem.getParent()));
-		assertTrue(checkListViewItem.getParent() == null);
-	}
-
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@Test
-	public void testChildMovementlWithLayoutTransition() {
-		checkListView.setLayoutTransition(new LayoutTransition());
-
-		CheckListViewItem checkListViewItem1 = new CheckListViewItem(context, false, false);
-		checkListView.addView(checkListViewItem);
-		checkListView.addView(checkListViewItem1);
-		assertTrue(checkListView.indexOfChild(checkListViewItem) == 0);
-		assertTrue(checkListView.indexOfChild(checkListViewItem1) == 1);
-		assertTrue(checkListViewItem.getParent().equals(checkListView));
-		assertTrue(checkListViewItem1.getParent().equals(checkListView));
-
-		ChecklistViewItemOnDragListener checklistViewOnTouchListener = new ChecklistViewItemOnDragListener();
-		checkListView.setOnDragListener(checklistViewOnTouchListener);
-		checklistViewOnTouchListener.moveView(checkListViewItem, checkListViewItem1);
-		assertTrue(checkListView.indexOfChild(checkListViewItem) == 1);
-		assertTrue(checkListView.indexOfChild(checkListViewItem1) == 0);
+    checkListView.removeView(checkListViewItem);
+    assertFalse(checkListView.indexOfChild(checkListViewItem) >= 0);
+    assertFalse(checkListView.equals(checkListViewItem.getParent()));
+    assertTrue(checkListViewItem.getParent() == null);
+  }
 
 
-	}
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+  @Test
+  public void testChildMovementlWithLayoutTransition () {
+    checkListView.setLayoutTransition(new LayoutTransition());
+
+    CheckListViewItem checkListViewItem1 = new CheckListViewItem(context, false, false);
+    checkListView.addView(checkListViewItem);
+    checkListView.addView(checkListViewItem1);
+    assertTrue(checkListView.indexOfChild(checkListViewItem) == 0);
+    assertTrue(checkListView.indexOfChild(checkListViewItem1) == 1);
+    assertTrue(checkListViewItem.getParent().equals(checkListView));
+    assertTrue(checkListViewItem1.getParent().equals(checkListView));
+
+    ChecklistViewItemOnDragListener checklistViewOnTouchListener = new ChecklistViewItemOnDragListener();
+    checkListView.setOnDragListener(checklistViewOnTouchListener);
+    checklistViewOnTouchListener.moveView(checkListViewItem, checkListViewItem1);
+    assertTrue(checkListView.indexOfChild(checkListViewItem) == 1);
+    assertTrue(checkListView.indexOfChild(checkListViewItem1) == 0);
+
+
+  }
 
 }

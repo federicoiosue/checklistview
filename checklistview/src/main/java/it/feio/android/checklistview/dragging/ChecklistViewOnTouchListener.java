@@ -12,22 +12,22 @@ import it.feio.android.checklistview.App;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewOnTouchListener implements OnTouchListener {
 
-	public boolean onTouch(View view, MotionEvent motionEvent) {
-		if (MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
-			actionDown(view);
-			return true;
-		}
-		return false;
-	}
-
-
-    private void actionDown(View view) {
-        View v = (View) view.getParent();
-        v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
-        if (App.getSettings().getDragVibrationEnabled()) {
-            ((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(App.getSettings()
-                    .getDragVibrationDuration());
-        }
+  public boolean onTouch (View view, MotionEvent motionEvent) {
+    if (MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
+      actionDown(view);
+      return true;
     }
+    return false;
+  }
+
+
+  private void actionDown (View view) {
+    View v = (View) view.getParent();
+    v.startDrag(null, new ChecklistViewDragShadowBuilder(v), v, 0);
+    if (App.getSettings().getDragVibrationEnabled()) {
+      ((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(App.getSettings()
+                                                                                           .getDragVibrationDuration());
+    }
+  }
 
 }
