@@ -76,7 +76,7 @@ public class CheckListViewItem extends LinearLayout implements
 
 
   private void initDragHandler () {
-    if (Build.VERSION.SDK_INT >= 11 && App.getSettings().getDragEnabled()) {
+    if (App.getSettings().getDragEnabled()) {
       dragHandler = (ImageView) findViewWithTag(mContext.get().getString(R.string.tag_draghandle));
     }
   }
@@ -108,9 +108,7 @@ public class CheckListViewItem extends LinearLayout implements
       deleteIcon = (ImageView) findViewWithTag(mContext.get().getString(R.string.tag_deleteicon));
       // Alpha is set just for newer API because using AlphaManager helper class I should use
       // an animation making this way impossible to set visibility to INVISIBLE
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        deleteIcon.setAlpha(0.7f);
-      }
+      deleteIcon.setAlpha(0.7f);
       deleteIcon.setOnClickListener(this);
     }
   }
@@ -267,7 +265,7 @@ public class CheckListViewItem extends LinearLayout implements
                 deletionUndone = true;
               }
             })
-            .setCallback(new Snackbar.Callback() {
+            .addCallback(new Snackbar.Callback() {
               @Override
               public void onDismissed (Snackbar snackbar, int event) {
                 if (!deletionUndone) {
@@ -301,8 +299,7 @@ public class CheckListViewItem extends LinearLayout implements
   public void onTextChanged (CharSequence s, int start, int before, int count) {
     // Checks if is the first text written here
     if (lengthBeforeTextChanged == 0) {
-      // If the actual edited line is the last but one a new empty
-      // line is cremCheckableLineated at its bottom
+      // If the actual edited line is the last but one a new empty line is created at its bottom
       if (isHintItem()) {
         mCheckListEventListener.onNewLineItemEdited(this);
       }
@@ -333,15 +330,10 @@ public class CheckListViewItem extends LinearLayout implements
 
 
   @SuppressLint("NewApi")
-  @SuppressWarnings("deprecation")
   public void cloneStyles (EditText edittext) {
     if (edittext != null) {
       Drawable drawable = edittext.getBackground();
-      if (android.os.Build.VERSION.SDK_INT < 16) {
-        getEditText().setBackgroundDrawable(drawable);
-      } else {
-        getEditText().setBackground(drawable);
-      }
+      getEditText().setBackground(drawable);
       getEditText().setTypeface(edittext.getTypeface());
       getEditText().setTextSize(0, edittext.getTextSize());
       getEditText().setTextColor(edittext.getTextColors());
@@ -380,8 +372,7 @@ public class CheckListViewItem extends LinearLayout implements
 
   @Override
   public void onDeletePressed () {
-    // When this is catched if text is empty the current item will
-    // be removed and focus moved to item above.
+    // When this is catched if text is empty the current item will be removed and focus moved to item above.
     if (!isHintItem() && getText().length() == 0 && deleteIcon != null) {
       focusView(View.FOCUS_UP);
       ((ViewGroup) getParent()).removeView(this);
@@ -407,11 +398,10 @@ public class CheckListViewItem extends LinearLayout implements
   private boolean manageDragEvents (View v, DragEvent event, OnDragListener l) {
     switch (event.getAction()) {
       case DragEvent.ACTION_DRAG_STARTED:
+      case DragEvent.ACTION_DROP:
         return l.onDrag(v, event);
       case DragEvent.ACTION_DRAG_LOCATION:
         return false;
-      case DragEvent.ACTION_DROP:
-        return l.onDrag(v, event);
       default:
         return true;
     }

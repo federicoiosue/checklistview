@@ -24,7 +24,6 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
   private static final int DIRECTION_DOWN = 1;
 
   private int dragDirection;
-  private float y;
   private Thread scrollerThread;
   private boolean scroll = false;
   private ScrollView scrollView;
@@ -64,12 +63,12 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
   private boolean actionDragLocation (View target, DragEvent event) {
     // Control demanded to the container to scroll
     if (checkTag(target, Constants.TAG_LIST)) {
-      y = event.getY();
-      int scroll = getScroll(scrollView, target);
-      if (y - scroll < Constants.SCROLLING_THREESHOLD) {
+      float y = event.getY();
+      int currentScroll = getScroll(scrollView, target);
+      if (y - currentScroll < Constants.SCROLLING_THREESHOLD) {
         dragDirection = DIRECTION_UP;
         startScrolling(target);
-      } else if (scrollView.getHeight() - (y - scroll) < Constants.SCROLLING_THREESHOLD) {
+      } else if (scrollView.getHeight() - (y - currentScroll) < Constants.SCROLLING_THREESHOLD) {
         dragDirection = DIRECTION_DOWN;
         startScrolling(target);
       } else {
@@ -122,8 +121,8 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
 
 
   private int getScroll (ScrollView scrollView, View target) {
-    int scroll = 0;
-    scroll += scrollView.getScrollY();
+    int currentScroll = 0;
+    currentScroll += scrollView.getScrollY();
     int sum = 0;
     View child = target;
     ViewGroup parent;
@@ -135,7 +134,7 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
       }
       child = parent;
     } while (!parent.equals(scrollView));
-    return scroll - sum;
+    return currentScroll - sum;
   }
 
 
@@ -197,10 +196,8 @@ public class ChecklistViewItemOnDragListener implements OnDragListener {
     if (checkTag(target, Constants.TAG_ITEM) && checkTag(dragged, Constants.TAG_ITEM)) {
       CheckListViewItem draggedItem = (CheckListViewItem) dragged;
       CheckListViewItem targetItem = (CheckListViewItem) target;
-      if (App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD
-          || draggedItem.isChecked() == targetItem.isChecked()) {
-        return true;
-      }
+      return App.getSettings().getMoveCheckedOnBottom() == Settings.CHECKED_HOLD
+          || draggedItem.isChecked() == targetItem.isChecked();
     }
     return false;
   }

@@ -1,9 +1,11 @@
 package it.feio.android.checklistview.models;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.text.Html;
 import android.util.Log;
 import android.view.DragEvent;
@@ -47,12 +49,10 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
     this.mContext = context;
     setTag(Constants.TAG_LIST);
     setOrientation(VERTICAL);
-    setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+    setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
     setLayoutTransition(new LayoutTransition());
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-      mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
-      this.setOnDragListener(mChecklistViewItemOnDragListener);
-    }
+    mChecklistViewItemOnDragListener = new ChecklistViewItemOnDragListener();
+    this.setOnDragListener(mChecklistViewItemOnDragListener);
   }
 
 
@@ -105,7 +105,6 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 
   @SuppressLint("NewApi")
-  @SuppressWarnings("deprecation")
   void cloneStyles (EditText v) {
     for (int i = 0; i < getChildCount(); i++) {
       getChildAt(i).cloneStyles(v);
@@ -257,9 +256,8 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
     // The actual and the new one view contents are generated depending
     // on cursor position
     String text = v.getText().toString();
-    String oldViewText = isTextSelected ? text.substring(0, start) + text.substring(end, text.length()) : text
-        .substring(0, start);
-    String newViewText = isTextSelected ? text.substring(start, end) : text.substring(end, text.length());
+    String oldViewText = isTextSelected ? text.substring(0, start) + text.substring(end) : text.substring(0, start);
+    String newViewText = isTextSelected ? text.substring(start, end) : text.substring(end);
 
     // Actual view content is replaced
     v.setText(oldViewText);
@@ -338,7 +336,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
 
 
   private void enableDragAndDrop (CheckListViewItem mCheckListViewItem) {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1 && App.getSettings().getDragEnabled()) {
+    if (App.getSettings().getDragEnabled()) {
       mCheckListViewItem.getDragHandler().setOnTouchListener(new ChecklistViewOnTouchListener());
       mCheckListViewItem.setOnDragListener(mChecklistViewItemOnDragListener);
     }
@@ -377,17 +375,15 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
     }
 
     // To avoid dropping here the dragged checklist items
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      mCheckListViewItem.setOnDragListener(new OnDragListener() {
-        @Override
-        public boolean onDrag (View v, DragEvent event) {
-          if (event.getAction() == DragEvent.ACTION_DROP) {
-            mChecklistViewItemOnDragListener.onDrag(v, event);
-          }
-          return true;
+    mCheckListViewItem.setOnDragListener(new OnDragListener() {
+      @Override
+      public boolean onDrag (View v, DragEvent event) {
+        if (event.getAction() == DragEvent.ACTION_DROP) {
+          mChecklistViewItemOnDragListener.onDrag(v, event);
         }
-      });
-    }
+        return true;
+      }
+    });
 
     addView(mCheckListViewItem, hintItemPosition);
   }

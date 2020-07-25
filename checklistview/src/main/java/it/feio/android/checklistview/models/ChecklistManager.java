@@ -291,10 +291,10 @@ public class ChecklistManager {
       }
       // If item is checked it will be removed if requested
       isChecked = mCheckListViewItem.isChecked();
-      if (!isChecked || (isChecked && App.getSettings().getKeepChecked())) {
+      String symbol = isChecked ? Constants.CHECKED_SYM : Constants.UNCHECKED_SYM;
+      if (!isChecked || App.getSettings().getKeepChecked()) {
         sb.append(i > 0 ? App.getSettings().getLinesSeparator() : "")
-          .append(App.getSettings().getShowChecks() ? isChecked ? Constants.CHECKED_SYM
-              : Constants.UNCHECKED_SYM : "").append(mCheckListViewItem.getText());
+          .append(App.getSettings().getShowChecks() ? symbol : "").append(mCheckListViewItem.getText());
       }
     }
   }
