@@ -17,5 +17,5 @@ allprojects {
         maven { url "https://jitpack.io" }
         google()
     }
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
 }
