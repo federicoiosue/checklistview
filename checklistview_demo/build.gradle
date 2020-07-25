@@ -17,11 +17,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    output.outputFile = new File(
-                            output.outputFile.parent,
-                            output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "OmniNotes-${variant.name}-${variant.versionName}.apk"
                 }
             }
         }
@@ -33,6 +31,6 @@ android {
 }
 
 dependencies {
-    compile project(':checklistview')
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    implementation project(':checklistview')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 }

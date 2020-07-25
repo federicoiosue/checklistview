@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.feio.android.checklistview" >
 
-    <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="19" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>

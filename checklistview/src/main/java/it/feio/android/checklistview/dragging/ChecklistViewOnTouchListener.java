@@ -4,11 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Vibrator;
-import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-
 import it.feio.android.checklistview.App;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
