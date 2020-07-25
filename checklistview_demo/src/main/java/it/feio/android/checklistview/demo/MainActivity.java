@@ -5,8 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -14,11 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import it.feio.android.checklistview.models.ChecklistManager;
+import androidx.appcompat.widget.Toolbar;
 import it.feio.android.checklistview.Settings;
 import it.feio.android.checklistview.exceptions.ViewNotSupportedException;
 import it.feio.android.checklistview.interfaces.CheckListChangedListener;
 import it.feio.android.checklistview.interfaces.Constants;
+import it.feio.android.checklistview.models.ChecklistManager;
 
 public class MainActivity extends AppCompatActivity implements CheckListChangedListener {
 
@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-		
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		switchView = findViewById(R.id.edittext);		
+		switchView = findViewById(R.id.edittext);
 		((EditText)switchView).setText(prefs.getString("text", getString(R.string.template_phrase)));
-		
+
 		if (prefs.getBoolean("isChecklist", false)) {
 			isChecklist = false;
 			toggleCheckList();
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 
 
 	private void initTextView() {
-		TextView textview = (TextView) findViewById(R.id.bottom_banner);
+		TextView textview = findViewById(R.id.bottom_banner);
 		textview.setText(Html.fromHtml(getString(R.string.omninotes)));
 		textview.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			prefs.edit().putBoolean("refresh", false).apply();
 		}
 	}
-	
-	
+
+
 	@Override
 	protected void onPause() {
 		save();
 		super.onPause();
 	}
-	
-		
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -123,14 +123,14 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			// will be used)
 			mChecklistManager.newEntryHint(prefs.getString("settings_hint", ""));
 			// Let checked items are moved on bottom
-			
-			mChecklistManager.moveCheckedOnBottom(Integer.valueOf(prefs.getString("settings_checked_items_behavior",
+
+			mChecklistManager.moveCheckedOnBottom(Integer.parseInt(prefs.getString("settings_checked_items_behavior",
 					String.valueOf(Settings.CHECKED_HOLD))));
-			
+
 			// Is also possible to set a general changes listener
 			mChecklistManager.setCheckListChangedListener(this);
 
-			
+
 			/*
 			 * These method are useful when converting from ChecklistView to
 			 * EditText (but can be set anytime, they'll be used at appropriate
@@ -140,11 +140,11 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
 			mChecklistManager.linesSeparator(prefs.getString("settings_lines_separator", Constants.LINES_SEPARATOR));
-			
+
 			// Decide if keep or remove checked items when converting
 			// back to simple text from checklist
 			mChecklistManager.keepChecked(prefs.getBoolean("settings_keep_checked", Constants.KEEP_CHECKED));
-			
+
 			// I want to make checks symbols visible when converting
 			// back to simple text from checklist
 			mChecklistManager.showCheckMarks(prefs.getBoolean("settings_show_checks", Constants.SHOW_CHECKS));
@@ -152,26 +152,26 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			// Enable or disable drag & drop
 			mChecklistManager.dragEnabled(true);
 			mChecklistManager.dragVibrationEnabled(true);
-			
+
 			// Converting actual EditText into a View that can
 			// replace the source or viceversa
 			newView = mChecklistManager.convert(switchView);
-			
+
 			// Replacing view in the layout
 			mChecklistManager.replaceViews(switchView, newView);
-			
+
 			// Updating the instance of the pointed view for
 			// eventual reverse conversion
 			switchView = newView;
-						
+
 			isChecklist = !isChecklist;
-		
+
 		} catch (ViewNotSupportedException e) {
 			// This exception is fired if the source view class is not supported
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	private void save(){
 		String text = "";

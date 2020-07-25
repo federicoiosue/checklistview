@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="tag_checkbox">checklistview_checkbox</string>
-    <string name="tag_draghandle">checklistview_draghandle</string>
-    <string name="tag_edittext">checklistview_edittext</string>
-    <string name="tag_deleteicon">checklistview_deleteicon</string>
+  <string name="tag_checkbox">checklistview_checkbox</string>
+  <string name="tag_draghandle">checklistview_draghandle</string>
+  <string name="tag_edittext">checklistview_edittext</string>
+  <string name="tag_deleteicon">checklistview_deleteicon</string>
 
-    <string name="item_deleted">Item deleted</string>
-    <string name="undo">Undo</string>
+  <string name="item_deleted">Item deleted</string>
+  <string name="undo">Undo</string>
 
 </resources>

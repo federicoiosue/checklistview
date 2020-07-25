@@ -4,14 +4,14 @@ import android.app.Application;
 
 public class App extends Application {
 
-	private static Settings settings;
+  private static Settings settings;
 
 
-	public static Settings getSettings() {
-		if (settings == null) {
-			settings = new Settings();
-		}
-		return settings;
-	}
+  public static Settings getSettings () {
+    if (settings == null) {
+      settings = new Settings();
+    }
+    return settings;
+  }
 
 }
