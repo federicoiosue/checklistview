@@ -13,6 +13,7 @@ android {
         targetSdkVersion project.TARGET_SDK
         versionName project.VERSION_NAME
         versionCode Integer.parseInt(project.VERSION_CODE)
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
