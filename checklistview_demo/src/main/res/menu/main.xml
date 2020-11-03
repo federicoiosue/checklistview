@@ -1,14 +1,20 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
   <item
     android:id="@+id/action_toggle_checklist"
     android:orderInCategory="100"
-    android:showAsAction="always"
-    android:title="@string/action_toggle_checklist" />
+    android:title="@string/action_toggle_checklist"
+    app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/action_move_to_bottom"
+    android:orderInCategory="150"
+    android:title="@string/action_move_to_bottom"
+    app:showAsAction="never" />
   <item
     android:id="@+id/settings"
     android:orderInCategory="200"
-    android:showAsAction="never"
-    android:title="@string/settings" />
+    android:title="@string/settings"
+    app:showAsAction="never" />
 
 </menu>

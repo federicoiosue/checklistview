@@ -117,7 +117,7 @@ public class CheckListViewItem extends LinearLayout implements
   }
 
 
-  CheckBox getCheckBox () {
+  public CheckBox getCheckBox () {
     return checkBox;
   }
 
