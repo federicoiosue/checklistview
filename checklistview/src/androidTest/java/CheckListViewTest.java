@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ViewGroupTest {
+public class CheckListViewTest {
 
   private WeakReference<Context> context;
   private CheckListView checkListView;
@@ -33,24 +33,32 @@ public class ViewGroupTest {
   }
 
   @Test
-  public void testChildAddRemoval () {
+  public void addView () {
     checkListView.addView(checkListViewItem);
+
     assertTrue(checkListView.indexOfChild(checkListViewItem) >= 0);
     assertEquals(checkListViewItem.getParent(), checkListView);
+  }
+
+  @Test
+  public void removeView () {
+    checkListView.addView(checkListViewItem);
 
     checkListView.removeView(checkListViewItem);
+
     assertFalse(checkListView.indexOfChild(checkListViewItem) >= 0);
     assertNotEquals(checkListView, checkListViewItem.getParent());
     assertNull(checkListViewItem.getParent());
   }
 
   @Test
-  public void testChildMovementlWithLayoutTransition () {
+  public void childMovementlWithLayoutTransition () {
     checkListView.setLayoutTransition(new LayoutTransition());
-
     CheckListViewItem checkListViewItem1 = new CheckListViewItem(context, false, false);
+
     checkListView.addView(checkListViewItem);
     checkListView.addView(checkListViewItem1);
+
     assertEquals(0, checkListView.indexOfChild(checkListViewItem));
     assertEquals(1, checkListView.indexOfChild(checkListViewItem1));
     assertEquals(checkListViewItem.getParent(), checkListView);
