@@ -6,9 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.animation.LayoutTransition;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import androidx.test.runner.AndroidJUnit4;
 import it.feio.android.checklistview.dragging.ChecklistViewItemOnDragListener;
 import it.feio.android.checklistview.models.CheckListView;
@@ -46,7 +44,6 @@ public class ViewGroupTest {
     assertNull(checkListViewItem.getParent());
   }
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Test
   public void testChildMovementlWithLayoutTransition () {
     checkListView.setLayoutTransition(new LayoutTransition());

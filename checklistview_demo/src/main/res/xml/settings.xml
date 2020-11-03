@@ -40,18 +40,18 @@
     android:entryValues="@array/checked_items_behavior_values"
     android:key="settings_checked_items_behavior"
     android:summary="@string/settings_checked_items_behavior_summary"
-    android:title="@string/settings_checked_items_behavior"></ListPreference>
+    android:title="@string/settings_checked_items_behavior" />
 
   <CheckBoxPreference
     android:defaultValue="true"
     android:key="settings_keep_checked"
     android:summary="@string/settings_keep_checked_summary"
-    android:title="@string/settings_keep_checked"></CheckBoxPreference>
+    android:title="@string/settings_keep_checked" />
   <CheckBoxPreference
     android:defaultValue="false"
     android:key="settings_show_checks"
     android:summary="@string/settings_show_checks_summary"
-    android:title="@string/settings_show_checks"></CheckBoxPreference>
+    android:title="@string/settings_show_checks" />
 
   <Preference android:title="@string/settings_info">
     <intent
