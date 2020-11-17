@@ -19,7 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "OmniNotes-${variant.name}-${variant.versionName}.apk"
+                    outputFileName = "ChecklistviewDemo-${variant.name}-${variant.versionName}.apk"
                 }
             }
         }
