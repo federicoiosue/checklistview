@@ -2,11 +2,9 @@ package it.feio.android.checklistview.models;
 
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import com.google.android.material.snackbar.Snackbar;
 import android.text.Editable;
 import android.text.Spanned;
@@ -119,7 +117,7 @@ public class CheckListViewItem extends LinearLayout implements
   }
 
 
-  CheckBox getCheckBox () {
+  public CheckBox getCheckBox () {
     return checkBox;
   }
 
@@ -381,7 +379,6 @@ public class CheckListViewItem extends LinearLayout implements
   }
 
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public void setOnDragListener (final OnDragListener l) {
     super.setOnDragListener(l);
@@ -394,7 +391,6 @@ public class CheckListViewItem extends LinearLayout implements
   }
 
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   private boolean manageDragEvents (View v, DragEvent event, OnDragListener l) {
     switch (event.getAction()) {
       case DragEvent.ACTION_DRAG_STARTED:

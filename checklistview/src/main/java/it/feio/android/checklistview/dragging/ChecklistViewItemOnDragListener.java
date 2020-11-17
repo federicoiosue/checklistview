@@ -1,8 +1,6 @@
 package it.feio.android.checklistview.dragging;
 
 import android.animation.LayoutTransition;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -15,7 +13,6 @@ import it.feio.android.checklistview.interfaces.Constants;
 import it.feio.android.checklistview.models.CheckListViewItem;
 import it.feio.android.checklistview.utils.DensityUtil;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ChecklistViewItemOnDragListener implements OnDragListener {
 
   private static final String TAG = ChecklistViewItemOnDragListener.class.getSimpleName();

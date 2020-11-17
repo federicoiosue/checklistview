@@ -1,5 +1,7 @@
 package it.feio.android.checklistview.models;
 
+import static it.feio.android.checklistview.Settings.CHECKED_ON_TOP_OF_CHECKED;
+
 import android.content.Context;
 import android.text.TextWatcher;
 import android.view.View;
@@ -399,6 +401,21 @@ public class ChecklistManager {
       }
     }
     return null;
+  }
+
+
+  public void moveCheckedToBottom() {
+    if (mCheckListView != null) {
+      int currentSetting = App.getSettings().getMoveCheckedOnBottom();
+      mCheckListView.setMoveCheckedOnBottom(CHECKED_ON_TOP_OF_CHECKED);
+      for (int i = 0; i < mCheckListView.getChildCount(); i++) {
+        CheckListViewItem mCheckListViewItem = mCheckListView.getChildAt(i);
+        if (!mCheckListViewItem.isHintItem() && mCheckListViewItem.isChecked()) {
+          mCheckListView.onItemChecked(mCheckListViewItem, true);
+        }
+      }
+      mCheckListView.setMoveCheckedOnBottom(currentSetting);
+    }
   }
 
 

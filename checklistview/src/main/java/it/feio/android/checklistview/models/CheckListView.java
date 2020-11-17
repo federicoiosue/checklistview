@@ -28,7 +28,6 @@ import it.feio.android.pixlui.links.TextLinkClickListener;
 import java.lang.ref.WeakReference;
 
 
-@SuppressLint("NewApi")
 public class CheckListView extends LinearLayout implements Constants, CheckListEventListener {
 
   private boolean showDeleteIcon = Constants.SHOW_DELETE_ICON;
@@ -163,8 +162,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
         return true;
       }
 
-      // Otherwise all items at bottom than the actual will be
-      // cycled until a good position is find.
+      // Otherwise all items at bottom than the actual will be cycled until a good position is find.
       Log.v(Constants.TAG, "Moving item at position " + i);
 
       // The newly checked item will be positioned at last position.
@@ -253,8 +251,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
       return;
     }
 
-    // The actual and the new one view contents are generated depending
-    // on cursor position
+    // The actual and the new one view contents are generated depending on cursor position
     String text = v.getText().toString();
     String oldViewText = isTextSelected ? text.substring(0, start) + text.substring(end) : text.substring(0, start);
     String newViewText = isTextSelected ? text.substring(start, end) : text.substring(end);

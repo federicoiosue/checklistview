@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			case R.id.action_toggle_checklist:
 				toggleCheckList();
 				break;
-
+			case R.id.action_move_to_bottom:
+				mChecklistManager.moveCheckedToBottom();
+				break;
 			case R.id.settings:
 				Intent settingsIntent = new Intent(this, SettingsActivity.class);
 				startActivity(settingsIntent);

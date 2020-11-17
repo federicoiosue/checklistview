@@ -1,12 +1,9 @@
 package it.feio.android.checklistview.dragging;
 
-import android.annotation.TargetApi;
 import android.graphics.Point;
-import android.os.Build;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class ChecklistViewDragShadowBuilder extends DragShadowBuilder {
 
 
