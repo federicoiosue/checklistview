@@ -24,6 +24,7 @@ public class Settings {
   private boolean showHintItem = Constants.SHOW_HINT_ITEM;
   private String newEntryHint = "";
   private int moveCheckedOnBottom = CHECKED_HOLD;
+  private boolean moveNewItemOnTop = Constants.NEW_ITEM_TOP;
   private boolean dragEnabled = Constants.DRAG_ENABLED;
   private boolean dragVibrationEnabled = Constants.DRAG_VIBRATION_ENABLED;
   private int dragVibrationDuration = Constants.DRAG_VIBRATION_DURATION;
@@ -98,6 +99,14 @@ public class Settings {
     this.moveCheckedOnBottom = moveCheckedOnBottom;
   }
 
+  public boolean getMoveNewItemOnTop () {
+    return moveNewItemOnTop;
+  }
+
+
+  public void setMoveNewItemOnTop (boolean moveNewItemOnTop) {
+    this.moveNewItemOnTop = moveNewItemOnTop;
+  }
 
   public boolean getDragEnabled () {
     return dragEnabled;

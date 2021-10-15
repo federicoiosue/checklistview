@@ -129,7 +129,11 @@ public class MainActivity extends AppCompatActivity implements CheckListChangedL
 			mChecklistManager.moveCheckedOnBottom(Integer.parseInt(prefs.getString("settings_checked_items_behavior",
 					String.valueOf(Settings.CHECKED_HOLD))));
 
-			// Is also possible to set a general changes listener
+			// Add new items on top
+			mChecklistManager.moveNewItemOnTop(prefs.getBoolean("settings_new_item_on_top",
+					Constants.NEW_ITEM_TOP));
+
+			// Is also possible tlinesSeparatoro set a general changes listener
 			mChecklistManager.setCheckListChangedListener(this);
 
 
