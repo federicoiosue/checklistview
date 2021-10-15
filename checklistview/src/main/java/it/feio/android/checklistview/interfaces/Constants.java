@@ -21,6 +21,10 @@ public interface Constants {
    */
   boolean KEEP_CHECKED = true;
   /**
+   * Add Item to the top of list.
+   */
+  boolean NEW_ITEM_TOP = false;
+  /**
    * Shows or not checks when converting back to simple text
    */
   boolean SHOW_CHECKS = false;

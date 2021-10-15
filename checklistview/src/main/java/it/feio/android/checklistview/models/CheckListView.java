@@ -34,6 +34,7 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
   private boolean showHintItem = Constants.SHOW_HINT_ITEM;
   private String newEntryHint = "";
   private int moveCheckedOnBottom = Settings.CHECKED_HOLD;
+  private boolean moveNewItemOnTop = Constants.NEW_ITEM_TOP;
 
   private WeakReference<Context> mContext;
   private CheckListChangedListener mCheckListChangedListener;
@@ -62,6 +63,12 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
     this.moveCheckedOnBottom = moveCheckedOnBottom;
   }
 
+  /**
+   * Declare if a checked item must be moved on bottom of the list or not
+   */
+  void setMoveNewItemOnTop (boolean moveNewItemOnTop) {
+    this.moveNewItemOnTop = moveNewItemOnTop;
+  }
 
   /**
    * Set if show or not a delete icon at the end of the line. Default true.
@@ -369,6 +376,11 @@ public class CheckListView extends LinearLayout implements Constants, CheckListE
           break;
         }
       }
+    }
+
+    // To add new item at the top of list
+    if (moveNewItemOnTop != Constants.NEW_ITEM_TOP) {
+      hintItemPosition = 0;
     }
 
     // To avoid dropping here the dragged checklist items

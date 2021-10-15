@@ -23,5 +23,7 @@
   <string name="settings_show_checks">Checks symbols</string>
   <string name="settings_show_checks_summary">Show checks symbols when converting back to simple text (parsed also for converting again into checklist with previously edited checks)</string>
   <string name="settings_info">Info</string>
+  <string name="settings_new_item_on_top_summary">Add new Item on top of the list</string>
+  <string name="settings_new_item_on_top">New Item on top</string>
 
 </resources>

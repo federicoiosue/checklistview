@@ -52,6 +52,11 @@
     android:key="settings_show_checks"
     android:summary="@string/settings_show_checks_summary"
     android:title="@string/settings_show_checks" />
+  <CheckBoxPreference
+      android:defaultValue="false"
+      android:key="settings_new_item_on_top"
+      android:summary="@string/settings_new_item_on_top_summary"
+      android:title="@string/settings_new_item_on_top" />
 
   <Preference android:title="@string/settings_info">
     <intent

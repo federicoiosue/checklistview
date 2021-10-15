@@ -92,6 +92,20 @@ public class ChecklistManager {
   }
 
 
+  public boolean getMoveNewItemOnTop () {
+    return App.getSettings().getMoveNewItemOnTop();
+  }
+
+
+  /**
+   * If set to true an Item is added to the top of list
+   */
+  public ChecklistManager moveNewItemOnTop (boolean moveNewItemOnTop) {
+    App.getSettings().setMoveNewItemOnTop(moveNewItemOnTop);
+    return this;
+  }
+
+
   /**
    * Set if an empty line on bottom of the checklist must be shown or not
    */
@@ -197,6 +211,7 @@ public class ChecklistManager {
     this.originalView = v;
     mCheckListView = new CheckListView(mContext);
     mCheckListView.setMoveCheckedOnBottom(App.getSettings().getMoveCheckedOnBottom());
+    mCheckListView.setMoveNewItemOnTop(App.getSettings().getMoveNewItemOnTop());
     mCheckListView.setUndoBarEnabled(undoBarEnabled);
     mCheckListView.setUndoBarContainerView(undoBarContainerView);
     mCheckListView.setShowDeleteIcon(App.getSettings().getShowDeleteIcon());
